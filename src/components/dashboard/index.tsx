@@ -1,4 +1,4 @@
-import { Table, Tag } from "antd";
+import { Table, Tag, notification } from "antd";
 
 import { MainLayout } from "../../components/mainlayout";
 import { BsCashCoin } from "react-icons/bs";
@@ -112,7 +112,11 @@ export default function DashboardPage() {
       );
 
       if (response.ok) {
-        alert("To'lov muvaffaqiyatli amalga oshirildi!");
+        notification.success({
+          message: "To'lov muvaffaqiyatli amalga oshirildi!",
+          placement: "topRight",
+        });
+
         closePaymentModal();
         const updatedData = data.map((user: any) =>
           user.id === selectedUser?.id
@@ -125,6 +129,11 @@ export default function DashboardPage() {
       }
     } catch (error: any) {
       setError(error.message);
+      notification.error({
+        message: "To'lovda xatolik yuz berdi!",
+        description: error.message,
+        placement: "topRight",
+      });
     }
   };
 

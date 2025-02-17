@@ -1,5 +1,11 @@
+import { MainLayout } from "../mainlayout";
+
 const Workplace = () => {
-  return <div>Workplace</div>;
+  return (
+    <MainLayout>
+      <div>Workplace</div>
+    </MainLayout>
+  );
 };
 
 export default Workplace;

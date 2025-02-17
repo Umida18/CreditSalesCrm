@@ -16,7 +16,7 @@ const { Header, Sider, Content } = Layout;
 
 const menuItems = [
   {
-    key: "/dashboard",
+    key: "/",
     icon: <DashboardOutlined />,
     label: "Dashboard",
   },
@@ -27,12 +27,17 @@ const menuItems = [
     label: "Zone",
   },
   {
-    key: "/users",
+    key: "/workplace",
     icon: <UserOutlined />,
     label: "Workplace",
   },
   {
-    key: "/settings",
+    key: "/collector",
+    icon: <BsFillPersonLinesFill />,
+    label: "Collector",
+  },
+  {
+    key: "/collectorMoney",
     icon: <BsFillPersonLinesFill />,
     label: "Yig'uvchilar",
   },
