@@ -7,7 +7,7 @@ import CollectorMoney from "./components/collector/collectorsTable";
 import Workplace from "./components/workplace/workplace";
 
 function App() {
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   return (
     <BrowserRouter>
       <Routes>
