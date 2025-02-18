@@ -14,32 +14,28 @@ import { Outlet } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
+import { Link } from "react-router-dom";
+
 const menuItems = [
   {
     key: "/",
     icon: <DashboardOutlined />,
-    label: "Dashboard",
+    label: <Link to="/">Dashboard</Link>,
   },
-
   {
     key: "/zone",
     icon: <CiLocationOn />,
-    label: "Zone",
+    label: <Link to="/zone">Zone</Link>,
   },
   {
     key: "/workplace",
     icon: <UserOutlined />,
-    label: "Workplace",
-  },
-  {
-    key: "/collector",
-    icon: <BsFillPersonLinesFill />,
-    label: "Collector",
+    label: <Link to="/workplace">Workplace</Link>,
   },
   {
     key: "/collectorMoney",
     icon: <BsFillPersonLinesFill />,
-    label: "Yig'uvchilar",
+    label: <Link to="/collectorMoney">Yig'uvchilar</Link>,
   },
 ];
 
@@ -60,13 +56,13 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           style={{ backgroundColor: "#001529" }}
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["/"]}
+          defaultSelectedKeys={[window.location.pathname]}
           items={menuItems.map((item) => ({
             ...item,
             label: (
-              <a href={item.key} style={{ color: "#bfbfbf" }}>
+              <Link to={item.key} style={{ color: "#bfbfbf" }}>
                 {item.label}
-              </a>
+              </Link>
             ),
           }))}
         />

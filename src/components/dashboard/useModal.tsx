@@ -7,7 +7,6 @@ const { Title, Text } = Typography;
 const UserModal = ({ user, closeModal }: any) => {
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [error, setError] = useState("");
-  //   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     if (user?.id) {

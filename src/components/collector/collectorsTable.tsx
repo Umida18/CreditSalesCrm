@@ -9,7 +9,7 @@ const CollectorMoney = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`${BASE_URL}/collector/all-money`)
+    fetch(`${BASE_URL}/collector`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Serverdan noto‘g‘ri javob keldi");

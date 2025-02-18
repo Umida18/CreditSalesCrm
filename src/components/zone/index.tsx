@@ -3,6 +3,8 @@ import { Table, Button, Modal, Input, notification } from "antd";
 import axios from "axios";
 import { MainLayout } from "../mainlayout";
 import { BASE_URL } from "../../config";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Zone = () => {
   const [data, setData] = useState([]);
@@ -10,6 +12,7 @@ const Zone = () => {
   const [zoneName, setZoneName] = useState("");
   const [description, setDescription] = useState("");
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const openNotification = (type: "success" | "error", message: string) => {
     notification[type]({
@@ -17,9 +20,10 @@ const Zone = () => {
       placement: "topRight",
     });
   };
+
   const fetchZones = useCallback(async () => {
     try {
-      const response = await fetch(`${BASE_URL}/zones`);
+      const response = await fetch(`${BASE_URL}/zone`);
       const result = await response.json();
       setData(result);
     } catch (error) {
@@ -34,7 +38,8 @@ const Zone = () => {
   const handleAddZone = async () => {
     const newZone = { zone_name: zoneName, description };
     try {
-      await axios.post(`${BASE_URL}/zones/add`, newZone, {
+      setLoading(true);
+      await axios.post(`${BASE_URL}/zone/add`, newZone, {
         headers: { "Content-Type": "application/json" },
       });
       setModalVisible(false);
@@ -45,13 +50,15 @@ const Zone = () => {
     } catch (error) {
       console.error("Error adding zone:", error);
       openNotification("error", "Hudud qo‘shishda xatolik yuz berdi.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleUpdateZone = async () => {
     const updatedZone = { zone_name: zoneName, description };
     try {
-      await axios.put(`${BASE_URL}/zones/update/${editId}`, updatedZone, {
+      await axios.put(`${BASE_URL}/zone/update/${editId}`, updatedZone, {
         headers: { "Content-Type": "application/json" },
       });
       setModalVisible(false);
@@ -59,7 +66,7 @@ const Zone = () => {
       setDescription("");
       setEditId(null);
       fetchZones();
-      openNotification("success", "Hudud muvaffaqiyatli yangilandi!");
+      toast.success("Hudud muvaffaqiyatli yangilandi!");
     } catch (error) {
       console.error("Error updating zone:", error);
       openNotification("error", "Hudud yangilashda xatolik yuz berdi! ");
@@ -145,6 +152,7 @@ const Zone = () => {
           rowKey="id"
           pagination={{ pageSize: 5 }}
           style={{ marginTop: 20 }}
+          loading={loading}
         />
 
         <Modal
