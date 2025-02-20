@@ -5,6 +5,7 @@ import { MainLayout } from "../mainlayout";
 import { BASE_URL } from "../../config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Edit2 } from "lucide-react";
 
 const Zone = () => {
   const [data, setData] = useState([]);
@@ -110,6 +111,7 @@ const Zone = () => {
         <>
           <Button
             type="primary"
+            icon={<Edit2 size={16} />}
             onClick={() => {
               setEditId(record.id);
               setZoneName(record.zone_name);
@@ -117,7 +119,7 @@ const Zone = () => {
               setModalVisible(true);
             }}
           >
-            Edit
+            Tahrirlash
           </Button>
           <Button
             style={{ marginLeft: 8 }}
@@ -143,7 +145,7 @@ const Zone = () => {
             setDescription("");
           }}
         >
-          Add Zone
+          Zona qo'shish
         </Button>
 
         <Table

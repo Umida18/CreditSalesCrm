@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Button, Input, Modal, Table, message } from "antd";
+import type React from "react";
+import { useEffect, useState, useCallback } from "react";
+import { Button, Input, Modal, Table, Card, Spin, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { MainLayout } from "../mainlayout";
 import api from "../../Api/Api";
+import { PlusCircle, Edit2 } from "lucide-react";
+import { FaBuilding } from "react-icons/fa";
 
 interface Workplace {
   id: number;
@@ -19,23 +22,23 @@ const Workplace: React.FC = () => {
   const [description, setDescription] = useState("");
   const [editId, setEditId] = useState<number | null>(null);
 
-  // Fetch workplaces
-  const fetchWorkplaces = async () => {
+  const fetchWorkplaces = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get("/workplace");
       setData(response.data);
     } catch (error) {
       console.error("Error fetching workplace data:", error);
+      message.error("Failed to fetch workplaces");
     } finally {
       setLoading(false);
     }
-  };
-  useEffect(() => {
-    fetchWorkplaces();
   }, []);
 
-  // Handle adding new workplace
+  useEffect(() => {
+    fetchWorkplaces();
+  }, [fetchWorkplaces]);
+
   const handleAddZone = async () => {
     if (!zoneName || !description) {
       message.error("Please fill in both fields");
@@ -56,7 +59,6 @@ const Workplace: React.FC = () => {
     }
   };
 
-  // Handle updating workplace
   const handleUpdateZone = async () => {
     if (!zoneName || !description) {
       message.error("Please fill in both fields");
@@ -77,7 +79,6 @@ const Workplace: React.FC = () => {
     }
   };
 
-  // Columns for the table
   const columns: ColumnsType<Workplace> = [
     {
       title: "ID",
@@ -85,17 +86,17 @@ const Workplace: React.FC = () => {
       key: "id",
     },
     {
-      title: "Zone Name",
+      title: "Joy nomi",
       dataIndex: "workplace_name",
       key: "workplace_name",
     },
     {
-      title: "Description",
+      title: "Ma'lumot",
       dataIndex: "description",
       key: "description",
     },
     {
-      title: "Created At",
+      title: "Vaqti",
       dataIndex: "createdat",
       key: "createdat",
       render: (date: string) => new Date(date).toLocaleString(),
@@ -104,43 +105,93 @@ const Workplace: React.FC = () => {
       title: "Actions",
       key: "actions",
       render: (_: any, record: Workplace) => (
-        <Button
-          type="primary"
-          onClick={() => {
-            setEditId(record.id);
-            setZoneName(record.workplace_name);
-            setDescription(record.description);
-            setModalVisible(true);
-          }}
-        >
-          Edit
-        </Button>
+        <div className="space-x-2">
+          <Button
+            type="primary"
+            icon={<Edit2 size={16} />}
+            onClick={() => {
+              setEditId(record.id);
+              setZoneName(record.workplace_name);
+              setDescription(record.description);
+              setModalVisible(true);
+            }}
+          >
+            Tahrirlash
+          </Button>
+        </div>
       ),
     },
   ];
 
   return (
     <MainLayout>
-      <Button
-        className="mb-3"
-        type="primary"
-        onClick={() => {
-          setModalVisible(true);
-          setEditId(null);
-          setZoneName("");
-          setDescription("");
-        }}
-      >
-        Add Zone
-      </Button>
-      <Table
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        rowKey="id"
-        bordered
-        pagination={{ pageSize: 10 }}
-      />
+      <div className="mb-4">
+        <Button
+          type="primary"
+          icon={<PlusCircle size={16} />}
+          onClick={() => {
+            setModalVisible(true);
+            setEditId(null);
+            setZoneName("");
+            setDescription("");
+          }}
+          className="bg-blue-500 hover:bg-blue-600"
+        >
+          Workplace qo'shish
+        </Button>
+      </div>
+
+      <div className="hidden md:block">
+        <Table
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          rowKey="id"
+          bordered
+          pagination={{ pageSize: 10 }}
+        />
+      </div>
+
+      <div className="md:hidden">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {data.map((workplace) => (
+              <div>
+                <Card key={workplace.id} className="shadow-md">
+                  <div className="flex items-center mb-2">
+                    <FaBuilding className="text-blue-500 mr-2" size={20} />
+                    <h3 className="text-lg font-semibold">
+                      {workplace.workplace_name}
+                    </h3>
+                  </div>
+                  <p className="text-gray-600 mb-2">{workplace.description}</p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    {new Date(workplace.createdat).toLocaleString()}
+                  </p>
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      type="primary"
+                      icon={<Edit2 size={16} />}
+                      onClick={() => {
+                        setEditId(workplace.id);
+                        setZoneName(workplace.workplace_name);
+                        setDescription(workplace.description);
+                        setModalVisible(true);
+                      }}
+                    >
+                      Tahrirlash
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <Modal
         title={editId ? "Update Workplace" : "Add Workplace"}
@@ -148,17 +199,22 @@ const Workplace: React.FC = () => {
         onCancel={() => setModalVisible(false)}
         onOk={editId ? handleUpdateZone : handleAddZone}
       >
-        <Input
-          placeholder="Zone name"
-          value={zoneName}
-          onChange={(e) => setZoneName(e.target.value)}
-          style={{ marginBottom: 10 }}
-        />
-        <Input
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <div className="my-3">
+          <Input
+            placeholder="Zone name"
+            value={zoneName}
+            onChange={(e) => setZoneName(e.target.value)}
+            className="mb-3"
+          />
+        </div>
+        <div>
+          <Input.TextArea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={4}
+          />
+        </div>
       </Modal>
     </MainLayout>
   );

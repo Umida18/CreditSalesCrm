@@ -60,7 +60,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       trigger={null}
       collapsible
       collapsed={collapsed}
-      className="hidden md:block"
+      className="hidden md:block min-h-screen"
     >
       <div className="flex justify-center items-center py-4">
         <p className="text-2xl font-bold text-gray-400">Admin</p>
