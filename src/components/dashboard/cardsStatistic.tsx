@@ -44,7 +44,7 @@ const CardsStatistic = () => {
       .catch((error) => console.error("Xatolik:", error));
   }, []);
   return (
-    <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mb-6">
       <Card style={{ background: "#FFF0F5", border: 0 }}>
         <p className="text-gray-600 text-[18px]">Jami pul</p>
         <h2 className="text-[22px] font-bold w-full">
