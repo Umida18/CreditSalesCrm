@@ -19,8 +19,8 @@ export default function CollectorLoginPage() {
       });
       console.log("res", res);
 
-      localStorage.setItem("token", res.data.token);
-      navigate("/");
+      localStorage.setItem("tokenCollector", res.data.token);
+      navigate("/collectorDashboard");
       console.log("Success:", values);
     } catch (error) {
       console.log(error);
@@ -28,32 +28,6 @@ export default function CollectorLoginPage() {
       setLoading(false);
     }
   };
-
-  //   const login = async (event) => {
-  //     event.preventDefault();
-
-  //     try {
-  //       const response = await fetch(`${API_URL}/admin/login`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ name, password }),
-  //       });
-
-  //       const data = await response.json();
-
-  //       if (data?.token) {
-  //         localStorage.setItem("token", data.token);
-  //         alert("Logged in successfully");
-  //         navigate("/");
-  //       } else {
-  //         alert("Invalid credentials");
-  //       }
-  //     } catch (error) {
-  //       alert("Something went wrong. Please try again.");
-  //     }
-  //   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

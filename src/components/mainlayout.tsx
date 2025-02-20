@@ -126,28 +126,19 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     <Layout className="min-h-screen">
       <DesktopSidebar />
       <MobileSidebar />
-      <Layout
-      // className={`transition-all duration-300 ${
-      //   collapsed ? "md:ml-20" : "md:ml-52"
-      // }`}
-      >
+      <Layout style={{ minHeight: "screen" }} className="!min-h-screen">
         <Header
           className="flex justify-between items-center "
           style={{ backgroundColor: "white" }}
         >
           <button
-            // type="text"
-            // icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={toggleDesktopSidebar}
             className="text-base w-16 h-16 hidden xl:flex"
           >
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </button>
-          {/* <div className=" flex justify-between items-center  text-gray-400"> */}
           <div>
             <button
-              // type="text"
-              // icon={<MenuUnfoldOutlined />}
               onClick={toggleMobileSidebar}
               className="text-base w-6 h-6 xl:hidden mt-3 block"
             >
@@ -160,15 +151,14 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
               alt="Profile picture"
               className="object-cover w-12 h-12 rounded-full border border-gray-300"
             />
-            <div className="text-xs">
-              <p>Avaz</p>
+            <div className="text-[16px] font-semibold leading-4">
+              <span>Avaz</span>
               <p>Azizov</p>
             </div>
           </div>
-          {/* </div> */}
         </Header>
         <Content
-          className="m-6 p-6 min-h-[280px]"
+          className="m-6 p-6 min-h-screen"
           style={{ background: colorBgContainer }}
         >
           {children}

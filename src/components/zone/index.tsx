@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Table, Button, Modal, Input, notification, Card, Spin } from "antd";

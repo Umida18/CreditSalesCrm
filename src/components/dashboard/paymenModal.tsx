@@ -100,11 +100,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   return (
     <Modal
-      title="Add Payment"
+      style={{ top: 30 }}
+      // title="To'lo'v qo'shish"
+      title={<h2 className="text-2xl font-bold mb-4">To'lo'v qo'shish</h2>}
       open={isOpen}
       onCancel={onClose}
       footer={null}
-      className="max-w-md"
+      className="max-w-md relative top-5"
     >
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item

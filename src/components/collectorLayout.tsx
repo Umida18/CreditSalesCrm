@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import { useState } from "react";
 import { Layout, Menu, Button, theme } from "antd";
@@ -7,38 +5,26 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   DashboardOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { CiLocationOn } from "react-icons/ci";
-import { BsFillPersonLinesFill } from "react-icons/bs";
 import { Outlet, Link, useLocation } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
 const menuItems = [
   {
-    key: "/",
+    key: "/collectorDashboard",
     icon: <DashboardOutlined />,
     label: "Dashboard",
   },
   {
-    key: "/zone",
+    key: "/statistic",
     icon: <CiLocationOn />,
-    label: "Zone",
-  },
-  {
-    key: "/workplace",
-    icon: <UserOutlined />,
-    label: "Workplace",
-  },
-  {
-    key: "/collector",
-    icon: <BsFillPersonLinesFill />,
-    label: "Yig'uvchilar",
+    label: "Statistika",
   },
 ];
 
-export function MainLayout({ children }: { children: React.ReactNode }) {
+export function CollectorLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -54,7 +40,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  // Desktop Sidebar
   const DesktopSidebar = () => (
     <Sider
       trigger={null}
@@ -63,7 +48,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       className="hidden md:block"
     >
       <div className="flex justify-center items-center py-4">
-        <p className="text-2xl font-bold text-gray-400">Admin</p>
+        <p className="text-2xl font-bold text-gray-400">Yig'uvchi</p>
       </div>
       <Menu
         theme="dark"

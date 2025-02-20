@@ -1,16 +1,14 @@
 import { Button, Table, notification } from "antd";
-import { MainLayout } from "../../components/mainlayout";
-// import { BsCashCoin } from "react-icons/bs";
-import CardsStatistic from "../../components/dashboard/cardsStatistic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
-import PaymentModal from "./paymentModal";
-import TableHeader from "./header";
-import DashboardCard from "./cardResponsiv";
+import PaymentModal from "../dashboard/paymentModal";
+import TableHeader from "../dashboard/header";
+import DashboardCard from "../dashboard/cardResponsiv";
 import { useNavigate } from "react-router-dom";
 import { BsPeople } from "react-icons/bs";
+import { CollectorLayout } from "../collectorLayout";
 
-export default function DashboardPage() {
+export default function DashboardCollector() {
   const [data, setData] = useState<any[]>([]);
   const [zones, setZones] = useState([]);
   // const [_____, setIsModalOpen] = useState(false);
@@ -26,22 +24,7 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
-  //   const fetchUserCount = async () => {
-  //     try {
-  //       const response = await fetch(`${BASE_URL}/users/count`);
-  //       if (!response.ok) {
-  //         throw new Error("Foydalanuvchilar sonini olishda xatolik yuz berdi");
-  //       }
-  //       const { count } = await response.json();
-  //       // Sahifalar sonini hisoblash
-  //       const calculatedPages = Math.ceil(count / itemsPerPage);
-  //       setTotalPages(calculatedPages);
-  //     } catch (error: any) {
-  //       setError(error.message);
-  //     }
-  //   };
-
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("tokenCollector");
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -212,14 +195,14 @@ export default function DashboardPage() {
   ];
 
   const handleRowClick = (record: any) => {
-    navigate(`/users/${record.id}`);
+    navigate(`/usersCollector/${record.id}`);
   };
 
   return (
-    <MainLayout>
+    <CollectorLayout>
       <h1 className="text-2xl font-bold mb-5">Dashboard</h1>
 
-      <CardsStatistic />
+      {/* <CardsStatistic /> */}
       <TableHeader
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -264,6 +247,6 @@ export default function DashboardPage() {
           userName={selectPayUser}
         />
       )}
-    </MainLayout>
+    </CollectorLayout>
   );
 }

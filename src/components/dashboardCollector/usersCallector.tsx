@@ -7,8 +7,9 @@ import { User, Building2, Phone, DollarSign } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash } from "react-icons/bs";
-import PaymentModal from "./paymenModal";
-import UserDetailsModal from "./userDetails";
+import PaymentModal from "../dashboard/paymentModal";
+import UserDetailsModal from "../dashboard/userDetails";
+import { CollectorLayout } from "../collectorLayout";
 
 interface UserData {
   id: number;
@@ -37,7 +38,7 @@ interface UserDetails {
   given_day: string;
 }
 
-export default function UsersPage() {
+export default function UsersCollec() {
   const { id } = useParams();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -204,7 +205,7 @@ export default function UsersPage() {
   }
 
   return (
-    <MainLayout>
+    <CollectorLayout>
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-2">Foydalanuvchilar ro'yxati</h1>
         <p className="text-gray-600">
@@ -331,6 +332,6 @@ export default function UsersPage() {
         userData={selectedUserDetails}
         loading={userDetailsLoading}
       />
-    </MainLayout>
+    </CollectorLayout>
   );
 }

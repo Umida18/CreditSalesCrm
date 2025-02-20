@@ -7,6 +7,9 @@ import Workplace from "./components/workplace/workplace";
 import { ToastContainer } from "react-toastify";
 import CollectorLoginPage from "./pages/collectorLogin";
 import UsersPage from "./components/dashboard/userPage";
+import DashboardCollector from "./components/dashboardCollector/dashboardCollector";
+import UsersCollec from "./components/dashboardCollector/usersCallector";
+import StatisticsContent from "./components/dashboardCollector/statistic";
 
 function App() {
   return (
@@ -19,8 +22,11 @@ function App() {
         <Route path="/collector" element={<Collector />} />
         <Route path="/collectorLogin" element={<CollectorLoginPage />} />
         <Route path="/zone" element={<Zone />} />
+        <Route path="/collectorDashboard" element={<DashboardCollector />} />
         <Route path="/workplace" element={<Workplace />} />
+        <Route path="/statistic" element={<StatisticsContent />} />
         <Route path="/users/:id" element={<UsersPage />} />
+        <Route path="/usersCollector/:id" element={<UsersCollec />} />
       </Routes>
     </BrowserRouter>
   );
