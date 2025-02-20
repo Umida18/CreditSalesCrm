@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import { Table, Button, Modal, Form, Input, notification } from "antd";
-import { MdEditSquare } from "react-icons/md";
-import { BASE_URL } from "../../config";
+// import { useCallback, useEffect, useState } from "react";
+// import { Table, Button, Modal, Form, Input, notification } from "antd";
+// import { MdEditSquare } from "react-icons/md";
+// import { BASE_URL } from "../../config";
 import { MainLayout } from "../mainlayout";
 
 const Collector = () => {
-  const [data, setData] = useState<any>([]);
-  const [modalVisible, setModalVisible] = useState<any>(false);
-  const [form] = Form.useForm();
-  const [editingCollector, setEditingCollector] = useState<any>(null);
+  // const [data, setData] = useState<any>([]);
+  // const [modalVisible, setModalVisible] = useState<any>(false);
+  // const [form] = Form.useForm();
+  // const [editingCollector, setEditingCollector] = useState<any>(null);
 
   // const fetchCollectors = useCallback(async () => {
   //   try {

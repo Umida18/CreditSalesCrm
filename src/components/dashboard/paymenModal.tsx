@@ -72,7 +72,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         ? values.paymentDate.format("MMMM")
         : undefined,
       payment_date: values.paymentDate.format("YYYY-MM-DD"),
-      type: String(isMonthlyPayment),
+      type: isMonthlyPayment,
       description: values.description,
     };
 

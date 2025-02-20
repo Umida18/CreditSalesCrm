@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table, Spin, Alert } from "antd";
@@ -51,6 +49,7 @@ export default function UsersPage() {
 
     fetchUsers();
   }, [id]);
+  console.log("users", users);
 
   const handleOpenModal = (userId: number) => {
     setSelectedUserId(userId);
