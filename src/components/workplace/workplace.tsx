@@ -125,6 +125,7 @@ const Workplace: React.FC = () => {
 
   return (
     <MainLayout>
+      <h1 className="text-2xl font-bold mb-5">Workplace ro'yxati</h1>
       <div className="mb-4">
         <Button
           type="primary"

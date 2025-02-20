@@ -157,7 +157,8 @@ const Zone: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="p-4">
+      <h1 className="text-2xl font-bold mb-5">Zona ro'yxati</h1>
+      <div className="">
         <Button
           type="primary"
           icon={<PlusCircle size={16} />}

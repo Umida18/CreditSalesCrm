@@ -8,6 +8,7 @@ import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash } from "react-icons/bs";
 import PaymentModal from "./paymenModal";
+import UserDetailsModal from "./userDetails";
 
 interface UserData {
   id: number;
@@ -21,13 +22,32 @@ interface UserData {
   cost: any;
 }
 
+interface UserDetails {
+  name: string;
+  product_name: string;
+  cost: number;
+  phone_number: string;
+  phone_number2: string;
+  workplace_id: string;
+  time: number;
+  zone_id: string;
+  seller: string;
+  passport_series: string;
+  description: string;
+  given_day: string;
+}
+
 export default function UsersPage() {
   const { id } = useParams();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedUserDetails, setSelectedUserDetails] =
+    useState<UserDetails | null>(null);
+  const [userDetailsLoading, setUserDetailsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -49,16 +69,38 @@ export default function UsersPage() {
 
     fetchUsers();
   }, [id]);
-  console.log("users", users);
 
-  const handleOpenModal = (userId: number) => {
+  const handleOpenPaymentModal = (userId: number) => {
     setSelectedUserId(userId);
-    setIsModalOpen(true);
+    setIsPaymentModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleClosePaymentModal = () => {
+    setIsPaymentModalOpen(false);
     setSelectedUserId(null);
+  };
+
+  const handleOpenUserDetailsModal = async (userId: number) => {
+    setUserDetailsLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/users/${userId}`);
+      if (!response.ok)
+        throw new Error(
+          "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
+        );
+      const data = await response.json();
+      setSelectedUserDetails(data);
+      setIsUserDetailsModalOpen(true);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setUserDetailsLoading(false);
+    }
+  };
+
+  const handleCloseUserDetailsModal = () => {
+    setIsUserDetailsModalOpen(false);
+    setSelectedUserDetails(null);
   };
 
   const columns = [
@@ -71,6 +113,7 @@ export default function UsersPage() {
       title: "Ism",
       dataIndex: "name",
       key: "name",
+      render: (text: string) => <a>{text}</a>,
     },
     {
       title: "Ish joyi",
@@ -97,7 +140,6 @@ export default function UsersPage() {
       dataIndex: "phone_number2",
       key: "phone2",
     },
-
     {
       title: "To'lov holati",
       dataIndex: "payment_status",
@@ -118,7 +160,7 @@ export default function UsersPage() {
       key: "Actions",
       render: (_: any, record: UserData) => (
         <button
-          onClick={() => handleOpenModal(record.id)}
+          onClick={() => handleOpenPaymentModal(record.id)}
           className={`text-2xl ${
             record.payment_status ? "text-green-800" : "text-red-800"
           }`}
@@ -163,6 +205,9 @@ export default function UsersPage() {
           dataSource={users}
           rowKey="id"
           className="shadow-sm"
+          onRow={(record) => ({
+            onClick: () => handleOpenUserDetailsModal(record.id),
+          })}
         />
       </div>
 
@@ -177,7 +222,13 @@ export default function UsersPage() {
               <div className="flex items-center space-x-2">
                 <User className="w-5 h-5 text-gray-500" />
                 <h3 className="font-medium">
-                  Ism <span className="font-bold">{user.name}</span>
+                  Ism{" "}
+                  <span
+                    className="font-bold cursor-pointer text-blue-600 hover:underline"
+                    onClick={() => handleOpenUserDetailsModal(user.id)}
+                  >
+                    {user.name}
+                  </span>
                 </h3>
               </div>
               <span
@@ -226,7 +277,7 @@ export default function UsersPage() {
                     Narxi <span className="font-bold">{user.cost}</span>
                   </span>
                 </div>
-                <button onClick={() => handleOpenModal(user.id)}>
+                <button onClick={() => handleOpenPaymentModal(user.id)}>
                   <span
                     className={`text-2xl ${
                       user.payment_status ? "text-green-800" : "text-red-800"
@@ -243,11 +294,18 @@ export default function UsersPage() {
 
       {selectedUserId && (
         <PaymentModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
+          isOpen={isPaymentModalOpen}
+          onClose={handleClosePaymentModal}
           userId={selectedUserId}
         />
       )}
+
+      <UserDetailsModal
+        isOpen={isUserDetailsModalOpen}
+        onClose={handleCloseUserDetailsModal}
+        userData={selectedUserDetails}
+        loading={userDetailsLoading}
+      />
     </MainLayout>
   );
 }
