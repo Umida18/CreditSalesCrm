@@ -6,15 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
-export default function LoginPage() {
+export default function CollectorLoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-      const res = await api.post("/admin/login", {
-        name: values.name,
+      const res = await api.post("/collector/login", {
+        login: values.login,
         password: values.password,
       });
       console.log("res", res);
@@ -59,7 +59,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <Title level={2} className="text-center mb-6">
-          Admin Login
+          Collector Login
         </Title>
 
         <Form
@@ -69,12 +69,12 @@ export default function LoginPage() {
           className="space-y-4"
         >
           <Form.Item
-            name="name"
+            name="login"
             rules={[{ required: true, message: "Please input your name  !" }]}
           >
             <Input
               prefix={<UserOutlined className="text-gray-400" />}
-              placeholder="name"
+              placeholder="login"
               className="rounded-md"
             />
           </Form.Item>
@@ -99,8 +99,8 @@ export default function LoginPage() {
             </Button>
           </Form.Item>
         </Form>
-        <Button onClick={() => navigate("/collectorLogin")} className="w-full">
-          Collector login
+        <Button onClick={() => navigate("/login")} className="w-full">
+          Admin Login
         </Button>
       </div>
     </div>

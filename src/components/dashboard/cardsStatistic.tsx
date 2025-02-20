@@ -44,21 +44,19 @@ const CardsStatistic = () => {
       .catch((error) => console.error("Xatolik:", error));
   }, []);
   return (
-    <div style={{ display: "flex", gap: "16px", marginBottom: "24px" }}>
-      <Card style={{ flex: 1, background: "#FFF0F5", border: 0 }}>
+    <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+      <Card style={{ background: "#FFF0F5", border: 0 }}>
         <p className="text-gray-600 text-[18px]">Jami pul</p>
         <h2 className="text-[22px] font-bold w-full">
-          {/* {parseInt(stats?.allMoney?.paid_money?.sum || 0, 10).toLocaleString()}{" "}
-          / */}
           {parseInt(stats?.allMoney?.all_income?.sum || 0, 10).toLocaleString()}{" "}
           UZS
         </h2>
         <p className="text-gray-600 text-[18px]">
-          {" "}
           {stats?.allMoney?.paid_users_count?.count || 0} /{" "}
           {stats?.allMoney?.income_users_count?.count || 0} kishi
         </p>
       </Card>
+
       <Card
         onClick={() =>
           setModalData({
@@ -67,19 +65,18 @@ const CardsStatistic = () => {
             users: stats.notPaidUsers,
           })
         }
-        style={{ flex: 1, background: "#E6F7FF", border: 0 }}
+        style={{ background: "#E6F7FF", border: 0 }}
       >
         <p className="text-gray-600 text-[18px]">To'lamaganlar</p>
         <h2 className="text-[22px] font-bold">
-          {" "}
           {parseInt(stats?.headPay?.sum || 0, 10).toLocaleString()} UZS
         </h2>
         <p className="text-gray-600 text-[18px]">
-          {" "}
           {stats.headPay?.count || 0} /{" "}
           {stats.allMoney?.income_users_count?.count || 0} kishi
         </p>
       </Card>
+
       <Card
         onClick={() =>
           setModalData({
@@ -88,17 +85,17 @@ const CardsStatistic = () => {
             users: stats.monthPaidUsers,
           })
         }
-        style={{ flex: 1, background: "#F6FFED", border: 0 }}
+        style={{ background: "#F6FFED", border: 0 }}
       >
         <p className="text-gray-600 text-[18px]">Bu oydagi to'lov</p>
         <h2 className="text-[22px] font-bold">
-          {" "}
           {parseInt(stats?.monthPay?.sum || 0, 10).toLocaleString()} UZS
         </h2>
         <p className="text-gray-600 text-[18px]">
           {stats.monthPay?.count || 0} kishi
         </p>
       </Card>
+
       <Card
         onClick={() =>
           setModalData({
@@ -107,17 +104,17 @@ const CardsStatistic = () => {
             users: stats.todayPaidUsers,
           })
         }
-        style={{ flex: 1, background: "#FFF7E6", border: 0 }}
+        style={{ background: "#FFF7E6", border: 0 }}
       >
         <p className="text-gray-600 text-[18px]">Bugungi to'lov</p>
         <h2 className="text-[22px] font-bold">
-          {" "}
           {parseInt(stats?.payUser?.sum || 0, 10).toLocaleString()} UZS
         </h2>
         <p className="text-gray-600 text-[18px]">
           {stats.payUser?.count || 0} kishi
         </p>
       </Card>
+
       {modalData && (
         <PaymentList
           type={modalData.type}

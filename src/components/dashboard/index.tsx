@@ -1,17 +1,18 @@
-import { Table, Tag, notification } from "antd";
-
+import { Table, notification } from "antd";
 import { MainLayout } from "../../components/mainlayout";
-import { BsCashCoin } from "react-icons/bs";
+// import { BsCashCoin } from "react-icons/bs";
 import CardsStatistic from "../../components/dashboard/cardsStatistic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
 import PaymentModal from "./paymentModal";
 import TableHeader from "./header";
+import DashboardCard from "./cardResponsiv";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardPage() {
   const [data, setData] = useState<any[]>([]);
   const [zones, setZones] = useState([]);
-  const [_____, setIsModalOpen] = useState(false);
+  // const [_____, setIsModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,6 +23,7 @@ export default function DashboardPage() {
   const [selectPayUser] = useState("");
   const [_, setTotalPages] = useState(1);
   const itemsPerPage = 20;
+  const navigate = useNavigate();
 
   //   const fetchUserCount = async () => {
   //     try {
@@ -37,6 +39,13 @@ export default function DashboardPage() {
   //       setError(error.message);
   //     }
   //   };
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
 
   useEffect(() => {
     if (!BASE_URL) {
@@ -64,7 +73,7 @@ export default function DashboardPage() {
       try {
         await fetchUserCount();
 
-        let url = `${BASE_URL}/users?page=${currentPage}`;
+        let url = `${BASE_URL}/zone`;
         if (selectedZone) {
           url += `&zone=${selectedZone}`;
         }
@@ -77,7 +86,7 @@ export default function DashboardPage() {
         setData(responseData.data || responseData);
 
         // Zonalar ma'lumotlarini olish
-        const zonesResponse = await fetch(`${BASE_URL}/zones`);
+        const zonesResponse = await fetch(`${BASE_URL}/zone`);
         if (!zonesResponse.ok) {
           throw new Error("Zonelarni yuklashda xatolik yuz berdi");
         }
@@ -91,7 +100,7 @@ export default function DashboardPage() {
     };
 
     fetchData();
-  }, [currentPage, selectedZone]);
+  }, [selectedZone]);
 
   const closePaymentModal = () => {
     setIsPaymentModalOpen(false);
@@ -155,71 +164,45 @@ export default function DashboardPage() {
   const columns = [
     {
       title: "Id",
-      key: "index",
+      key: "id",
       render: (_: any, __: any, index: any) =>
         index + 1 + (currentPage - 1) * itemsPerPage,
     },
     {
-      title: "Ismi",
-      dataIndex: "name",
-      key: "name",
-      render: (text: any, record: any) => (
-        <a
-          onClick={() => {
-            setSelectedUser(record);
-            setIsModalOpen(true);
-          }}
-        >
-          {text}
-        </a>
-      ),
+      title: "Hudud nomi",
+      dataIndex: "zone_name",
+      key: "zone_name",
     },
     {
-      title: "Manzili",
-      dataIndex: "zone",
-      key: "zone",
+      title: "Tavsif",
+      dataIndex: "description",
+      key: "description",
     },
-    {
-      title: "Narxi",
-      dataIndex: "cost",
-      key: "cost",
-      render: (cost: any) => `${Number(cost).toLocaleString()} so'm`,
-    },
-    {
-      title: "Telefon",
-      dataIndex: "phone_number",
-      key: "phone_number",
-    },
-    {
-      title: "Status",
-      dataIndex: "payment_status",
-      key: "payment_status",
-      render: (status: any) => (
-        <Tag color={status ? "green" : "red"}>
-          {status ? "To'landi" : "To'lanmadi"}
-        </Tag>
-      ),
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_: any, record: any) => (
-        <button
-          onClick={() => {
-            setSelectedUser(record);
-            setIsPaymentModalOpen(true);
-          }}
-          className=" cursor-pointer"
-        >
-          <BsCashCoin className="text-green-600 text-2xl" />
-        </button>
-      ),
-    },
+
+    // {
+    //   title: "Ismi",
+    //   dataIndex: "name",
+    //   key: "name",
+    //   render: (text: any, record: any) => (
+    //     <a
+    //       onClick={() => {
+    //         setSelectedUser(record);
+    //         setIsModalOpen(true);
+    //       }}
+    //     >
+    //       {text}
+    //     </a>
+    //   ),
+    // },
   ];
+
+  const handleRowClick = (record: any) => {
+    navigate(`/users/${record.id}`);
+  };
 
   return (
     <MainLayout>
-      <h1 style={{ fontSize: "24px", marginBottom: "24px" }}>Dashboard</h1>
+      <h1 className="text-2xl mb-6">Dashboard</h1>
 
       <CardsStatistic />
       <TableHeader
@@ -230,10 +213,32 @@ export default function DashboardPage() {
         zones={zones}
         setData={setData}
       />
-      <Table
-        columns={columns}
-        dataSource={filteredData ? filteredData : data}
-      />
+
+      {/* Desktop view */}
+      <div className="hidden md:block">
+        <Table
+          columns={columns}
+          dataSource={filteredData ? filteredData : data}
+          rowClassName="cursor-pointer hover:bg-gray-50"
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+          })}
+        />
+      </div>
+
+      {/* Mobile and Tablet view */}
+      <div className="md:hidden">
+        {(filteredData ? filteredData : data).map((item: any) => (
+          <DashboardCard
+            key={item.id}
+            item={item}
+            // onActionClick={() => {
+            //   setSelectedUser(item);
+            //   setIsPaymentModalOpen(true);
+            // }}
+          />
+        ))}
+      </div>
 
       {isPaymentModalOpen && (
         <PaymentModal
@@ -241,7 +246,6 @@ export default function DashboardPage() {
           closeModal={closePaymentModal}
           handlePayment={handlePayment}
           userName={selectPayUser}
-          //   closeModal={closeModal}
         />
       )}
     </MainLayout>

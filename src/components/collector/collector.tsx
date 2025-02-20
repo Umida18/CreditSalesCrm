@@ -10,109 +10,109 @@ const Collector = () => {
   const [form] = Form.useForm();
   const [editingCollector, setEditingCollector] = useState<any>(null);
 
-  const fetchCollectors = useCallback(async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/collector`);
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error("Error fetching collectors:", error);
-    }
-  }, []);
+  // const fetchCollectors = useCallback(async () => {
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/collector`);
+  //     const result = await response.json();
+  //     setData(result);
+  //   } catch (error) {
+  //     console.error("Error fetching collectors:", error);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    fetchCollectors();
-  }, [fetchCollectors]);
+  // useEffect(() => {
+  //   fetchCollectors();
+  // }, [fetchCollectors]);
 
-  const handleOpenModal = (collector: any = null) => {
-    setEditingCollector(collector);
-    form.setFieldsValue(
-      collector
-        ? { name: collector.collector_name, description: collector.description }
-        : { name: "", description: "" }
-    );
-    setModalVisible(true);
-  };
+  // const handleOpenModal = (collector: any = null) => {
+  //   setEditingCollector(collector);
+  //   form.setFieldsValue(
+  //     collector
+  //       ? { name: collector.collector_name, description: collector.description }
+  //       : { name: "", description: "" }
+  //   );
+  //   setModalVisible(true);
+  // };
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
-    form.resetFields();
-  };
+  // const handleCloseModal = () => {
+  //   setModalVisible(false);
+  //   form.resetFields();
+  // };
 
-  const handleSubmit = async (values: any) => {
-    try {
-      const method = editingCollector ? "PUT" : "POST";
-      const url = editingCollector
-        ? `${BASE_URL}/collector/update/${editingCollector.id}`
-        : `${BASE_URL}/collector/add`;
+  // const handleSubmit = async (values: any) => {
+  //   try {
+  //     const method = editingCollector ? "PUT" : "POST";
+  //     const url = editingCollector
+  //       ? `${BASE_URL}/collector/update/${editingCollector.id}`
+  //       : `${BASE_URL}/collector/add`;
 
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          collector_name: values.name,
-          description: values.description,
-        }),
-      });
+  //     const response = await fetch(url, {
+  //       method,
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         collector_name: values.name,
+  //         description: values.description,
+  //       }),
+  //     });
 
-      if (response.ok) {
-        fetchCollectors();
-        handleCloseModal();
-        notification.success({
-          message: editingCollector
-            ? "Yig'uvchi muvaffaqiyatli yangilandi!"
-            : "Yig'uvchi muvaffaqiyatli qo'shildi!",
-          placement: "topRight",
-        });
-      } else {
-        throw new Error("Error saving collector");
-      }
-    } catch (error) {
-      console.error("Error saving collector:", error);
-      //   openNotification("error", "Something went wrong!");
-    }
-  };
+  //     if (response.ok) {
+  //       fetchCollectors();
+  //       handleCloseModal();
+  //       notification.success({
+  //         message: editingCollector
+  //           ? "Yig'uvchi muvaffaqiyatli yangilandi!"
+  //           : "Yig'uvchi muvaffaqiyatli qo'shildi!",
+  //         placement: "topRight",
+  //       });
+  //     } else {
+  //       throw new Error("Error saving collector");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error saving collector:", error);
+  //     //   openNotification("error", "Something went wrong!");
+  //   }
+  // };
 
-  const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Name", dataIndex: "collector_name", key: "collector_name" },
-    {
-      title: "Created At",
-      dataIndex: "createdat",
-      key: "createdat",
-      render: (date: any) => new Date(date).toLocaleString("en-GB"),
-    },
-    { title: "Description", dataIndex: "description", key: "description" },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_: any, record: any) => (
-        <Button type="link" onClick={() => handleOpenModal(record)}>
-          <MdEditSquare className="text-blue-500 text-xl" />
-        </Button>
-      ),
-    },
-  ];
+  // const columns = [
+  //   { title: "ID", dataIndex: "id", key: "id" },
+  //   { title: "Name", dataIndex: "collector_name", key: "collector_name" },
+  //   {
+  //     title: "Created At",
+  //     dataIndex: "createdat",
+  //     key: "createdat",
+  //     render: (date: any) => new Date(date).toLocaleString("en-GB"),
+  //   },
+  //   { title: "Description", dataIndex: "description", key: "description" },
+  //   {
+  //     title: "Actions",
+  //     key: "actions",
+  //     render: (_: any, record: any) => (
+  //       <Button type="link" onClick={() => handleOpenModal(record)}>
+  //         <MdEditSquare className="text-blue-500 text-xl" />
+  //       </Button>
+  //     ),
+  //   },
+  // ];
 
   return (
     <MainLayout>
       <div className="">
-        <Button
+        {/* <Button
           type="primary"
           onClick={() => handleOpenModal()}
           className="mb-3"
         >
           Add Collector
-        </Button>
-
-        <Table
+        </Button> */}
+        <p>ggggggggggg</p>
+        {/* <Table
           dataSource={data}
           columns={columns}
           rowKey="id"
           pagination={{ pageSize: 5 }}
-        />
+        /> */}
 
-        <Modal
+        {/* <Modal
           title={editingCollector ? "Edit Collector" : "Add Collector"}
           visible={modalVisible}
           onCancel={handleCloseModal}
@@ -137,7 +137,7 @@ const Collector = () => {
               <Input placeholder="Enter description" />
             </Form.Item>
           </Form>
-        </Modal>
+        </Modal> */}
       </div>
     </MainLayout>
   );
