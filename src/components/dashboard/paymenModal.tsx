@@ -4,6 +4,7 @@ import { BsCash } from "react-icons/bs";
 import api from "../../Api/Api";
 import { useParams } from "react-router-dom";
 import { BASE_URL } from "../../config";
+import moment from "moment";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -64,16 +65,17 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       message.error("Collectorni tanlang");
       return;
     }
+
     console.log("values", values);
 
     const paymentData = {
       amount: Number(values.amount),
       collector_id: values.collector,
       zone_id: values.zone,
-      payment_month: isMonthlyPayment
-        ? values.paymentDate.format("MMMM")
-        : undefined,
-      payment_date: values.paymentDate.format("YYYY-MM-DD"),
+      payment_month: isMonthlyPayment ? moment().format("MMMM") : undefined, // Hozirgi oy
+      payment_date: isMonthlyPayment
+        ? moment().format("YYYY-MM-DD") // Bugungi sana
+        : values.paymentDate.format("YYYY-MM-DD"), // Tanlangan sana
       type: isMonthlyPayment,
       description: values.description,
     };
@@ -104,7 +106,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   return (
     <Modal
       style={{ top: 30 }}
-      // title="To'lo'v qo'shish"
       title={<h2 className="text-2xl font-bold mb-4">To'lo'v qo'shish</h2>}
       open={isOpen}
       onCancel={onClose}
@@ -119,15 +120,22 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         >
           <Input prefix={<BsCash className="text-gray-400" />} type="number" />
         </Form.Item>
-        <Form.Item name="paymentDate" label="Sana" rules={[{ required: true }]}>
-          <DatePicker className="w-full" />
-        </Form.Item>
+
         <Form.Item name="isMonthly" label="Bu oy uchunmi?">
           <Radio.Group onChange={(e) => setIsMonthlyPayment(e.target.value)}>
             <Radio value={true}>Ha</Radio>
             <Radio value={false}>Yo'q</Radio>
           </Radio.Group>
         </Form.Item>
+        {!isMonthlyPayment && (
+          <Form.Item
+            name="paymentDate"
+            label="Sana"
+            rules={[{ required: true }]}
+          >
+            <DatePicker className="w-full" />
+          </Form.Item>
+        )}
         <Form.Item
           name="collector"
           label="Yig'uvchini"
