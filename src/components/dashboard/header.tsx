@@ -1,25 +1,18 @@
 import { useEffect, useState } from "react";
-// import { MdAdd } from "react-icons/md";
-import { IoSearchOutline } from "react-icons/io5";
-// import { useNavigate } from "react-router-dom";
+import { Modal, Input, Form, message, Select } from "antd";
+import { MdAdd } from "react-icons/md";
 import { BASE_URL } from "../../config";
-import { Modal, Input, Form, message } from "antd";
 
-const Header = ({
-  searchTerm,
-  setSearchTerm,
-  selectedZone,
-  setSelectedZone,
-  zones,
-  setData,
-}: any) => {
-  // const navigate = useNavigate();
+const Header = ({ selectedZone, setData }: any) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const [zoneOptions, setZoneOptions] = useState([]);
+  const [workplaceOptions, setWorkplaceOptions] = useState([]);
 
-  // const handleAddUser = () => {
-  //   setIsModalVisible(true);
-  // };
+  const handleAddUser = () => {
+    setIsModalVisible(true);
+  };
+  console.log("zoneOptions", zoneOptions);
 
   const handleSubmit = async (values: any) => {
     try {
@@ -39,7 +32,7 @@ const Header = ({
       if (response.ok) {
         message.success("Foydalanuvchi muvaffaqiyatli qo'shildi!");
         setIsModalVisible(false);
-        form.resetFields(); // Formani tozalash
+        form.resetFields();
       } else {
         message.error(
           `Foydalanuvchini qo'shishda xatolik: ${
@@ -80,132 +73,148 @@ const Header = ({
     if (selectedZone !== null) fetchData(selectedZone);
   }, [selectedZone, setData]);
 
+  useEffect(() => {
+    const fetchZones = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/zone`);
+        const data = await response.json();
+        setZoneOptions(
+          data.map((zone: any) => ({ value: zone.id, label: zone.zone_name }))
+        );
+      } catch (error) {
+        console.error("Hududlarni olishda xatolik:", error);
+      }
+    };
+
+    const fetchWorkplaces = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/workplace`);
+        const data = await response.json();
+        setWorkplaceOptions(
+          data.map((workplace: any) => ({
+            value: workplace.id,
+            label: workplace.workplace_name,
+          }))
+        );
+      } catch (error) {
+        console.error("Ish joylarini olishda xatolik:", error);
+      }
+    };
+
+    fetchZones();
+    fetchWorkplaces();
+  }, []);
+
   return (
     <>
       <div className="flex justify-between items-center mb-3">
-        {/* <button
+        <button
           className="flex gap-4 px-4 py-2 rounded-lg bg-[#0042fd] text-white cursor-pointer"
           onClick={handleAddUser}
         >
           <MdAdd className="text-2xl" />
           <p>Klient qo'shish</p>
-        </button> */}
-
-        <div className="flex xl:items-center xl:flex-row flex-col  gap-4">
-          <div className="w-80 px-4 py-1 flex gap-4 bg-white rounded-md items-center text-gray-400 border border-gray-300">
-            <IoSearchOutline className="text-2xl" />
-            <input
-              type="text"
-              placeholder="Qidirish..."
-              className="px-2 py-1 outline-none w-full"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <select
-            className="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-600"
-            value={selectedZone || ""}
-            onChange={(e) => setSelectedZone(e.target.value.trim() || null)}
-          >
-            <option value="">Barcha hududlar</option>
-            {zones.map((zone: any) => (
-              <option key={zone.id} value={zone.zone_name}>
-                {zone.zone_name}
-              </option>
-            ))}
-          </select>
-        </div>
+        </button>
       </div>
 
       <Modal
-        title="Foydalanuvchi qo'shish"
-        visible={isModalVisible}
+        style={{ top: 20 }}
+        title={
+          <span style={{ fontWeight: 700, fontSize: 24 }}>
+            Foydalanuvchi qo'shish
+          </span>
+        }
+        open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         onOk={() => form.submit()}
         okText="Yuborish"
       >
-        <Form
-          form={form}
-          onFinish={handleSubmit}
-          layout="vertical"
-          initialValues={{
-            cost: 0,
-            time: 0,
-            phone_number2: "",
-          }}
-        >
-          <Form.Item
-            label="Ism"
-            name="name"
-            rules={[{ required: true, message: "Ismni kiriting!" }]}
+        <div className="max-h-[550px] p-4 overflow-y-auto">
+          <Form
+            form={form}
+            onFinish={handleSubmit}
+            layout="vertical"
+            initialValues={{
+              cost: 0,
+              time: 0,
+              phone_number2: "",
+            }}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Mahsulot nomi"
-            name="product_name"
-            rules={[{ required: true, message: "Mahsulot nomini kiriting!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Narx"
-            name="cost"
-            rules={[{ required: true, message: "Narxni kiriting!" }]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Telefon raqami"
-            name="phone_number"
-            rules={[{ required: true, message: "Telefon raqamini kiriting!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item label="Telefon raqami 2" name="phone_number2">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Ish joyi ID"
-            name="workplace_id"
-            rules={[{ required: true, message: "Ish joyi ID sini kiriting!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Vaqt"
-            name="time"
-            rules={[{ required: true, message: "Vaqtni kiriting!" }]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Hudud ID"
-            name="zone_id"
-            rules={[{ required: true, message: "Hudud ID sini kiriting!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Sotuvchi"
-            name="seller"
-            rules={[{ required: true, message: "Sotuvchini kiriting!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Pasport seriyasi"
-            name="passport_series"
-            rules={[
-              { required: true, message: "Pasport seriyasini kiriting!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item label="Tavsif" name="description">
-            <Input.TextArea />
-          </Form.Item>
-        </Form>
+            <Form.Item
+              label="Ism"
+              name="name"
+              rules={[{ required: true, message: "Ismni kiriting!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Mahsulot nomi"
+              name="product_name"
+              rules={[{ required: true, message: "Mahsulot nomini kiriting!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Narx"
+              name="cost"
+              rules={[{ required: true, message: "Narxni kiriting!" }]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Telefon raqami"
+              name="phone_number"
+              rules={[
+                { required: true, message: "Telefon raqamini kiriting!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item label="Telefon raqami 2" name="phone_number2">
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Ish joyi"
+              name="workplace_id"
+              rules={[{ required: true, message: "Ish joyini tanlang!" }]}
+            >
+              <Select options={workplaceOptions} />
+            </Form.Item>
+            <Form.Item
+              label="Vaqt"
+              name="time"
+              rules={[{ required: true, message: "Vaqtni kiriting!" }]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Hudud"
+              name="zone_id"
+              rules={[{ required: true, message: "Hududni tanlang!" }]}
+            >
+              <Select options={zoneOptions} />
+            </Form.Item>
+            <Form.Item
+              label="Sotuvchi"
+              name="seller"
+              rules={[{ required: true, message: "Sotuvchini kiriting!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Pasport seriyasi"
+              name="passport_series"
+              rules={[
+                { required: true, message: "Pasport seriyasini kiriting!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item label="Tavsif" name="description">
+              <Input.TextArea />
+            </Form.Item>
+          </Form>
+        </div>
       </Modal>
     </>
   );

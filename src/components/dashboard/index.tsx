@@ -193,26 +193,10 @@ export default function DashboardPage() {
         </Button>
       ),
     },
-
-    // {
-    //   title: "Ismi",
-    //   dataIndex: "name",
-    //   key: "name",
-    //   render: (text: any, record: any) => (
-    //     <a
-    //       onClick={() => {
-    //         setSelectedUser(record);
-    //         setIsModalOpen(true);
-    //       }}
-    //     >
-    //       {text}
-    //     </a>
-    //   ),
-    // },
   ];
 
   const handleRowClick = (record: any) => {
-    navigate(`/users/${record.id}`);
+    navigate(`/users/${record.id}?title=${record.zone_name}`);
   };
 
   return (

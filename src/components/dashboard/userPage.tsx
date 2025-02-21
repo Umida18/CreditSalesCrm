@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Table, Spin, Alert } from "antd";
 import { MainLayout } from "../../components/mainlayout";
 import { BASE_URL } from "../../config";
@@ -9,6 +9,7 @@ import { PiUniteSquare } from "react-icons/pi";
 import { BsCash } from "react-icons/bs";
 import PaymentModal from "./paymenModal";
 import UserDetailsModal from "./userDetails";
+import UserHistoryPaymentModal from "./userHistoryPaymentModal";
 
 interface UserData {
   id: number;
@@ -22,21 +23,6 @@ interface UserData {
   cost: any;
 }
 
-interface UserDetails {
-  name: string;
-  product_name: string;
-  cost: number;
-  phone_number: string;
-  phone_number2: string;
-  workplace_id: string;
-  time: number;
-  zone_id: string;
-  seller: string;
-  passport_series: string;
-  description: string;
-  given_day: string;
-}
-
 export default function UsersPage() {
   const { id } = useParams();
   const [users, setUsers] = useState<UserData[]>([]);
@@ -44,29 +30,30 @@ export default function UsersPage() {
   const [error, setError] = useState("");
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
+  const [isOpenUserHistoryModalOpen, setIsOpenUserHistoryModal] =
+    useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const [selectedUserDetails, setSelectedUserDetails] =
-    useState<UserDetails | null>(null);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
   const [userDetailsLoading, setUserDetailsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const title = searchParams.get("title");
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${BASE_URL}/users/filter/${id}?page=${1}`);
+      if (!response.ok)
+        throw new Error("Ma'lumotlarni yuklashda xatolik yuz berdi");
+      const data = await response.json();
+      setUsers(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          `${BASE_URL}/users/filter/${id}?page=${1}`
-        );
-        if (!response.ok)
-          throw new Error("Ma'lumotlarni yuklashda xatolik yuz berdi");
-        const data = await response.json();
-        setUsers(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
   }, [id]);
 
@@ -98,8 +85,30 @@ export default function UsersPage() {
     }
   };
 
+  const handleOpenUserHistoryModal = async (userId: number) => {
+    setUserDetailsLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/users/${userId}`);
+      if (!response.ok)
+        throw new Error(
+          "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
+        );
+      const data = await response.json();
+      setSelectedUserDetails(data);
+      setIsOpenUserHistoryModal(true);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setUserDetailsLoading(false);
+    }
+  };
+
   const handleCloseUserDetailsModal = () => {
     setIsUserDetailsModalOpen(false);
+    setSelectedUserDetails(null);
+  };
+  const handleCloseUserHistoryModal = () => {
+    setIsOpenUserHistoryModal(false);
     setSelectedUserDetails(null);
   };
 
@@ -180,6 +189,12 @@ export default function UsersPage() {
           >
             To'liq malumot
           </button>
+          <button
+            className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
+            onClick={() => handleOpenUserHistoryModal(record.id)}
+          >
+            To'lov tarixi
+          </button>
         </div>
       ),
     },
@@ -208,7 +223,8 @@ export default function UsersPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-2">Foydalanuvchilar ro'yxati</h1>
         <p className="text-gray-600">
-          Tanlangan hudud bo'yicha foydalanuvchilar
+          <span className="capitalize font-bold">{title}</span> tanlangan hudud
+          bo'yicha foydalanuvchilar
         </p>
       </div>
 
@@ -322,8 +338,14 @@ export default function UsersPage() {
           isOpen={isPaymentModalOpen}
           onClose={handleClosePaymentModal}
           userId={selectedUserId}
+          fetchUsers={fetchUsers}
         />
       )}
+      <UserHistoryPaymentModal
+        isOpen={isOpenUserHistoryModalOpen}
+        onClose={handleCloseUserHistoryModal}
+        userData={selectedUserDetails}
+      />
 
       <UserDetailsModal
         isOpen={isUserDetailsModalOpen}

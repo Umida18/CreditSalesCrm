@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, Col, Row, Select, Spin } from "antd";
 import { Users, DollarSign, UserCheck, UserX } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 import { BASE_URL } from "../../config";
 import { CollectorLayout } from "../collectorLayout";
 
@@ -50,12 +50,11 @@ export default function StatisticsContent() {
   const [selectedCollector, setSelectedCollector] = useState<number | null>(
     null
   );
-  const [selectedZone, setSelectedZone] = useState<number | null>(null);
-  const [selectedWorkplace, setSelectedWorkplace] = useState<number | null>(
-    null
-  );
 
-  const searchParams = useSearchParams();
+  const [selectedZone, setSelectedZone] = useState<number | null>(null);
+  const [_, setSelectedWorkplace] = useState<number | null>(null);
+
+  // const searchParams = useSearchParams();
   //   const zoneId = searchParams.get("zoneId")
 
   useEffect(() => {

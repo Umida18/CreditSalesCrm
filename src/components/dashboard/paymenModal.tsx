@@ -9,18 +9,22 @@ interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
   userId: number;
+  fetchUsers: any;
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({
   isOpen,
   onClose,
   userId,
+  fetchUsers,
 }) => {
   const [form] = Form.useForm();
   const [isMonthlyPayment, setIsMonthlyPayment] = useState(false);
   const { id } = useParams();
-  const [selectedZone, setSelectedZone] = useState<number | null>(null);
-  const [collectors, setCollectors] = useState<{ id: number; name: string }[]>(
+  const [selectedZone, setSelectedZone] = useState<
+    { id: number; zone_name: string }[]
+  >([]);
+  const [collectors, setCollectors] = useState<{ id: number; login: string }[]>(
     []
   );
   const [selectedCollector, setSelectedCollector] = useState<number | null>(
@@ -30,8 +34,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   useEffect(() => {
     const fetchZone = async () => {
       try {
-        const res = await api.get(`/zone/${id}`);
-        setSelectedZone(res.data.id);
+        const res = await api.get(`/zone`);
+        setSelectedZone(res.data);
       } catch (error) {
         console.error("Failed to fetch zone:", error);
       }
@@ -44,10 +48,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       if (!selectedZone) return;
 
       try {
-        const res = await api.post("/collector/filter", {
-          zone_id: selectedZone,
-          payment_status: true,
-        });
+        const res = await api.get("/collector");
 
         setCollectors(res.data);
       } catch (error) {
@@ -63,11 +64,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       message.error("Collectorni tanlang");
       return;
     }
+    console.log("values", values);
 
     const paymentData = {
       amount: Number(values.amount),
-      collector_id: selectedCollector,
-      zone_id: selectedZone,
+      collector_id: values.collector,
+      zone_id: values.zone,
       payment_month: isMonthlyPayment
         ? values.paymentDate.format("MMMM")
         : undefined,
@@ -91,6 +93,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
       message.success("Payment added successfully");
       onClose();
+      fetchUsers();
       form.resetFields();
       setSelectedCollector(null);
     } catch (error) {
@@ -136,7 +139,19 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           >
             {collectors.map((collector) => (
               <Select.Option key={collector.id} value={collector.id}>
-                {collector.name}
+                {collector.login}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item name="zone" label="Hudud" rules={[{ required: true }]}>
+          <Select
+            placeholder="Hududni tanlang"
+            onChange={(value) => setSelectedCollector(value)}
+          >
+            {selectedZone?.map((collector) => (
+              <Select.Option key={collector.id} value={collector.id}>
+                {collector.zone_name}
               </Select.Option>
             ))}
           </Select>

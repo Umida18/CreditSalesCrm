@@ -23,21 +23,6 @@ interface UserData {
   cost: any;
 }
 
-interface UserDetails {
-  name: string;
-  product_name: string;
-  cost: number;
-  phone_number: string;
-  phone_number2: string;
-  workplace_id: string;
-  time: number;
-  zone_id: string;
-  seller: string;
-  passport_series: string;
-  description: string;
-  given_day: string;
-}
-
 export default function UsersCollec() {
   const { id } = useParams();
   const [users, setUsers] = useState<UserData[]>([]);
@@ -46,8 +31,7 @@ export default function UsersCollec() {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const [selectedUserDetails, setSelectedUserDetails] =
-    useState<UserDetails | null>(null);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
   const [userDetailsLoading, setUserDetailsLoading] = useState(false);
 
   useEffect(() => {

@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 
 import { useState, useEffect } from "react";
@@ -23,9 +21,9 @@ interface UserDetails {
   cost: number;
   phone_number: string;
   phone_number2: string;
-  workplace_id: string;
+  workplace_name: string;
   time: number;
-  zone_id: string;
+  zone_name: string;
   seller: string;
   passport_series: string;
   description: string;
@@ -119,7 +117,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           {renderDetailItem(
             <Briefcase className="w-5 h-5" />,
             "Ish joyi ID",
-            userData.workplace_id
+            userData.workplace_name
           )}
           {renderDetailItem(
             <Calendar className="w-5 h-5" />,
@@ -129,7 +127,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           {renderDetailItem(
             <MapPin className="w-5 h-5" />,
             "Zona ID",
-            userData.zone_id
+            userData.zone_name
           )}
           {renderDetailItem(
             <UserCheck className="w-5 h-5" />,

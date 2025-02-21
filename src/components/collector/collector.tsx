@@ -1,33 +1,38 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "antd";
-import { BASE_URL } from "../../config";
 import { MainLayout } from "../mainlayout";
+import api from "../../Api/Api";
 
 const Collector = () => {
   const [data, setData] = useState<any>([]);
 
-  const fetchCollectors = useCallback(async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/collector`);
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error("Error fetching collectors:", error);
-    }
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await api.get("/collector/all-money");
+      console.log("res", res);
+
+      setData(res.data.result);
+      return res.data;
+    };
+    fetch();
   }, []);
 
-  useEffect(() => {
-    fetchCollectors();
-  }, [fetchCollectors]);
+  console.log("data", data);
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
-    { title: "login", dataIndex: "login", key: "login" },
+    { title: "Hudud", dataIndex: "zone_name", key: "zone_name" },
+    { title: "Yig'uvchi", dataIndex: "zone_name", key: "login" },
+    { title: "Oy", dataIndex: "month", key: "month" },
     {
-      title: "Created At",
-      dataIndex: "createdat",
-      key: "createdat",
-      render: (date: any) => new Date(date).toLocaleString("en-GB"),
+      title: "Jami yig'ilgan",
+      dataIndex: "total_collected",
+      key: "total_collected",
+    },
+    {
+      title: "Jami to'lo'vlar",
+      dataIndex: "total_payments",
+      key: "total_payments",
     },
   ];
 
@@ -35,12 +40,7 @@ const Collector = () => {
     <MainLayout>
       <h1 className="text-2xl font-bold mb-5">Yig'uvchilar ro'yxati</h1>
       <div className="">
-        <Table
-          dataSource={data}
-          columns={columns}
-          rowKey="id"
-          pagination={{ pageSize: 5 }}
-        />
+        <Table dataSource={data} columns={columns} />
       </div>
     </MainLayout>
   );
