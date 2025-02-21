@@ -290,14 +290,16 @@ export default function UsersPage() {
   }
 
   const handleSearch = useCallback(async () => {
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) {
+      fetchUsers();
+      return;
+    }
 
     setIsSearching(true);
     try {
       const response = await fetch(
         `${BASE_URL}/users/search/${encodeURIComponent(searchQuery)}`
       );
-      if (!response.ok) throw new Error("Qidirishda xatolik yuz berdi");
       const data = await response.json();
       setUsers(data);
     } catch (err: any) {
