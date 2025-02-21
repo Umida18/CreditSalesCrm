@@ -12,6 +12,7 @@ const Header = ({ selectedZone, setData }: any) => {
   const handleAddUser = () => {
     setIsModalVisible(true);
   };
+
   console.log("zoneOptions", zoneOptions);
 
   const handleSubmit = async (values: any) => {

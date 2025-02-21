@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { Table, Spin, Alert } from "antd";
+import { Table, Alert, Select, Button, Input } from "antd";
 import { MainLayout } from "../../components/mainlayout";
 import { BASE_URL } from "../../config";
-import { User, Building2, Phone, DollarSign } from "lucide-react";
+import { User, Building2, Phone, DollarSign, Search } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash } from "react-icons/bs";
@@ -21,6 +21,13 @@ interface UserData {
   created_at: string;
   workplace_name: string;
   cost: any;
+  zone_id: number;
+  workplace_id: number;
+}
+
+interface Workplace {
+  id: number;
+  workplace_name: string;
 }
 
 export default function UsersPage() {
@@ -38,7 +45,14 @@ export default function UsersPage() {
   const [searchParams] = useSearchParams();
   const title = searchParams.get("title");
 
-  const fetchUsers = async () => {
+  const [workplaceId, setWorkplaceId] = useState<number | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<boolean | null>(null);
+  const [workplaces, setWorkplaces] = useState<Workplace[]>([]);
+  const [workplaceError, setWorkplaceError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`${BASE_URL}/users/filter/${id}?page=${1}`);
@@ -51,12 +65,79 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  const fetchWorkplaces = useCallback(async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/workplace`);
+      if (!response.ok)
+        throw new Error("Ish joylarini yuklashda xatolik yuz berdi");
+      const data = await response.json();
+      setWorkplaces(data);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }, []);
 
   useEffect(() => {
     fetchUsers();
-  }, [id]);
+    fetchWorkplaces();
+  }, [fetchUsers, fetchWorkplaces]);
 
+  const handleFilterWorkplace = async (selectedWorkplaceId?: number) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${BASE_URL}/users/filter-workplace?page=1`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            zone_id: Number(id),
+            workplace_id: selectedWorkplaceId ?? workplaceId, // Agar `selectedWorkplaceId` kelsa, shuni ishlatamiz
+          }),
+        }
+      );
+      if (!response.ok) throw new Error("Filtrlashda xatolik yuz berdi");
+      const data = await response.json();
+      setUsers(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFilterUsers = async () => {
+    if (!workplaceId) {
+      setWorkplaceError("Ish joyini ham tanlang");
+      return;
+    }
+    setWorkplaceError(null);
+    try {
+      setLoading(true);
+      const response = await fetch(`${BASE_URL}/users/filter?page=${1}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          zone_id: Number(id),
+          workplace_id: workplaceId,
+          payment_status: paymentStatus,
+        }),
+      });
+      if (!response.ok) throw new Error("Filtrlashda xatolik yuz berdi");
+      const data = await response.json();
+      setUsers(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleOpenPaymentModal = (userId: number) => {
     setSelectedUserId(userId);
     setIsPaymentModalOpen(true);
@@ -200,16 +281,6 @@ export default function UsersPage() {
     },
   ];
 
-  if (loading) {
-    return (
-      <MainLayout>
-        <div className="flex justify-center items-center h-[50vh]">
-          <Spin size="large" />
-        </div>
-      </MainLayout>
-    );
-  }
-
   if (error) {
     return (
       <MainLayout>
@@ -217,6 +288,24 @@ export default function UsersPage() {
       </MainLayout>
     );
   }
+
+  const handleSearch = useCallback(async () => {
+    if (!searchQuery.trim()) return;
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(
+        `${BASE_URL}/users/search/${encodeURIComponent(searchQuery)}`
+      );
+      if (!response.ok) throw new Error("Qidirishda xatolik yuz berdi");
+      const data = await response.json();
+      setUsers(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [searchQuery]);
 
   return (
     <MainLayout>
@@ -228,17 +317,73 @@ export default function UsersPage() {
         </p>
       </div>
 
-      {/* Desktop view */}
+      <div className="flex justify-between items-center">
+        <div className="mb-4 space-x-4 flex items-center gap-1">
+          <Input
+            placeholder="Qidirish (telefon, ism yoki ID)"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ width: 250 }}
+          />
+          <Button type="primary" onClick={handleSearch} loading={isSearching}>
+            <Search className="size-4" />
+          </Button>
+        </div>
+
+        <div className="flex gap-2 items-center">
+          <div className="mb-4 space-x-4 flex items-center flex-col gap-1">
+            <Select
+              placeholder="Workplace"
+              value={workplaceId}
+              onChange={(value) => {
+                setWorkplaceId(value);
+                handleFilterWorkplace(value);
+              }}
+              style={{ width: 180 }}
+            >
+              {workplaces.map((workplace) => (
+                <Select.Option key={workplace.id} value={workplace.id}>
+                  {workplace.workplace_name}
+                </Select.Option>
+              ))}
+            </Select>
+            {workplaceError && (
+              <p className="text-red-500 text-sm mt-1">{workplaceError}</p>
+            )}
+          </div>
+
+          <div className="mb-4 space-x-4 flex items-center gap-1">
+            <Select
+              placeholder="To'lov holati"
+              onChange={(value) => setPaymentStatus(value)}
+              style={{ width: 180 }}
+            >
+              <Select.Option value={true}>To'langan</Select.Option>
+              <Select.Option value={false}>To'lanmagan</Select.Option>
+            </Select>
+            <Button
+              type="primary"
+              onClick={() => {
+                setWorkplaceError(null);
+                handleFilterUsers();
+              }}
+            >
+              <Search className="size-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <div className="hidden md:block">
         <Table
           columns={columns}
           dataSource={users}
           rowKey="id"
           className="shadow-sm"
+          loading={loading}
         />
       </div>
 
-      {/* Mobile and Tablet view */}
       <div className="md:hidden space-y-4">
         {users.map((user) => (
           <div
