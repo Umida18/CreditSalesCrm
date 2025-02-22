@@ -8,6 +8,7 @@ import {
   MenuUnfoldOutlined,
   DashboardOutlined,
   UserOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { CiLocationOn } from "react-icons/ci";
 import { BsFillPersonLinesFill } from "react-icons/bs";
@@ -61,6 +62,10 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const toggleMobileSidebar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   // Desktop Sidebar
   const DesktopSidebar = () => (
@@ -86,6 +91,21 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           ),
         }))}
       />
+
+      <div className=" px-4 ">
+        <Button
+          style={{
+            color: "red",
+            border: 0,
+            backgroundColor: "transparent",
+          }}
+          icon={<LogoutOutlined />}
+          onClick={handleLogout}
+          className="text-red-500 hover:text-red-700"
+        >
+          Logout
+        </Button>
+      </div>
     </Sider>
   );
 
@@ -127,6 +147,20 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           ),
         }))}
       />
+      <div className=" px-4 ">
+        <Button
+          style={{
+            color: "red",
+            border: 0,
+            backgroundColor: "transparent",
+          }}
+          icon={<LogoutOutlined />}
+          onClick={handleLogout}
+          className="text-red-500 hover:text-red-700"
+        >
+          Logout
+        </Button>
+      </div>
     </div>
   );
 

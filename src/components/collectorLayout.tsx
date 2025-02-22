@@ -1,3 +1,5 @@
+"use client";
+
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Layout, Menu, Button, theme } from "antd";
@@ -5,6 +7,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   DashboardOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { CiLocationOn } from "react-icons/ci";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
@@ -38,7 +41,7 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
     if (!token) {
       navigate("/collectorLogin");
     }
-  }, []);
+  }, [navigate, token]);
 
   const toggleDesktopSidebar = () => {
     setCollapsed(!collapsed);
@@ -48,33 +51,53 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("tokenCollector");
+    navigate("/collectorLogin");
+  };
+
   const DesktopSidebar = () => (
     <Sider
       trigger={null}
       collapsible
       collapsed={collapsed}
-      className="hidden md:block  !min-h-screen"
+      className="hidden md:block !min-h-screen"
     >
       <div className="flex justify-center items-center py-4">
         <p className="text-2xl font-bold text-gray-400">Yig'uvchi</p>
       </div>
-      <Menu
-        theme="dark"
-        mode="inline"
-        selectedKeys={[location.pathname]}
-        items={menuItems.map((item) => ({
-          ...item,
-          label: (
-            <Link to={item.key} className="text-gray-400 hover:text-white">
-              {item.label}
-            </Link>
-          ),
-        }))}
-      />
+      <div className="flex flex-col justify-between min-h-[85vh]">
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          items={menuItems.map((item) => ({
+            ...item,
+            label: (
+              <Link to={item.key} className="text-gray-400 hover:text-white">
+                {item.label}
+              </Link>
+            ),
+          }))}
+        />
+        <div className=" px-4 ">
+          <Button
+            style={{
+              color: "red",
+              border: 0,
+              backgroundColor: "transparent",
+            }}
+            icon={<LogoutOutlined />}
+            onClick={handleLogout}
+            className="text-red-500 hover:text-red-700"
+          >
+            Logout
+          </Button>
+        </div>
+      </div>
     </Sider>
   );
 
-  // Mobile Sidebar
   const MobileSidebar = () => (
     <div
       className={`md:hidden fixed inset-y-0 left-0 z-50 w-64 bg-[#001529] transform ${
@@ -112,6 +135,18 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
           ),
         }))}
       />
+      <Button
+        style={{
+          color: "red",
+          border: 0,
+          backgroundColor: "transparent",
+        }}
+        icon={<LogoutOutlined />}
+        onClick={handleLogout}
+        className="text-red-500 hover:text-red-700"
+      >
+        Logout
+      </Button>
     </div>
   );
 
@@ -119,28 +154,19 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
     <Layout className="min-h-screen">
       <DesktopSidebar />
       <MobileSidebar />
-      <Layout
-      // className={`transition-all duration-300 ${
-      //   collapsed ? "md:ml-20" : "md:ml-52"
-      // }`}
-      >
+      <Layout>
         <Header
-          className="flex justify-between items-center "
+          className="flex justify-between items-center"
           style={{ backgroundColor: "white" }}
         >
           <button
-            // type="text"
-            // icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={toggleDesktopSidebar}
             className="text-base w-16 h-16 hidden xl:flex"
           >
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </button>
-          {/* <div className=" flex justify-between items-center  text-gray-400"> */}
           <div>
             <button
-              // type="text"
-              // icon={<MenuUnfoldOutlined />}
               onClick={toggleMobileSidebar}
               className="text-base w-6 h-6 xl:hidden mt-3 block"
             >
@@ -158,7 +184,6 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
               <p>Azizov</p>
             </div>
           </div>
-          {/* </div> */}
         </Header>
         <Content
           className="m-6 p-6 min-h-[280px]"
@@ -171,7 +196,7 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
       {mobileMenuOpen && (
         <div
           style={{ backdropFilter: "blur(1px)" }}
-          className="md:hidden fixed inset-0 bg-white/5    bg-opacity-50 z-40"
+          className="md:hidden fixed inset-0 bg-white/5 bg-opacity-50 z-40"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
