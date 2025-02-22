@@ -1,14 +1,16 @@
 import { Button, Table, notification } from "antd";
+// import { BsCashCoin } from "react-icons/bs";
+import CardsStatistic from "../../components/dashboard/cardsStatistic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
-import PaymentModal from "../dashboard/paymentModal";
+import PaymentModal from "../dashboard/paymenModal";
 import TableHeader from "../dashboard/header";
 import DashboardCard from "../dashboard/cardResponsiv";
 import { useNavigate } from "react-router-dom";
 import { BsPeople } from "react-icons/bs";
 import { CollectorLayout } from "../collectorLayout";
 
-export default function DashboardCollector() {
+export default function DashboardPage() {
   const [data, setData] = useState<any[]>([]);
   const [zones, setZones] = useState([]);
   // const [_____, setIsModalOpen] = useState(false);
@@ -24,10 +26,25 @@ export default function DashboardCollector() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
+  //   const fetchUserCount = async () => {
+  //     try {
+  //       const response = await fetch(`${BASE_URL}/users/count`);
+  //       if (!response.ok) {
+  //         throw new Error("Foydalanuvchilar sonini olishda xatolik yuz berdi");
+  //       }
+  //       const { count } = await response.json();
+  //       // Sahifalar sonini hisoblash
+  //       const calculatedPages = Math.ceil(count / itemsPerPage);
+  //       setTotalPages(calculatedPages);
+  //     } catch (error: any) {
+  //       setError(error.message);
+  //     }
+  //   };
+
   const token = localStorage.getItem("tokenCollector");
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      navigate("/collectorLogin");
     }
   }, []);
 
@@ -176,33 +193,17 @@ export default function DashboardCollector() {
         </Button>
       ),
     },
-
-    // {
-    //   title: "Ismi",
-    //   dataIndex: "name",
-    //   key: "name",
-    //   render: (text: any, record: any) => (
-    //     <a
-    //       onClick={() => {
-    //         setSelectedUser(record);
-    //         setIsModalOpen(true);
-    //       }}
-    //     >
-    //       {text}
-    //     </a>
-    //   ),
-    // },
   ];
 
   const handleRowClick = (record: any) => {
-    navigate(`/usersCollector/${record.id}`);
+    navigate(`/usersCollector/${record.id}?title=${record.zone_name}`);
   };
 
   return (
     <CollectorLayout>
       <h1 className="text-2xl font-bold mb-5">Dashboard</h1>
 
-      {/* <CardsStatistic /> */}
+      <CardsStatistic />
       <TableHeader
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

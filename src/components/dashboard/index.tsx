@@ -4,7 +4,7 @@ import { MainLayout } from "../../components/mainlayout";
 import CardsStatistic from "../../components/dashboard/cardsStatistic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
-import PaymentModal from "./paymentModal";
+import PaymentModal from "./paymenModal";
 import TableHeader from "./header";
 import DashboardCard from "./cardResponsiv";
 import { useNavigate } from "react-router-dom";
@@ -243,7 +243,7 @@ export default function DashboardPage() {
       {isPaymentModalOpen && (
         <PaymentModal
           isOpen={isPaymentModalOpen}
-          closeModal={closePaymentModal}
+          onClose={closePaymentModal}
           handlePayment={handlePayment}
           userName={selectPayUser}
         />

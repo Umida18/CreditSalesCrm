@@ -13,8 +13,6 @@ const Header = ({ selectedZone, setData }: any) => {
     setIsModalVisible(true);
   };
 
-  console.log("zoneOptions", zoneOptions);
-
   const handleSubmit = async (values: any) => {
     try {
       const response = await fetch(`${BASE_URL}/users/add`, {

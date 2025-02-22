@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, DatePicker, Radio, Input, Form, message, Select } from "antd";
 import { BsCash } from "react-icons/bs";
 import api from "../../Api/Api";
@@ -6,19 +6,7 @@ import { useParams } from "react-router-dom";
 import { BASE_URL } from "../../config";
 import moment from "moment";
 
-interface PaymentModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  userId: number;
-  fetchUsers: any;
-}
-
-const PaymentModal: React.FC<PaymentModalProps> = ({
-  isOpen,
-  onClose,
-  userId,
-  fetchUsers,
-}) => {
+const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
   const [form] = Form.useForm();
   const [isMonthlyPayment, setIsMonthlyPayment] = useState(false);
   const { id } = useParams();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input, Form, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import api from "../Api/Api";
@@ -9,6 +9,16 @@ const { Title } = Typography;
 export default function CollectorLoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const tokenCollector = localStorage.getItem("tokenCollector");
+
+  useEffect(() => {
+    if (tokenCollector) {
+      navigate("/collectorDashboard");
+    } else {
+      navigate("/collectorLogin");
+    }
+  }, [tokenCollector]);
 
   const onFinish = async (values: any) => {
     try {
