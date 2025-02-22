@@ -1,15 +1,37 @@
+"use client";
+
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { Table, Alert, Select, Button, Input } from "antd";
+import {
+  Table,
+  Alert,
+  Select,
+  Button,
+  Input,
+  Modal,
+  Form,
+  DatePicker,
+  message,
+} from "antd";
 import { MainLayout } from "../../components/mainlayout";
 import { BASE_URL } from "../../config";
-import { User, Building2, Phone, DollarSign, Search } from "lucide-react";
+import {
+  User,
+  Building2,
+  Phone,
+  DollarSign,
+  Search,
+  Pen,
+  Trash,
+} from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash } from "react-icons/bs";
 import PaymentModal from "./paymenModal";
 import UserDetailsModal from "./userDetails";
 import UserHistoryPaymentModal from "./userHistoryPaymentModal";
+import moment from "moment";
+import api from "../../Api/Api";
 
 interface UserData {
   id: number;
@@ -23,6 +45,12 @@ interface UserData {
   cost: any;
   zone_id: number;
   workplace_id: number;
+  given_day: string;
+  phone_number2: string;
+  time: number;
+  seller: string;
+  passport_series: string;
+  description: string;
 }
 
 interface Workplace {
@@ -51,6 +79,9 @@ export default function UsersPage() {
   const [workplaceError, setWorkplaceError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<UserData | null>(null);
+  const [form] = Form.useForm();
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -193,6 +224,62 @@ export default function UsersPage() {
     setSelectedUserDetails(null);
   };
 
+  const handleEditUser = async (userId: number) => {
+    try {
+      const response = await fetch(`${BASE_URL}/users/${userId}`);
+      if (!response.ok)
+        throw new Error(
+          "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
+        );
+      const userData = await response.json();
+      setEditingUser(userData);
+      form.setFieldsValue({
+        ...userData,
+        given_day: moment(userData.given_day),
+      });
+      setIsEditModalOpen(true);
+      fetchUsers();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const handleEditSubmit = async (values: any) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/users/update/${editingUser?.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...values,
+            given_day: values.given_day.toISOString(),
+          }),
+        }
+      );
+      if (!response.ok)
+        throw new Error(
+          "Foydalanuvchi ma'lumotlarini yangilashda xatolik yuz berdi"
+        );
+      setIsEditModalOpen(false);
+      fetchUsers();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const handleDeleteUser = async (id: number) => {
+    try {
+      await api.delete(`/users/delete/${id}`);
+      message.success("Muvafaqiyatli ochirildi");
+      fetchUsers();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const columns = [
     {
       title: "ID",
@@ -225,11 +312,6 @@ export default function UsersPage() {
       key: "phone",
     },
     {
-      title: "Raqam 2",
-      dataIndex: "phone_number2",
-      key: "phone2",
-    },
-    {
       title: "To'lov holati",
       dataIndex: "payment_status",
       key: "payment_status",
@@ -248,7 +330,7 @@ export default function UsersPage() {
       dataIndex: "Actions",
       key: "Actions",
       render: (_: any, record: UserData) => (
-        <div className="flex justify-between gap-3 items-center">
+        <div className="flex gap-2 justify-between   items-center">
           <button
             className=" cursor-pointer"
             onClick={(e) => {
@@ -265,10 +347,22 @@ export default function UsersPage() {
             </span>
           </button>
           <button
+            className="bg-green-600 py-1 px-1 text-[12px] text-white rounded-md cursor-pointer"
+            onClick={() => handleEditUser(record.id)}
+          >
+            <Pen className="text-[8px] size-5" />
+          </button>
+          <button
+            className="bg-red-600 py-1 px-1 text-[15px] text-white rounded-md cursor-pointer"
+            onClick={() => handleDeleteUser(record.id)}
+          >
+            <Trash className="text-[8px] size-5" />
+          </button>
+          <button
             className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
             onClick={() => handleOpenUserDetailsModal(record.id)}
           >
-            To'liq malumot
+            batafsil
           </button>
           <button
             className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
@@ -319,7 +413,7 @@ export default function UsersPage() {
         </p>
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between xl:flex-row flex-col xl:items-center items-start">
         <div className="mb-4 space-x-4 flex items-center gap-1">
           <Input
             placeholder="Qidirish (telefon, ism yoki ID)"
@@ -332,7 +426,7 @@ export default function UsersPage() {
           </Button>
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 xl:flex-row flex-col xl:items-center items-start">
           <div className="mb-4 space-x-4 flex items-center flex-col gap-1">
             <Select
               placeholder="Workplace"
@@ -388,92 +482,110 @@ export default function UsersPage() {
 
       <div className="md:hidden space-y-4">
         {users.map((user) => (
-          <div
-            key={user.id}
-            className="bg-white rounded-lg shadow-md p-4 space-y-3"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <User className="w-5 h-5 text-gray-500" />
-                <h3 className="font-medium">
-                  Ism{" "}
-                  <span
-                    className="font-bold cursor-pointer text-blue-600 underline"
-                    onClick={() => handleOpenUserDetailsModal(user.id)}
-                  >
-                    {user.name}
+          <div className="bg-white flex flex-col rounded-lg shadow-md p-4 h-full">
+            <div key={user.id} className="  space-y-3 min-h-full">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <User className="w-5 h-5 text-gray-500" />
+                  <h3 className="font-medium">
+                    Ism{" "}
+                    <span
+                      className="font-bold cursor-pointer text-blue-600 underline"
+                      onClick={() => handleOpenUserDetailsModal(user.id)}
+                    >
+                      {user.name}
+                    </span>
+                  </h3>
+                </div>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs ${
+                    user.payment_status
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {user.payment_status ? "To'langan" : "To'lanmagan"}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2 text-sm ">
+                <div className="flex items-center space-x-2">
+                  <PiUniteSquare className="w-5 h-5 text-gray-500" />
+                  <h3 className="font-medium">
+                    ID: <span className="font-bold">{user.id}</span>
+                  </h3>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Building2 className="w-4 h-4" />
+                  <span>
+                    Ish joyi{" "}
+                    <span className="font-bold">{user.workplace_name}</span>
                   </span>
-                </h3>
-              </div>
-              <span
-                className={`px-2 py-1 rounded-full text-xs ${
-                  user.payment_status
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
-                }`}
-              >
-                {user.payment_status ? "To'langan" : "To'lanmagan"}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2 text-sm ">
-              <div className="flex items-center space-x-2">
-                <PiUniteSquare className="w-5 h-5 text-gray-500" />
-                <h3 className="font-medium">
-                  ID: <span className="font-bold">{user.id}</span>
-                </h3>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Building2 className="w-4 h-4" />
-                <span>
-                  Ish joyi{" "}
-                  <span className="font-bold">{user.workplace_name}</span>
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="w-4 h-4" />
-                <span>
-                  Raqam: <span className="font-bold">{user.phone_number}</span>
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <ProductFilled className="w-4 h-4" />
-                <span>
-                  Maxsulot nomi:{" "}
-                  <span className="font-bold">{user.product_name}</span>
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between space-x-2">
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Phone className="w-4 h-4" />
+                  <span>
+                    Raqam:{" "}
+                    <span className="font-bold">{user.phone_number}</span>
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <ProductFilled className="w-4 h-4" />
+                  <span>
+                    Maxsulot nomi:{" "}
+                    <span className="font-bold">{user.product_name}</span>
+                  </span>
+                </div>
                 <div className="flex items-center space-x-2">
                   <DollarSign className="w-4 h-4" />
                   <span>
                     Narxi <span className="font-bold">{user.cost}</span>
                   </span>
                 </div>
-                <div className="flex justify-between gap-3 items-center">
-                  <button
-                    className=" cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleOpenPaymentModal(user.id);
-                    }}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between min-h-full mt-3 w-full">
+              <div className="flex justify-between w-full  items-center">
+                <button
+                  className=" cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenPaymentModal(user.id);
+                  }}
+                >
+                  <span
+                    className={`text-2xl ${
+                      user.payment_status ? "text-green-800" : "text-red-800"
+                    }`}
                   >
-                    <span
-                      className={`text-2xl ${
-                        user.payment_status ? "text-green-800" : "text-red-800"
-                      }`}
-                    >
-                      <BsCash />
-                    </span>
-                  </button>
-                  <button
-                    className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
-                    onClick={() => handleOpenUserDetailsModal(user.id)}
-                  >
-                    To'liq malumot
-                  </button>
-                </div>
+                    <BsCash />
+                  </span>
+                </button>
+                <button
+                  className="bg-green-600 py-1 px-1 text-[12px] text-white rounded-md cursor-pointer"
+                  onClick={() => handleEditUser(user.id)}
+                >
+                  <Pen className="text-[8px] size-5" />
+                </button>
+                <button
+                  className="bg-red-600 py-1 px-1 text-[15px] text-white rounded-md cursor-pointer"
+                  onClick={() => handleDeleteUser(user.id)}
+                >
+                  <Trash className="text-[8px] size-5" />
+                </button>
+                <button
+                  className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
+                  onClick={() => handleOpenUserDetailsModal(user.id)}
+                >
+                  Batafsil
+                </button>
+                <button
+                  className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
+                  onClick={() => handleOpenUserHistoryModal(user.id)}
+                >
+                  To'lov tarixi
+                </button>
               </div>
             </div>
           </div>
@@ -500,6 +612,84 @@ export default function UsersPage() {
         userData={selectedUserDetails}
         loading={userDetailsLoading}
       />
+      <Modal
+        title="Foydalanuvchi ma'lumotlarini tahrirlash"
+        open={isEditModalOpen}
+        onCancel={() => setIsEditModalOpen(false)}
+        footer={null}
+        className="max-h-[600px]"
+      >
+        <div className="max-h-[500px] overflow-y-auto px-2 mt-4">
+          <Form
+            className=""
+            form={form}
+            onFinish={handleEditSubmit}
+            layout="vertical"
+          >
+            <Form.Item name="name" label="Ism" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="product_name"
+              label="Mahsulot nomi"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item name="cost" label="Narxi" rules={[{ required: true }]}>
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              name="phone_number"
+              label="Telefon raqami"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item name="phone_number2" label="Qo'shimcha telefon raqami">
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="workplace_id"
+              label="Ish joyi ID"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item name="time" label="Vaqt" rules={[{ required: true }]}>
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              name="zone_id"
+              label="Hudud ID"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item name="seller" label="Sotuvchi">
+              <Input />
+            </Form.Item>
+            <Form.Item name="passport_series" label="Passport seriyasi">
+              <Input />
+            </Form.Item>
+            <Form.Item name="description" label="Tavsif">
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              name="given_day"
+              label="Berilgan sana"
+              rules={[{ required: true }]}
+            >
+              <DatePicker showTime />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Saqlash
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Modal>
     </MainLayout>
   );
 }

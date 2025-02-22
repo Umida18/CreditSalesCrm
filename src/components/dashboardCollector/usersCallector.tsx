@@ -257,7 +257,7 @@ export default function UsersCollec() {
             className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
             onClick={() => handleOpenUserDetailsModal(record.id)}
           >
-            To'liq malumot
+            Batafsil
           </button>
           <button
             className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
