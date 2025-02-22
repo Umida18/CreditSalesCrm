@@ -1,259 +1,167 @@
 import { useState, useEffect } from "react";
-import { Card, Col, Row, Select, Spin } from "antd";
-import { Users, DollarSign, UserCheck, UserX } from "lucide-react";
-// import { useSearchParams } from "react-router-dom";
-import { BASE_URL } from "../../config";
+import { Select, Button, Spin, Empty } from "antd";
+import { BarChart2, Filter } from "lucide-react";
+import { FaUser } from "react-icons/fa";
+import StatisticCard from "./statisticCard";
+import CollectorTable from "./statisticTable";
 import { CollectorLayout } from "../collectorLayout";
+import { BASE_URL } from "../../config";
 
-interface StatisticsData {
-  zonedagi_tolaganlar: number;
-  bu_oy_tolagan: number;
-  hamma_users: number;
-  tolamagan_users: number;
-}
-
-interface CollectorStatistics {
-  // Add properties based on the actual response
-  totalUsers?: number;
-  paidUsers?: number;
-  unpaidUsers?: number;
-}
-
-interface Workplace {
-  id: number;
-  name: string;
-  // Add other properties as needed
-}
-
-interface Collector {
-  id: number;
-  name: string;
-  // Add other properties as needed
-}
-
-interface Zone {
-  id: number;
-  name: string;
-  // Add other properties as needed
-}
-
-export default function StatisticsContent() {
-  const [statistics, setStatistics] = useState<StatisticsData | null>(null);
-  const [collectorStats, setCollectorStats] =
-    useState<CollectorStatistics | null>(null);
-  const [workplaces, setWorkplaces] = useState<Workplace[]>([]);
-  const [collectors, setCollectors] = useState<Collector[]>([]);
-  const [zones, setZones] = useState<Zone[]>([]);
+export default function StatisticsPage() {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [thisMonthStats, setThisMonthStats] = useState([]);
+  const [oldMonthStats, setOldMonthStats] = useState([]);
+  const [collectorStats, setCollectorStats] = useState([]);
+  const [filteredStats, setFilteredStats] = useState([]);
+  const [zones, setZones] = useState([]);
+  const [selectedZone, setSelectedZone] = useState(undefined);
+  const [isFiltered, setIsFiltered] = useState(false);
 
-  const [selectedCollector, setSelectedCollector] = useState<number | null>(
-    null
-  );
-
-  const [selectedZone, setSelectedZone] = useState<number | null>(null);
-  const [_, setSelectedWorkplace] = useState<number | null>(null);
-
-  // const searchParams = useSearchParams();
-  //   const zoneId = searchParams.get("zoneId")
+  const collectorId =
+    typeof window !== "undefined" ? localStorage.getItem("collectorId") : null;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        // Fetch initial statistics
-        const statsRes = await fetch(`${BASE_URL}/zone/about`);
-        const statsData: StatisticsData = await statsRes.json();
-        setStatistics(statsData);
-
-        // Fetch zones
-        const zonesRes = await fetch(`${BASE_URL}/zone`);
-        const zonesData: Zone[] = await zonesRes.json();
-        setZones(zonesData);
-
-        // Fetch collectors
-        const collectorsRes = await fetch(`${BASE_URL}/collector`);
-        const collectorsData: Collector[] = await collectorsRes.json();
-        setCollectors(collectorsData);
-
-        // Fetch workplaces
-        const workplacesRes = await fetch(`${BASE_URL}/workplace`);
-        const workplacesData: Workplace[] = await workplacesRes.json();
-        setWorkplaces(workplacesData);
-
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch data. Please try again later.");
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchStatistics();
   }, []);
 
-  useEffect(() => {
-    const fetchCollectorStats = async () => {
-      if (selectedCollector && selectedZone) {
-        try {
-          setLoading(true);
-          const res = await fetch(
-            `${BASE_URL}/api/collector/statistic-by-users-zone`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                collector_id: selectedCollector,
-                zone_id: selectedZone,
-              }),
-            }
-          );
-          const data: CollectorStatistics = await res.json();
-          setCollectorStats(data);
-          setLoading(false);
-        } catch (err) {
-          setError("Failed to fetch collector statistics. Please try again.");
-          setLoading(false);
+  const fetchStatistics = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${BASE_URL}/collector/statistic/${collectorId}`
+      );
+      const data = await response.json();
+      setThisMonthStats(data.this_month.rows);
+      setOldMonthStats(data.old_month.rows);
+
+      const collectorResponse = await fetch(
+        `${BASE_URL}/collector/statistic-by-users-all/${collectorId}?page=${1}`,
+        {
+          method: "POST",
         }
+      );
+      const collectorData = await collectorResponse.json();
+      setCollectorStats(collectorData);
+
+      const zonesResponse = await fetch(`${BASE_URL}/zone`);
+      if (!zonesResponse.ok) {
+        throw new Error("Zonelarni yuklashda xatolik yuz berdi");
       }
-    };
+      const zonesData = await zonesResponse.json();
+      setZones(zonesData);
+    } catch (error) {
+      console.error("Error fetching statistics:", error);
+    }
+    setLoading(false);
+  };
 
-    fetchCollectorStats();
-  }, [selectedCollector, selectedZone]);
+  const handleFilter = async () => {
+    if (!selectedZone) {
+      setIsFiltered(false);
+      setFilteredStats([]);
+      return;
+    }
 
-  const handleCollectorChange = (value: number) => setSelectedCollector(value);
-  const handleZoneChange = (value: number) => setSelectedZone(value);
-  const handleWorkplaceChange = (value: number) => setSelectedWorkplace(value);
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${BASE_URL}/collector/statistic-by-users-zone?page=${1}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            collector_id: Number(collectorId),
+            zone_id: selectedZone,
+          }),
+        }
+      );
 
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
-  }
+      const data = await response.json();
+      setFilteredStats(data);
+      setIsFiltered(true);
+    } catch (error) {
+      console.error("Error filtering statistics:", error);
+    }
+    setLoading(false);
+  };
+
+  const handleClearFilter = () => {
+    setSelectedZone(undefined);
+    setIsFiltered(false);
+    setFilteredStats([]);
+  };
+
+  const displayData = isFiltered ? filteredStats : collectorStats;
 
   return (
     <CollectorLayout>
-      <div className="space-y-6">
-        <Row gutter={16}>
-          <Col xs={24} sm={12} md={6}>
-            <Card>
-              <Spin spinning={loading}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-500">Total Users</p>
-                    <p className="text-2xl font-semibold">
-                      {statistics?.hamma_users || 0}
-                    </p>
-                  </div>
-                  <Users className="h-8 w-8 text-blue-500" />
-                </div>
-              </Spin>
-            </Card>
-          </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Card>
-              <Spin spinning={loading}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-500">Paid This Month</p>
-                    <p className="text-2xl font-semibold">
-                      {statistics?.bu_oy_tolagan || 0}
-                    </p>
-                  </div>
-                  <DollarSign className="h-8 w-8 text-green-500" />
-                </div>
-              </Spin>
-            </Card>
-          </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Card>
-              <Spin spinning={loading}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-500">Paid in Zone</p>
-                    <p className="text-2xl font-semibold">
-                      {statistics?.zonedagi_tolaganlar || 0}
-                    </p>
-                  </div>
-                  <UserCheck className="h-8 w-8 text-indigo-500" />
-                </div>
-              </Spin>
-            </Card>
-          </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Card>
-              <Spin spinning={loading}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-500">Unpaid Users</p>
-                    <p className="text-2xl font-semibold">
-                      {statistics?.tolamagan_users || 0}
-                    </p>
-                  </div>
-                  <UserX className="h-8 w-8 text-red-500" />
-                </div>
-              </Spin>
-            </Card>
-          </Col>
-        </Row>
+      <div className="container mx-auto">
+        <h1 className="text-2xl font-bold mb-6">Collector Statistics</h1>
 
-        <Card title="Filter Statistics">
-          <Row gutter={16}>
-            <Col xs={24} sm={8}>
-              <Select
-                style={{ width: "100%" }}
-                placeholder="Select Collector"
-                onChange={handleCollectorChange}
-                options={collectors.map((c) => ({
-                  value: c.id,
-                  label: c.name,
-                }))}
-              />
-            </Col>
-            <Col xs={24} sm={8}>
-              <Select
-                style={{ width: "100%" }}
-                placeholder="Select Zone"
-                onChange={handleZoneChange}
-                options={zones.map((z) => ({ value: z.id, label: z.name }))}
-              />
-            </Col>
-            <Col xs={24} sm={8}>
-              <Select
-                style={{ width: "100%" }}
-                placeholder="Select Workplace"
-                onChange={handleWorkplaceChange}
-                options={workplaces.map((w) => ({
-                  value: w.id,
-                  label: w.name,
-                }))}
-              />
-            </Col>
-          </Row>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <StatisticCard
+            title="Bu Oy Jami"
+            value={thisMonthStats
+              .reduce(
+                (acc, curr: any) => acc + Number.parseFloat(curr.total_payment),
+                0
+              )
+              .toFixed(2)}
+            icon={<BarChart2 className="h-8 w-8 text-blue-500" />}
+          />
+          <StatisticCard
+            title="O'tgan Oy Jami"
+            value={oldMonthStats
+              .reduce(
+                (acc, curr: any) => acc + Number.parseFloat(curr.total_payment),
+                0
+              )
+              .toFixed(2)}
+            icon={<BarChart2 className="h-8 w-8 text-green-500" />}
+          />
+          <StatisticCard
+            title="Jami Foydalanuvchilar"
+            value={collectorStats.length}
+            icon={<FaUser className="h-8 w-8 text-purple-500" />}
+          />
+        </div>
 
-        {collectorStats && (
-          <Card title="Collector Statistics">
-            <Spin spinning={loading}>
-              <Row gutter={16}>
-                <Col xs={24} sm={8}>
-                  <p className="text-sm text-gray-500">Total Users</p>
-                  <p className="text-xl font-semibold">
-                    {collectorStats.totalUsers || 0}
-                  </p>
-                </Col>
-                <Col xs={24} sm={8}>
-                  <p className="text-sm text-gray-500">Paid Users</p>
-                  <p className="text-xl font-semibold">
-                    {collectorStats.paidUsers || 0}
-                  </p>
-                </Col>
-                <Col xs={24} sm={8}>
-                  <p className="text-sm text-gray-500">Unpaid Users</p>
-                  <p className="text-xl font-semibold">
-                    {collectorStats.unpaidUsers || 0}
-                  </p>
-                </Col>
-              </Row>
-            </Spin>
-          </Card>
+        <div className="flex flex-col justify-end md:flex-row gap-4 mb-4">
+          <Select
+            allowClear
+            placeholder="Select Zone"
+            className="w-full md:w-48 flex items-center"
+            value={selectedZone}
+            onChange={(value) => setSelectedZone(value)}
+            options={zones.map((zone: any) => ({
+              value: zone.id,
+              label: zone.zone_name,
+            }))}
+          />
+
+          <Button
+            type="primary"
+            icon={<Filter className="h-4 w-4" />}
+            onClick={handleFilter}
+          >
+            Filter
+          </Button>
+
+          {isFiltered && (
+            <Button onClick={handleClearFilter}>Filterni tozalash</Button>
+          )}
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Spin size="large" />
+          </div>
+        ) : displayData.length > 0 ? (
+          <CollectorTable data={displayData} />
+        ) : (
+          <Empty description="Ma'lumot mavjud emas" />
         )}
       </div>
     </CollectorLayout>

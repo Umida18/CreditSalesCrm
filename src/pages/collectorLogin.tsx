@@ -30,6 +30,8 @@ export default function CollectorLoginPage() {
       console.log("res", res);
 
       localStorage.setItem("tokenCollector", res.data.token);
+      localStorage.setItem("collectorId", res.data.id);
+
       navigate("/collectorDashboard");
       console.log("Success:", values);
     } catch (error) {
