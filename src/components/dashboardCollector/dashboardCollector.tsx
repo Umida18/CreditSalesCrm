@@ -1,6 +1,4 @@
-import { Button, Table, notification } from "antd";
-// import { BsCashCoin } from "react-icons/bs";
-import CardsStatistic from "../../components/dashboard/cardsStatistic";
+import { Button, Spin, Table, notification } from "antd";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
 import PaymentModal from "../dashboard/paymenModal";
@@ -13,7 +11,6 @@ import { CollectorLayout } from "../collectorLayout";
 export default function DashboardPage() {
   const [data, setData] = useState<any[]>([]);
   const [zones, setZones] = useState([]);
-  // const [_____, setIsModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,21 +22,6 @@ export default function DashboardPage() {
   const itemsPerPage = 20;
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
-
-  //   const fetchUserCount = async () => {
-  //     try {
-  //       const response = await fetch(`${BASE_URL}/users/count`);
-  //       if (!response.ok) {
-  //         throw new Error("Foydalanuvchilar sonini olishda xatolik yuz berdi");
-  //       }
-  //       const { count } = await response.json();
-  //       // Sahifalar sonini hisoblash
-  //       const calculatedPages = Math.ceil(count / itemsPerPage);
-  //       setTotalPages(calculatedPages);
-  //     } catch (error: any) {
-  //       setError(error.message);
-  //     }
-  //   };
 
   useEffect(() => {
     if (!BASE_URL) {
@@ -196,7 +178,6 @@ export default function DashboardPage() {
     <CollectorLayout>
       <h1 className="text-2xl font-bold mb-5">Dashboard</h1>
 
-      <CardsStatistic />
       <TableHeader
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -206,7 +187,6 @@ export default function DashboardPage() {
         setData={setData}
       />
 
-      {/* Desktop view */}
       <div className="hidden md:block">
         <Table
           columns={columns}
@@ -219,18 +199,14 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Mobile and Tablet view */}
       <div className="md:hidden">
-        {(filteredData ? filteredData : data).map((item: any) => (
-          <DashboardCard
-            key={item.id}
-            item={item}
-            // onActionClick={() => {
-            //   setSelectedUser(item);
-            //   setIsPaymentModalOpen(true);
-            // }}
-          />
-        ))}
+        {loading ? (
+          <Spin />
+        ) : (
+          (filteredData ? filteredData : data).map((item: any) => (
+            <DashboardCard key={item.id} item={item} />
+          ))
+        )}
       </div>
 
       {isPaymentModalOpen && (
