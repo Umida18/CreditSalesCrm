@@ -127,7 +127,7 @@ export default function UsersPage() {
           },
           body: JSON.stringify({
             zone_id: Number(id),
-            workplace_id: selectedWorkplaceId ?? workplaceId, // Agar `selectedWorkplaceId` kelsa, shuni ishlatamiz
+            workplace_id: selectedWorkplaceId ?? workplaceId,
           }),
         }
       );
@@ -156,7 +156,6 @@ export default function UsersPage() {
         },
         body: JSON.stringify({
           zone_id: Number(id),
-          workplace_id: workplaceId,
           payment_status: paymentStatus,
         }),
       });
@@ -232,9 +231,11 @@ export default function UsersPage() {
           "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
         );
       const userData = await response.json();
+
       setEditingUser(userData);
       form.setFieldsValue({
         ...userData,
+        // workplace_name: work,
         given_day: moment(userData.given_day),
       });
       setIsEditModalOpen(true);
@@ -246,23 +247,24 @@ export default function UsersPage() {
 
   const handleEditSubmit = async (values: any) => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/users/update/${editingUser?.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...values,
-            given_day: values.given_day.toISOString(),
-          }),
-        }
-      );
-      if (!response.ok)
-        throw new Error(
-          "Foydalanuvchi ma'lumotlarini yangilashda xatolik yuz berdi"
-        );
+      const work = workplaces?.find(
+        (w: any) => w?.workplace_name === editingUser?.workplace_name
+      )?.id;
+
+      await fetch(`${BASE_URL}/users/update/${editingUser?.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          ...values,
+          workplace_id: work,
+          zone_id: id,
+          given_day: values.given_day.toISOString(),
+        }),
+      });
+
       setIsEditModalOpen(false);
       fetchUsers();
     } catch (err: any) {
@@ -649,23 +651,33 @@ export default function UsersPage() {
             <Form.Item name="phone_number2" label="Qo'shimcha telefon raqami">
               <Input />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="workplace_id"
               label="Ish joyi ID"
               rules={[{ required: true }]}
             >
-              <Input />
-            </Form.Item>
+              <Select
+                placeholder="Workplace"
+                value={"workplace_name"}
+                style={{ width: 180 }}
+              >
+                {workplaces.map((workplace) => (
+                  <Select.Option key={workplace.id} value={workplace.id}>
+                    {workplace.workplace_name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item> */}
             <Form.Item name="time" label="Vaqt" rules={[{ required: true }]}>
               <Input type="number" />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="zone_id"
               label="Hudud ID"
               rules={[{ required: true }]}
             >
               <Input />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item name="seller" label="Sotuvchi">
               <Input />
             </Form.Item>

@@ -59,7 +59,7 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
     const paymentData = {
       amount: Number(values.amount),
       collector_id: values.collector,
-      zone_id: values.zone,
+      zone_id: id,
       payment_month: isMonthlyPayment ? moment().format("MMMM") : undefined, // Hozirgi oy
       payment_date: isMonthlyPayment
         ? moment().format("YYYY-MM-DD") // Bugungi sana
@@ -140,7 +140,7 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name="zone" label="Hudud" rules={[{ required: true }]}>
+        {/* <Form.Item name="zone" label="Hudud" rules={[{ required: true }]}>
           <Select
             placeholder="Hududni tanlang"
             onChange={(value) => setSelectedCollector(value)}
@@ -151,7 +151,7 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
               </Select.Option>
             ))}
           </Select>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item name="description" label="Izoh">
           <Input.TextArea rows={3} />
         </Form.Item>

@@ -292,14 +292,14 @@ export default function UsersCollec() {
       const data = await response.json();
 
       if (response.status === 404 || !Array.isArray(data)) {
-        setUsers([]); // Xatolik bo'lsa users bo'sh massiv bo'ladi
+        setUsers([]);
         message.error("Topilmadi");
         return;
       }
 
       setUsers(data);
     } catch (err: any) {
-      setUsers([]); // Xatolik bo'lsa users bo'sh massiv bo'ladi
+      setUsers([]);
       setError(err.message);
     } finally {
       setIsSearching(false);
@@ -315,7 +315,7 @@ export default function UsersCollec() {
           bo'yicha foydalanuvchilar
         </p>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between xl:flex-row flex-col xl:items-center items-start">
         <div className="mb-4 space-x-4 flex items-center gap-1">
           <Input
             placeholder="Qidirish (telefon, ism yoki ID)"
@@ -328,7 +328,7 @@ export default function UsersCollec() {
           </Button>
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2  flex-col xl:items-center items-start">
           <div className="mb-4 space-x-4 flex items-center flex-col gap-1">
             <Select
               placeholder="Workplace"
