@@ -41,13 +41,6 @@ export default function DashboardPage() {
   //     }
   //   };
 
-  const token = localStorage.getItem("tokenCollector");
-  useEffect(() => {
-    if (!token) {
-      navigate("/collectorLogin");
-    }
-  }, []);
-
   useEffect(() => {
     if (!BASE_URL) {
       setError("API URL aniqlanmagan! Iltimos, .env faylni tekshiring.");

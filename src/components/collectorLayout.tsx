@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout, Menu, Button, theme } from "antd";
 import {
   MenuFoldOutlined,
@@ -7,7 +7,7 @@ import {
   DashboardOutlined,
 } from "@ant-design/icons";
 import { CiLocationOn } from "react-icons/ci";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
@@ -31,6 +31,14 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("tokenCollector");
+  useEffect(() => {
+    if (!token) {
+      navigate("/collectorLogin");
+    }
+  }, []);
 
   const toggleDesktopSidebar = () => {
     setCollapsed(!collapsed);
@@ -45,7 +53,7 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
       trigger={null}
       collapsible
       collapsed={collapsed}
-      className="hidden md:block"
+      className="hidden md:block  !min-h-screen"
     >
       <div className="flex justify-center items-center py-4">
         <p className="text-2xl font-bold text-gray-400">Yig'uvchi</p>
