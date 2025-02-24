@@ -13,7 +13,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
   return (
     <div
       onClick={() =>
-        navigate(`/usersCollector/${item.id}?title=${item.zone_name}`)
+        navigate(`/usersCollector/${item.zone_id}?title=${item.zone_name}`)
       }
       className="bg-white shadow-lg rounded-xl p-6 mb-4 border border-gray-200 cursor-pointer transition-transform transform hover:scale-105"
     >
@@ -52,7 +52,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
           type="primary"
           icon={<BsPeople size={16} />}
           onClick={() =>
-            navigate(`/usersCollector/${item.id}?title=${item.zone_name}`)
+            navigate(`/usersCollector/${item.zone_id}?title=${item.zone_name}`)
           }
         >
           Foydalanuvchilar
