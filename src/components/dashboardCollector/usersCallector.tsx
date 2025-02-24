@@ -7,11 +7,11 @@ import { User, Building2, Phone, DollarSign, Search } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash } from "react-icons/bs";
-import PaymentModal from "../dashboard/paymenModal";
 // import UserDetailsModal from "../dashboard/userDetails";
 import UserHistoryPaymentModal from "../dashboard/userHistoryPaymentModal";
 import { CollectorLayout } from "../collectorLayout";
 import UserDetailsModal from "./userDetailsCollector";
+import PaymentModal from "./paymentModal";
 
 interface UserData {
   id: number;

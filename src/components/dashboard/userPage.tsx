@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
@@ -273,12 +271,20 @@ export default function UsersPage() {
   };
 
   const handleDeleteUser = async (id: number) => {
-    try {
-      await api.delete(`/users/delete/${id}`);
-      message.success("Muvafaqiyatli ochirildi");
-      fetchUsers();
-    } catch (error) {
-      console.log(error);
+    const confirmDelete = window.confirm(
+      "Bu foydalanuvchini oʻchirib tashlamoqchimisiz? Bu amalni ortga qaytarib bo‘lmaydi."
+    );
+
+    if (confirmDelete) {
+      console.log("Delete bosildi");
+      try {
+        await api.delete(`/users/delete/${id}`);
+        message.success("Muvaffaqiyatli ochirildi");
+        fetchUsers();
+      } catch (error) {
+        console.log(error);
+        message.error("An error occurred while deleting the user");
+      }
     }
   };
 
