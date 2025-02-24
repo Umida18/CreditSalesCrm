@@ -87,8 +87,8 @@ export default function UsersPage() {
     try {
       setLoading(true);
       const response = await fetch(`${BASE_URL}/users/filter/${id}?page=${1}`);
-      if (!response.ok)
-        throw new Error("Ma'lumotlarni yuklashda xatolik yuz berdi");
+      console.log("222222response", response);
+
       const data = await response.json();
       setUsers(data);
     } catch (err: any) {

@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Divider } from "antd";
 import type React from "react";
 import { BsPeople } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -19,12 +19,34 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
     >
       <div className=" flex justify-between items-center">
         <p className="text-sm text-gray-500">Hudud nomi:</p>
-        <h3 className="text-xl font-bold text-gray-800">{item.zone_name}</h3>
+        <h3 className=" font-bold text-gray-800">{item.zone_name}</h3>
       </div>
+      <Divider style={{ marginBlock: 4 }} />
       <div className=" flex justify-between items-center">
-        <p className="text-sm text-gray-500">Tavsif</p>
-        <p className="text-gray-600 text-base">{item.description}</p>
+        <p className="text-sm text-gray-500">Jami narx:</p>
+        <p className="text-gray-600">{item.total_cost}</p>
       </div>
+      <Divider style={{ marginBlock: 4 }} />
+      <div className=" flex justify-between items-center">
+        <p className="text-sm text-gray-500">Umumiy hisob:</p>
+        <p className="text-gray-600 ">{item.total_amount}</p>
+      </div>
+      <Divider style={{ marginBlock: 4 }} />
+      <div className=" flex justify-between items-center">
+        <p className="text-sm text-gray-500">Oylik hisob:</p>
+        <p className="text-gray-600 ">{item.monthly_amount}</p>
+      </div>
+      <Divider style={{ marginBlock: 4 }} />
+      <div className=" flex justify-between items-center">
+        <p className="text-sm text-gray-500">Umumiy foydalanuvchilar:</p>
+        <p className="text-gray-600 ">{item.total_users}</p>
+      </div>
+      <Divider style={{ marginBlock: 4 }} />
+      <div className=" flex justify-between items-center">
+        <p className="text-sm text-gray-500">Tolamagan foydalanuvchilar:</p>
+        <p className="text-gray-600 ">{item.unpaid_users}</p>
+      </div>
+      <Divider style={{ marginBlock: 4 }} />
       <div className="mt-3">
         <Button
           type="primary"
