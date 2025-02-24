@@ -1,6 +1,7 @@
+"use client";
+
 import { Button, Table, notification } from "antd";
 import { MainLayout } from "../../components/mainlayout";
-// import { BsCashCoin } from "react-icons/bs";
 import CardsStatistic from "../../components/dashboard/cardsStatistic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
@@ -13,40 +14,24 @@ import { BsPeople } from "react-icons/bs";
 export default function DashboardPage() {
   const [data, setData] = useState<any[]>([]);
   const [zones, setZones] = useState([]);
-  // const [_____, setIsModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, ____] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [selectedZone, setSelectedZone] = useState<any>(null);
-  const [___, setError] = useState("");
+  const [_, setError] = useState("");
   const [selectPayUser] = useState("");
-  const [_, setTotalPages] = useState(1);
+  const [__, setTotalPages] = useState(1);
   const itemsPerPage = 20;
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
-
-  //   const fetchUserCount = async () => {
-  //     try {
-  //       const response = await fetch(`${BASE_URL}/users/count`);
-  //       if (!response.ok) {
-  //         throw new Error("Foydalanuvchilar sonini olishda xatolik yuz berdi");
-  //       }
-  //       const { count } = await response.json();
-  //       // Sahifalar sonini hisoblash
-  //       const calculatedPages = Math.ceil(count / itemsPerPage);
-  //       setTotalPages(calculatedPages);
-  //     } catch (error: any) {
-  //       setError(error.message);
-  //     }
-  //   };
 
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate, token]);
 
   useEffect(() => {
     if (!BASE_URL) {
@@ -74,9 +59,9 @@ export default function DashboardPage() {
       try {
         await fetchUserCount();
 
-        let url = `${BASE_URL}/zone`;
+        let url = `${BASE_URL}/zone/about`;
         if (selectedZone) {
-          url += `&zone=${selectedZone}`;
+          url += `?zone=${selectedZone}`;
         }
 
         const response = await fetch(url);
@@ -84,7 +69,10 @@ export default function DashboardPage() {
           throw new Error("Ma'lumotlarni yuklashda xatolik yuz berdi");
         }
         const responseData = await response.json();
-        setData(responseData.data || responseData);
+        console.log(data);
+        console.log(url);
+        console.log(responseData.zones);
+        setData(responseData.zones || []);
 
         // Zonalar ma'lumotlarini olish
         const zonesResponse = await fetch(`${BASE_URL}/zone`);
@@ -150,13 +138,11 @@ export default function DashboardPage() {
   const filteredData = data.filter((item: any) => {
     const matchesSearch =
       searchTerm.length >= 2
-        ? (item.name &&
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (item.product_name &&
-            item.product_name.toLowerCase().includes(searchTerm.toLowerCase()))
+        ? item.zone_name &&
+          item.zone_name.toLowerCase().includes(searchTerm.toLowerCase())
         : true;
     const matchesZone = selectedZone
-      ? item.zone === selectedZone.toString()
+      ? item.zone_id === Number.parseInt(selectedZone)
       : true;
 
     return matchesSearch && matchesZone;
@@ -165,9 +151,10 @@ export default function DashboardPage() {
   const columns = [
     {
       title: "Id",
-      key: "id",
-      render: (_: any, __: any, index: any) =>
-        index + 1 + (currentPage - 1) * itemsPerPage,
+      dataIndex: "zone_id",
+      key: "zone_id",
+      // render: (_: any, __: any, index: any) =>
+      //   index + 1 + (currentPage - 1) * itemsPerPage,
     },
     {
       title: "Hudud nomi",
@@ -175,9 +162,29 @@ export default function DashboardPage() {
       key: "zone_name",
     },
     {
-      title: "Tavsif",
-      dataIndex: "description",
-      key: "description",
+      title: "Jami narx",
+      dataIndex: "total_cost",
+      key: "total_cost",
+    },
+    {
+      title: "Umumiy hisob",
+      dataIndex: "total_amount",
+      key: "total_amount",
+    },
+    {
+      title: "Oylik hisob",
+      dataIndex: "monthly_amount",
+      key: "monthly_amount",
+    },
+    {
+      title: "Umumiy foydalanuvchilar",
+      dataIndex: "total_users",
+      key: "total_users",
+    },
+    {
+      title: "Tolamagan foydalanuvchilar",
+      dataIndex: "unpaid_users",
+      key: "unpaid_users",
     },
     {
       title: "Actions",
@@ -196,7 +203,7 @@ export default function DashboardPage() {
   ];
 
   const handleRowClick = (record: any) => {
-    navigate(`/users/${record.id}?title=${record.zone_name}`);
+    navigate(`/users/${record.zone_id}?title=${record.zone_name}`);
   };
 
   return (
@@ -218,7 +225,7 @@ export default function DashboardPage() {
         <Table
           columns={columns}
           loading={loading}
-          dataSource={filteredData ? filteredData : data}
+          dataSource={filteredData}
           rowClassName="cursor-pointer hover:bg-gray-50"
           onRow={(record) => ({
             onClick: () => handleRowClick(record),
@@ -228,15 +235,8 @@ export default function DashboardPage() {
 
       {/* Mobile and Tablet view */}
       <div className="md:hidden">
-        {(filteredData ? filteredData : data).map((item: any) => (
-          <DashboardCard
-            key={item.id}
-            item={item}
-            // onActionClick={() => {
-            //   setSelectedUser(item);
-            //   setIsPaymentModalOpen(true);
-            // }}
-          />
+        {filteredData.map((item: any) => (
+          <DashboardCard key={item.zone_id} item={item} />
         ))}
       </div>
 

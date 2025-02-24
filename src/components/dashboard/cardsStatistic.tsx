@@ -14,7 +14,7 @@ const CardsStatistic = () => {
     monthPaidUsers: [],
   });
 
-  console.log("stats", stats);
+  // console.log("stats", stats);
 
   const [modalData, setModalData] = useState<any>(null);
 
