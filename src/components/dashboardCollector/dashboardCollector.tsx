@@ -14,7 +14,6 @@ export default function DashboardPage() {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, ____] = useState(1);
   const [selectedZone, setSelectedZone] = useState<any>(null);
   const [___, setError] = useState("");
   const [selectPayUser] = useState("");
@@ -49,7 +48,7 @@ export default function DashboardPage() {
       try {
         await fetchUserCount();
 
-        let url = `${BASE_URL}/zone`;
+        let url = `${BASE_URL}/zone/about`;
         if (selectedZone) {
           url += `&zone=${selectedZone}`;
         }
@@ -59,7 +58,7 @@ export default function DashboardPage() {
           throw new Error("Ma'lumotlarni yuklashda xatolik yuz berdi");
         }
         const responseData = await response.json();
-        setData(responseData.data || responseData);
+        setData(responseData.zones || responseData);
 
         // Zonalar ma'lumotlarini olish
         const zonesResponse = await fetch(`${BASE_URL}/zone`);
@@ -137,12 +136,46 @@ export default function DashboardPage() {
     return matchesSearch && matchesZone;
   });
 
+  // const columns = [
+  //   {
+  //     title: "Id",
+  //     key: "id",
+  //     render: (_: any, __: any, index: any) =>
+  //       index + 1 + (currentPage - 1) * itemsPerPage,
+  //   },
+  //   {
+  //     title: "Hudud nomi",
+  //     dataIndex: "zone_name",
+  //     key: "zone_name",
+  //   },
+  //   {
+  //     title: "Tavsif",
+  //     dataIndex: "description",
+  //     key: "description",
+  //   },
+  //   {
+  //     title: "Actions",
+  //     dataIndex: "Actions",
+  //     key: "Actions",
+  //     render: (_: any, record: any) => (
+  //       <Button
+  //         type="primary"
+  //         icon={<BsPeople size={16} />}
+  //         onClick={() => handleRowClick(record)}
+  //       >
+  //         Foydalanuvchilar
+  //       </Button>
+  //     ),
+  //   },
+  // ];
+
   const columns = [
     {
       title: "Id",
-      key: "id",
-      render: (_: any, __: any, index: any) =>
-        index + 1 + (currentPage - 1) * itemsPerPage,
+      dataIndex: "zone_id",
+      key: "zone_id",
+      // render: (_: any, __: any, index: any) =>
+      //   index + 1 + (currentPage - 1) * itemsPerPage,
     },
     {
       title: "Hudud nomi",
@@ -150,9 +183,29 @@ export default function DashboardPage() {
       key: "zone_name",
     },
     {
-      title: "Tavsif",
-      dataIndex: "description",
-      key: "description",
+      title: "Jami narx",
+      dataIndex: "total_cost",
+      key: "total_cost",
+    },
+    {
+      title: "Umumiy hisob",
+      dataIndex: "total_amount",
+      key: "total_amount",
+    },
+    {
+      title: "Oylik hisob",
+      dataIndex: "monthly_amount",
+      key: "monthly_amount",
+    },
+    {
+      title: "Umumiy foydalanuvchilar",
+      dataIndex: "total_users",
+      key: "total_users",
+    },
+    {
+      title: "Tolamagan foydalanuvchilar",
+      dataIndex: "unpaid_users",
+      key: "unpaid_users",
     },
     {
       title: "Actions",
@@ -171,7 +224,7 @@ export default function DashboardPage() {
   ];
 
   const handleRowClick = (record: any) => {
-    navigate(`/usersCollector/${record.id}?title=${record.zone_name}`);
+    navigate(`/usersCollector/${record.zone_id}?title=${record.zone_name}`);
   };
 
   return (
