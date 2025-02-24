@@ -8,9 +8,10 @@ import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash } from "react-icons/bs";
 import PaymentModal from "../dashboard/paymenModal";
-import UserDetailsModal from "../dashboard/userDetails";
+// import UserDetailsModal from "../dashboard/userDetails";
 import UserHistoryPaymentModal from "../dashboard/userHistoryPaymentModal";
 import { CollectorLayout } from "../collectorLayout";
+import UserDetailsModal from "./userDetailsCollector";
 
 interface UserData {
   id: number;
@@ -169,23 +170,23 @@ export default function UsersCollec() {
     }
   };
 
-  const handleOpenUserHistoryModal = async (userId: number) => {
-    setUserDetailsLoading(true);
-    try {
-      const response = await fetch(`${BASE_URL}/users/${userId}`);
-      if (!response.ok)
-        throw new Error(
-          "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
-        );
-      const data = await response.json();
-      setSelectedUserDetails(data);
-      setIsOpenUserHistoryModal(true);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setUserDetailsLoading(false);
-    }
-  };
+  // const handleOpenUserHistoryModal = async (userId: number) => {
+  //   setUserDetailsLoading(true);
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/users/${userId}`);
+  //     if (!response.ok)
+  //       throw new Error(
+  //         "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
+  //       );
+  //     const data = await response.json();
+  //     setSelectedUserDetails(data);
+  //     setIsOpenUserHistoryModal(true);
+  //   } catch (err: any) {
+  //     setError(err.message);
+  //   } finally {
+  //     setUserDetailsLoading(false);
+  //   }
+  // };
 
   const handleCloseUserDetailsModal = () => {
     setIsUserDetailsModalOpen(false);
@@ -259,12 +260,12 @@ export default function UsersCollec() {
           >
             Batafsil
           </button>
-          <button
+          {/* <button
             className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
             onClick={() => handleOpenUserHistoryModal(record.id)}
           >
             To'lov tarixi
-          </button>
+          </button> */}
         </div>
       ),
     },
