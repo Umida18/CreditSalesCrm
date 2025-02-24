@@ -14,8 +14,11 @@ export default function StatisticsPage() {
   const [collectorStats, setCollectorStats] = useState([]);
   const [filteredStats, setFilteredStats] = useState([]);
   const [zones, setZones] = useState([]);
+  const [rowCount1, setRowCount1] = useState<number | null>(null);
+  const [rowCount2, setRowCount2] = useState<number | null>(null);
   const [selectedZone, setSelectedZone] = useState(undefined);
   const [isFiltered, setIsFiltered] = useState(false);
+  console.log("collectorStats", collectorStats);
 
   const collectorId =
     typeof window !== "undefined" ? localStorage.getItem("collectorId") : null;
@@ -33,6 +36,8 @@ export default function StatisticsPage() {
       const data = await response.json();
       setThisMonthStats(data.this_month.rows);
       setOldMonthStats(data.old_month.rows);
+      setRowCount1(data.this_month.rowCount);
+      setRowCount2(data.old_month.rowCount);
 
       const collectorResponse = await fetch(
         `${BASE_URL}/collector/statistic-by-users-all/${collectorId}?page=${1}`,
@@ -94,6 +99,7 @@ export default function StatisticsPage() {
   };
 
   const displayData = isFiltered ? filteredStats : collectorStats;
+  console.log("thisMonthStats", thisMonthStats);
 
   return (
     <CollectorLayout>
@@ -103,6 +109,7 @@ export default function StatisticsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <StatisticCard
             title="Bu Oy Jami"
+            count={rowCount1}
             value={thisMonthStats
               .reduce(
                 (acc, curr: any) => acc + Number.parseFloat(curr.total_payment),
@@ -113,6 +120,7 @@ export default function StatisticsPage() {
           />
           <StatisticCard
             title="O'tgan Oy Jami"
+            count={rowCount2}
             value={oldMonthStats
               .reduce(
                 (acc, curr: any) => acc + Number.parseFloat(curr.total_payment),
@@ -124,6 +132,7 @@ export default function StatisticsPage() {
           <StatisticCard
             title="Jami Foydalanuvchilar"
             value={collectorStats.length}
+            // number={}
             icon={<FaUser className="h-8 w-8 text-purple-500" />}
           />
         </div>
