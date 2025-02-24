@@ -133,6 +133,7 @@ const PaymentList = ({
       },
     ];
   };
+  // console.log("paymentHistory34567", paymentHistory);
 
   return (
     <Modal

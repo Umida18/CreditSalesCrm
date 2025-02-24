@@ -1,7 +1,9 @@
-import type React from "react";
+"use client";
 
+import type React from "react";
 import { useState, useEffect } from "react";
-import { Modal, Spin, Table, message } from "antd";
+import { Modal, Spin, Table, message, Input, Button, Select } from "antd";
+import { Edit2, Save, X } from "lucide-react";
 // import {
 //   User,
 //   Package,
@@ -47,6 +49,8 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
 }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  console.log("paymentHistory234567", paymentHistory);
 
   useEffect(() => {
     const handleResize = () => {
@@ -67,6 +71,71 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
   };
 
+  const isEditing = (record: any) => record.id === editingKey;
+
+  const edit = (record: any) => {
+    setEditingKey(record.id);
+  };
+
+  const cancel = () => {
+    setEditingKey(null);
+  };
+
+  const save = async (id: string) => {
+    try {
+      const row = paymentHistory.find((item) => item.id === id);
+      const response = await fetch(`${BASE_URL}/payment/update-history/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: row.amount,
+          payment_month: row.payment_month,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update payment history");
+      }
+
+      const updatedData = await response.json();
+      setPaymentHistory((prevHistory) =>
+        prevHistory.map((item) =>
+          item.id === id ? { ...item, ...updatedData } : item
+        )
+      );
+      setEditingKey(null);
+      message.success("Payment history updated successfully");
+    } catch (error) {
+      console.error("Error updating payment history:", error);
+      message.error("Failed to update payment history");
+    }
+  };
+
+  const handleChange = (value: string, id: string, field: string) => {
+    setPaymentHistory((prevHistory) =>
+      prevHistory.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
+  };
+
+  const months = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentyabr",
+    "Oktyabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+
   const paymentColumns = [
     {
       title: "Sana",
@@ -79,10 +148,172 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       dataIndex: "zone_name",
       key: "zone_name",
     },
-    { title: "Oy", dataIndex: "payment_month", key: "payment_month" },
+    {
+      title: "Oy",
+      dataIndex: "payment_month",
+      key: "payment_month",
+      render: (text: string, record: any) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <Select
+            value={text}
+            onChange={(value) =>
+              handleChange(value, record.id, "payment_month")
+            }
+            style={{ width: "100%" }}
+          >
+            {months.map((month) => (
+              <Select.Option key={month} value={month}>
+                {month}
+              </Select.Option>
+            ))}
+          </Select>
+        ) : (
+          text
+        );
+      },
+    },
     { title: "To'lov haqida", dataIndex: "description", key: "description" },
     { title: "Yig'uvchi", dataIndex: "login", key: "login" },
+    {
+      title: "To'lov miqdori",
+      dataIndex: "amount",
+      key: "amount",
+      render: (text: string, record: any) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <Input
+            value={text}
+            onChange={(e) => handleChange(e.target.value, record.id, "amount")}
+          />
+        ) : (
+          text
+        );
+      },
+    },
+    {
+      title: "Amallar",
+      dataIndex: "operation",
+      render: (_: any, record: any) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <span className="flex space-x-2">
+            <Button
+              onClick={() => save(record.id)}
+              icon={<Save className="w-4 h-4" />}
+              className="flex items-center"
+            >
+              Saqlash
+            </Button>
+            <Button
+              onClick={cancel}
+              icon={<X className="w-4 h-4" />}
+              className="flex items-center"
+            >
+              Bekor qilish
+            </Button>
+          </span>
+        ) : (
+          <Button
+            disabled={editingKey !== null}
+            onClick={() => edit(record)}
+            icon={<Edit2 className="w-4 h-4" />}
+            className="flex items-center"
+          >
+            Tahrirlash
+          </Button>
+        );
+      },
+    },
   ];
+
+  // Add a custom renderer for mobile view
+  const mobileRenderer = (record: any) => {
+    const editable = isEditing(record);
+    return (
+      <div className="space-y-2 p-4">
+        <div className="flex justify-between">
+          <span className="font-semibold">Sana:</span>
+          <span>{formatDate(record.payment_date)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="font-semibold">Manzili:</span>
+          <span>{record.zone_name}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="font-semibold">Oy:</span>
+          {editable ? (
+            <Select
+              value={record.payment_month}
+              onChange={(value) =>
+                handleChange(value, record.id, "payment_month")
+              }
+              style={{ width: "50%" }}
+            >
+              {months.map((month) => (
+                <Select.Option key={month} value={month}>
+                  {month}
+                </Select.Option>
+              ))}
+            </Select>
+          ) : (
+            <span>{record.payment_month}</span>
+          )}
+        </div>
+        <div className="flex justify-between">
+          <span className="font-semibold">To'lov haqida:</span>
+          <span>{record.description}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="font-semibold">Yig'uvchi:</span>
+          <span>{record.login}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="font-semibold">To'lov miqdori:</span>
+          {editable ? (
+            <Input
+              value={record.amount}
+              onChange={(e) =>
+                handleChange(e.target.value, record.id, "amount")
+              }
+              style={{ width: "50%" }}
+            />
+          ) : (
+            <span>{record.amount}</span>
+          )}
+        </div>
+        <div className="flex justify-end space-x-2">
+          {editable ? (
+            <>
+              <Button
+                onClick={() => save(record.id)}
+                icon={<Save className="w-4 h-4" />}
+                className="flex items-center"
+              >
+                Saqlash
+              </Button>
+              <Button
+                onClick={cancel}
+                icon={<X className="w-4 h-4" />}
+                className="flex items-center"
+              >
+                Bekor qilish
+              </Button>
+            </>
+          ) : (
+            <Button
+              disabled={editingKey !== null}
+              onClick={() => edit(record)}
+              icon={<Edit2 className="w-4 h-4" />}
+              className="flex items-center"
+            >
+              Tahrirlash
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   const userInfoColumns = [
     { title: "Ma'lumot", dataIndex: "label", key: "label" },
@@ -152,7 +383,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
 
   return (
     <Modal
-      className="xl:min-w-[600px]"
+      className="xl:min-w-[800px]"
       title={
         <h2 className="text-2xl font-bold mb-4">Foydalanuvchi ma'lumotlari</h2>
       }
@@ -171,71 +402,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           <Spin size="large" />
         </div>
       ) : userData ? (
-        // <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        //   {renderDetailItem(<User className="w-5 h-5" />, "Ism", userData.name)}
-        //   {renderDetailItem(
-        //     <Package className="w-5 h-5" />,
-        //     "Maxsulot nomi",
-        //     userData.product_name
-        //   )}
-        //   {renderDetailItem(
-        //     <DollarSign className="w-5 h-5" />,
-        //     "Narxi",
-        //     userData.cost
-        //   )}
-        //   {renderDetailItem(
-        //     <Phone className="w-5 h-5" />,
-        //     "Telefon raqam 1",
-        //     userData.phone_number
-        //   )}
-        //   {renderDetailItem(
-        //     <Phone className="w-5 h-5" />,
-        //     "Telefon raqam 2",
-        //     userData.phone_number2
-        //   )}
-        //   {renderDetailItem(
-        //     <Briefcase className="w-5 h-5" />,
-        //     "Ish joyi ID",
-        //     userData.workplace_name
-        //   )}
-        //   {renderDetailItem(
-        //     <Calendar className="w-5 h-5" />,
-        //     "Vaqt",
-        //     userData.time
-        //   )}
-        //   {renderDetailItem(
-        //     <MapPin className="w-5 h-5" />,
-        //     "Zona ID",
-        //     userData.zone_name
-        //   )}
-        //   {renderDetailItem(
-        //     <UserCheck className="w-5 h-5" />,
-        //     "Sotuvchi",
-        //     userData.seller
-        //   )}
-        //   {renderDetailItem(
-        //     <CreditCard className="w-5 h-5" />,
-        //     "Passport seriyasi",
-        //     userData.passport_series
-        //   )}
-        //   {renderDetailItem(
-        //     <FileText className="w-5 h-5" />,
-        //     "Tavsif",
-        //     userData.description
-        //   )}
-        //   {renderDetailItem(
-        //     <Calendar className="w-5 h-5" />,
-        //     "Berilgan sana",
-        //     new Date(userData.given_day).toLocaleString()
-        //   )}
-        // </div>
         <div className="">
-          {/* <Button
-            onClick={closeUserDetails}
-            style={{ marginBottom: 16, marginTop: 20 }}
-          >
-            <IoMdArrowRoundBack className="mt-1" /> Orqaga
-          </Button> */}
           <h3 className="font-bold text-[20px] my-5" style={{ marginTop: 20 }}>
             To'liq malumot
           </h3>
@@ -250,14 +417,26 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           <h3 className="font-bold text-[20px] my-5" style={{ marginTop: 20 }}>
             To'lov Tarixi
           </h3>
-          {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
           <Table
             dataSource={paymentHistory}
             columns={paymentColumns}
             pagination={{ pageSize: 5 }}
             bordered
             loading={loading}
+            scroll={{ x: true }}
+            expandable={{
+              expandedRowRender: mobileRenderer,
+              showExpandColumn: false,
+            }}
+            className="hidden md:table"
           />
+          <div className="md:hidden">
+            {paymentHistory.map((record) => (
+              <div key={record.id} className="mb-4 border rounded-lg shadow">
+                {mobileRenderer(record)}
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <p className="text-center text-lg">Ma'lumot topilmadi</p>
