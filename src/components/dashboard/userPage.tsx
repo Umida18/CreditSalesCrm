@@ -364,14 +364,14 @@ export default function UsersPage() {
             className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
             onClick={() => handleOpenUserDetailsModal(record.id)}
           >
-            batafsil
+            Batafsil
           </button>
-          <button
+          {/* <button
             className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
             onClick={() => handleOpenUserHistoryModal(record.id)}
           >
             To'lov tarixi
-          </button>
+          </button> */}
         </div>
       ),
     },
