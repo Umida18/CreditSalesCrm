@@ -17,6 +17,7 @@ import { Edit2, Save, X } from "lucide-react";
 //   Calendar,
 // } from "lucide-react";
 import { BASE_URL } from "../../config";
+import api from "../../Api/Api";
 
 interface UserDetails {
   id: number;
@@ -90,7 +91,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: row.amount,
+          amount: row.payment_amount,
           payment_month: row.payment_month,
         }),
       });
@@ -177,14 +178,16 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
     { title: "Yig'uvchi", dataIndex: "login", key: "login" },
     {
       title: "To'lov miqdori",
-      dataIndex: "amount",
-      key: "amount",
+      dataIndex: "payment_amount",
+      key: "payment_amount",
       render: (text: string, record: any) => {
         const editable = isEditing(record);
         return editable ? (
           <Input
             value={text}
-            onChange={(e) => handleChange(e.target.value, record.id, "amount")}
+            onChange={(e) =>
+              handleChange(e.target.value, record.id, "payment_amount")
+            }
           />
         ) : (
           text
@@ -272,14 +275,14 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           <span className="font-semibold">To'lov miqdori:</span>
           {editable ? (
             <Input
-              value={record.amount}
+              value={record.payment_amount}
               onChange={(e) =>
-                handleChange(e.target.value, record.id, "amount")
+                handleChange(e.target.value, record.id, "payment_amount")
               }
               style={{ width: "50%" }}
             />
           ) : (
-            <span>{record.amount}</span>
+            <span>{record.payment_amount}</span>
           )}
         </div>
         <div className="flex justify-end space-x-2">
@@ -366,13 +369,10 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   useEffect(() => {
     const fetchPaymentHistory = async () => {
       try {
-        const response = await fetch(
-          `${BASE_URL}/payment/history/${userData?.id}`
-        );
-        console.log("responsehistory", response);
+        const response = await api.get(`/payment/history/${userData?.id}`);
+        console.log("responsehistory", response.data);
 
-        const data = await response.json();
-        setPaymentHistory(data.result || []);
+        setPaymentHistory(response.data || []);
       } catch (err) {
         // setError("To'lov tarixini olishda xatolik yuz berdi");
         message.error("To'lov tarixini olishda xatolik yuz berdi");
@@ -383,7 +383,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
 
   return (
     <Modal
-      className="xl:min-w-[800px]"
+      className="xl:min-w-[1000px]"
       title={
         <h2 className="text-2xl font-bold mb-4">Foydalanuvchi ma'lumotlari</h2>
       }
