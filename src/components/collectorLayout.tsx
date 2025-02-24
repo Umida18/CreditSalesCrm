@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { CiLocationOn } from "react-icons/ci";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import api from "../Api/Api";
 
 const { Header, Sider, Content } = Layout;
 
@@ -30,6 +31,7 @@ const menuItems = [
 export function CollectorLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [colec, setColec] = useState<any>("");
   const location = useLocation();
   const {
     token: { colorBgContainer },
@@ -37,6 +39,7 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("tokenCollector");
+  const id = localStorage.getItem("collectorId");
   useEffect(() => {
     if (!token) {
       navigate("/collectorLogin");
@@ -46,6 +49,15 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
   const toggleDesktopSidebar = () => {
     setCollapsed(!collapsed);
   };
+
+  useEffect(() => {
+    const f = async () => {
+      const res = await api.get(`/collector/${id}`);
+      setColec(res.data);
+      console.log("colec", colec);
+    };
+    f();
+  }, []);
 
   const toggleMobileSidebar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -105,7 +117,7 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
       } transition-transform duration-300 ease-in-out`}
     >
       <div className="flex justify-between items-center p-4">
-        <p className="text-2xl font-bold text-gray-400">Admin</p>
+        <p className="text-2xl font-bold text-gray-400">Yig'uvchi</p>
         <Button
           type="text"
           icon={
@@ -168,20 +180,19 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
           <div>
             <button
               onClick={toggleMobileSidebar}
-              className="text-base w-6 h-6 xl:hidden mt-3 block"
+              className="text-base w-6 h-6 xl:hidden block"
             >
               {<MenuUnfoldOutlined />}
             </button>
           </div>
-          <div className="flex items-center xl:mt-0 mt-3 gap-3">
+          <div className="flex items-center  gap-3">
             <img
               src="/img.jpg"
               alt="Profile picture"
               className="object-cover w-12 h-12 rounded-full border border-gray-300"
             />
-            <div className="text-xs">
-              <p>Avaz</p>
-              <p>Azizov</p>
+            <div className="text-xl capitalize">
+              <p>{colec.login}</p>
             </div>
           </div>
         </Header>

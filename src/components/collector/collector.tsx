@@ -39,13 +39,13 @@ const Collector = () => {
       title: "Jami yig'ilgan",
       dataIndex: "total_collected",
       key: "total_collected",
-      render: (value: number) => `${value.toLocaleString()} so'm`,
+      render: (value: number) => `${value.toLocaleString()} UZS`,
     },
     {
       title: "Jami to'lo'vlar",
       dataIndex: "total_payments",
       key: "total_payments",
-      render: (value: number) => `${value.toLocaleString()} so'm`,
+      render: (value: number) => `${value.toLocaleString()} `,
     },
   ];
 

@@ -371,6 +371,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       try {
         const response = await api.get(`/payment/history/${userData?.id}`);
         console.log("responsehistory", response.data);
+        console.log("response", response);
 
         setPaymentHistory(response.data || []);
       } catch (err) {

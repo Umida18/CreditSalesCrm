@@ -2,6 +2,7 @@ import { Modal, Table, Button, message } from "antd";
 import { useState } from "react";
 import { BASE_URL } from "../../config";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import api from "../../Api/Api";
 
 const PaymentList = ({
   type,
@@ -52,9 +53,12 @@ const PaymentList = ({
 
   const fetchPaymentHistory = async (userId: string) => {
     try {
-      const response = await fetch(`${BASE_URL}/payment/history/${userId}`);
-      const data = await response.json();
-      setPaymentHistory(data.result || []);
+      console.log("userId123456", userId);
+      const response = await api.get(`/payment/history/${userId}`);
+      console.log("responsehistory", response.data);
+      console.log("response", response);
+
+      setPaymentHistory(response.data || []);
     } catch (err) {
       setError("To'lov tarixini olishda xatolik yuz berdi");
       message.error("To'lov tarixini olishda xatolik yuz berdi");
@@ -133,6 +137,7 @@ const PaymentList = ({
       },
     ];
   };
+
   // console.log("paymentHistory34567", paymentHistory);
 
   return (

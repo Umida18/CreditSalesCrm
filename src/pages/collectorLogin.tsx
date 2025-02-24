@@ -85,9 +85,9 @@ export default function CollectorLoginPage() {
             </Button>
           </Form.Item>
         </Form>
-        <Button onClick={() => navigate("/login")} className="w-full">
+        {/* <Button onClick={() => navigate("/login")} className="w-full">
           Admin Login
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
