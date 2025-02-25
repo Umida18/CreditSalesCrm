@@ -2,7 +2,7 @@ import { Button, Spin, Table, notification } from "antd";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
 import PaymentModal from "../dashboard/paymenModal";
-import TableHeader from "../dashboard/header";
+// import TableHeader from "../dashboard/header";
 // import DashboardCard from "../dashboard/cardResponsiv";
 import { useNavigate } from "react-router-dom";
 import { BsPeople } from "react-icons/bs";
@@ -11,11 +11,11 @@ import DashboardCard from "./cardResponsiveCollector";
 
 export default function DashboardPage() {
   const [data, setData] = useState<any[]>([]);
-  const [zones, setZones] = useState([]);
+  const [_____, setZones] = useState([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedZone, setSelectedZone] = useState<any>(null);
+  const [searchTerm, __] = useState("");
+  const [selectedZone, ____] = useState<any>(null);
   const [___, setError] = useState("");
   const [selectPayUser] = useState("");
   const [_, setTotalPages] = useState(1);
@@ -232,14 +232,14 @@ export default function DashboardPage() {
     <CollectorLayout>
       <h1 className="text-2xl font-bold mb-5">Dashboard</h1>
 
-      <TableHeader
+      {/* <TableHeader
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         selectedZone={selectedZone}
         setSelectedZone={setSelectedZone}
         zones={zones}
         setData={setData}
-      />
+      /> */}
 
       <div className="hidden md:block">
         <Table
