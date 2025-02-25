@@ -117,7 +117,7 @@ const Header = ({ selectedZone, setData }: any) => {
       </div>
 
       <Modal
-        style={{ top: 20 }}
+        style={{ top: 20, maxHeight: "600px" }}
         title={
           <span style={{ fontWeight: 700, fontSize: 24 }}>
             Foydalanuvchi qo'shish

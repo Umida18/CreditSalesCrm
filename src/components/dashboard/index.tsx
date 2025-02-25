@@ -235,9 +235,19 @@ export default function DashboardPage() {
 
       {/* Mobile and Tablet view */}
       <div className="md:hidden">
-        {filteredData.map((item: any) => (
-          <DashboardCard key={item.zone_id} item={item} />
-        ))}
+        {/* <TableHeader
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedZone={selectedZone}
+          setSelectedZone={setSelectedZone}
+          zones={zones}
+          setData={setData}
+        /> */}
+        <div>
+          {filteredData.map((item: any) => (
+            <DashboardCard key={item.zone_id} item={item} />
+          ))}
+        </div>
       </div>
 
       {isPaymentModalOpen && (
