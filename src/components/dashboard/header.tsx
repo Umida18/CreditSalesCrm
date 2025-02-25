@@ -200,13 +200,7 @@ const Header = ({ selectedZone, setData }: any) => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              label="Pasport seriyasi"
-              name="passport_series"
-              rules={[
-                { required: true, message: "Pasport seriyasini kiriting!" },
-              ]}
-            >
+            <Form.Item label="Pasport seriyasi" name="passport_series">
               <Input />
             </Form.Item>
             <Form.Item label="Tavsif" name="description">
