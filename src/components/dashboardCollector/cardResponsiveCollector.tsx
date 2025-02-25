@@ -12,7 +12,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
 
   return (
     <div
-      onClick={() => navigate(`/users/${item.zone_id}?title=${item.zone_name}`)}
+      onClick={() =>
+        navigate(`/usersCollector/${item.zone_id}?title=${item.zone_name}`)
+      }
       className="bg-white shadow-lg rounded-xl p-6 mb-4 border border-gray-200 cursor-pointer transition-transform transform hover:scale-105"
     >
       <div className=" flex justify-between items-center">

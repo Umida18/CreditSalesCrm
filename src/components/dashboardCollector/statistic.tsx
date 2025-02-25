@@ -19,6 +19,7 @@ export default function StatisticsPage() {
   const [selectedZone, setSelectedZone] = useState(undefined);
   const [isFiltered, setIsFiltered] = useState(false);
   console.log("collectorStats", collectorStats);
+  console.log("thisMonthStats", thisMonthStats);
 
   const collectorId =
     typeof window !== "undefined" ? localStorage.getItem("collectorId") : null;
