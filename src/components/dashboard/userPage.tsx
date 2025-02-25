@@ -427,7 +427,7 @@ export default function UsersPage() {
             placeholder="Qidirish (telefon, ism yoki ID)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: 250 }}
+            style={{ width: 180 }}
           />
           <Button type="primary" onClick={handleSearch} loading={isSearching}>
             <Search className="size-4" />
@@ -496,7 +496,7 @@ export default function UsersPage() {
                 <div className="flex items-center space-x-2">
                   <User className="w-5 h-5 text-gray-500" />
                   <h3 className="font-medium">
-                    Ism{" "}
+                    Ism:{" "}
                     <span
                       className="font-bold cursor-pointer text-blue-600 underline"
                       onClick={() => handleOpenUserDetailsModal(user.id)}

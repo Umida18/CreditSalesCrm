@@ -50,7 +50,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
           type="primary"
           icon={<BsPeople size={16} />}
           onClick={() =>
-            navigate(`/usersCollector/${item.zone_id}?title=${item.zone_name}`)
+            navigate(`/users/${item.zone_id}?title=${item.zone_name}`)
           }
         >
           Foydalanuvchilar
