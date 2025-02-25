@@ -194,23 +194,23 @@ export default function UsersPage() {
     }
   };
 
-  const handleOpenUserHistoryModal = async (userId: number) => {
-    setUserDetailsLoading(true);
-    try {
-      const response = await fetch(`${BASE_URL}/users/${userId}`);
-      if (!response.ok)
-        throw new Error(
-          "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
-        );
-      const data = await response.json();
-      setSelectedUserDetails(data);
-      setIsOpenUserHistoryModal(true);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setUserDetailsLoading(false);
-    }
-  };
+  // const handleOpenUserHistoryModal = async (userId: number) => {
+  //   setUserDetailsLoading(true);
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/users/${userId}`);
+  //     if (!response.ok)
+  //       throw new Error(
+  //         "Foydalanuvchi ma'lumotlarini yuklashda xatolik yuz berdi"
+  //       );
+  //     const data = await response.json();
+  //     setSelectedUserDetails(data);
+  //     setIsOpenUserHistoryModal(true);
+  //   } catch (err: any) {
+  //     setError(err.message);
+  //   } finally {
+  //     setUserDetailsLoading(false);
+  //   }
+  // };
 
   const handleCloseUserDetailsModal = () => {
     setIsUserDetailsModalOpen(false);
@@ -588,12 +588,12 @@ export default function UsersPage() {
                 >
                   Batafsil
                 </button>
-                <button
+                {/* <button
                   className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
                   onClick={() => handleOpenUserHistoryModal(user.id)}
                 >
                   To'lov tarixi
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
