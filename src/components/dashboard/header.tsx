@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Input, Form, message, Select } from "antd";
-// import { MdAdd } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import { BASE_URL } from "../../config";
 
 const Header = ({ selectedZone, setData }: any) => {
@@ -9,9 +9,9 @@ const Header = ({ selectedZone, setData }: any) => {
   const [zoneOptions, setZoneOptions] = useState([]);
   const [workplaceOptions, setWorkplaceOptions] = useState([]);
 
-  // const handleAddUser = () => {
-  //   setIsModalVisible(true);
-  // };
+  const handleAddUser = () => {
+    setIsModalVisible(true);
+  };
 
   const handleSubmit = async (values: any) => {
     try {
@@ -107,13 +107,13 @@ const Header = ({ selectedZone, setData }: any) => {
   return (
     <>
       <div className="flex justify-between items-center mb-3">
-        {/* <button
+        <button
           className="flex gap-4 px-4 py-2 rounded-lg bg-[#0042fd] text-white cursor-pointer"
           onClick={handleAddUser}
         >
           <MdAdd className="text-2xl" />
           <p>Klient qo'shish</p>
-        </button> */}
+        </button>
       </div>
 
       <Modal
