@@ -413,6 +413,8 @@ export default function UsersPage() {
     }
   }, [searchQuery]);
 
+  console.log("users", users);
+
   return (
     <MainLayout>
       <div className="mb-6">

@@ -51,7 +51,9 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
       amount: Number(values.amount),
       collector_id: idCollector,
       zone_id: id,
-      payment_month: isMonthlyPayment ? moment().format("MMMM") : undefined, // Hozirgi oy
+      payment_month: isMonthlyPayment
+        ? moment().format("MMMM")
+        : values.paymentDate.format("MMMM"), // Hozirgi oy
       payment_date: isMonthlyPayment
         ? moment().format("YYYY-MM-DD") // Bugungi sana
         : values.paymentDate.format("YYYY-MM-DD"), // Tanlangan sana
