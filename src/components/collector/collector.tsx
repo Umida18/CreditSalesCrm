@@ -39,7 +39,7 @@ const Collector = () => {
       title: "Jami yig'ilgan",
       dataIndex: "total_collected",
       key: "total_collected",
-      render: (value: number) => `${value.toLocaleString()} UZS`,
+      render: (text: any) => Number(text).toLocaleString(),
     },
     {
       title: "Jami to'lo'vlar",

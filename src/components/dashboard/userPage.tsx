@@ -313,11 +313,13 @@ export default function UsersPage() {
       title: "Narxi",
       dataIndex: "cost",
       key: "cost",
+      render: (text: any) => Number(text).toLocaleString() + " UZS",
     },
     {
       title: "Raqam 1",
       dataIndex: "phone_number",
       key: "phone",
+      render: (text: any) => <a href={`tel:${text}`}>{text}</a>,
     },
     {
       title: "To'lov holati",

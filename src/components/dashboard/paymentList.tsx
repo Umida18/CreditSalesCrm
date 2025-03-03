@@ -140,6 +140,41 @@ const PaymentList = ({
 
   // console.log("paymentHistory34567", paymentHistory);
 
+  const todayPaidUsers = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Zona",
+      dataIndex: "zone_name",
+      key: "zone_name",
+    },
+    {
+      title: "Yig'uvchi",
+      dataIndex: "login",
+      key: "login",
+    },
+    {
+      title: "Kun",
+      dataIndex: "day",
+      key: "day",
+      render: (text: string) => new Date(text).toLocaleDateString(), // Formats date
+    },
+    {
+      title: "Jami yig'ilgan",
+      dataIndex: "total_collected",
+      key: "total_collected",
+      render: (text: any) => Number(text).toLocaleString() + " UZS", // Formats number with commas
+    },
+    {
+      title: "Jami foydalanuvchi",
+      dataIndex: "total_payments",
+      key: "total_payments",
+    },
+  ];
+
   return (
     <Modal
       open={true}
@@ -193,7 +228,7 @@ const PaymentList = ({
             loading={loading}
           />
         </div>
-      ) : (
+      ) : type !== "todayPaid" ? (
         <Table
           className="!min-h-[500px]"
           dataSource={Array.isArray(users) ? users.flat() : []}
@@ -203,6 +238,20 @@ const PaymentList = ({
             onClick: () => openUserDetails(record.id),
             style: { cursor: "pointer" },
           })}
+          pagination={{ pageSize: 5 }}
+          scroll={{ x: true }}
+          bordered
+        />
+      ) : (
+        <Table
+          className="!min-h-[500px]"
+          dataSource={Array.isArray(users) ? users.flat() : []}
+          columns={todayPaidUsers}
+          rowKey="id"
+          // onRow={(record) => ({
+          //   onClick: () => openUserDetails(record.id),
+          //   style: { cursor: "pointer" },
+          // })}
           pagination={{ pageSize: 5 }}
           scroll={{ x: true }}
           bordered

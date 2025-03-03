@@ -2,6 +2,7 @@ import { Card } from "antd";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
 import PaymentList from "./paymentList";
+import api from "../../Api/Api";
 
 const CardsStatistic = () => {
   const [stats, setStats] = useState<any>({
@@ -17,6 +18,7 @@ const CardsStatistic = () => {
   // console.log("stats", stats);
 
   const [modalData, setModalData] = useState<any>(null);
+  const [totayPaid, setTotayPaid] = useState<any>();
 
   useEffect(() => {
     Promise.all([
@@ -43,6 +45,24 @@ const CardsStatistic = () => {
       })
       .catch((error) => console.error("Xatolik:", error));
   }, []);
+
+  // {
+  //   "zone_name": "bekobod",
+  //   "login": "aziz",
+  //   "id": 1,
+  //   "day": "2025-03-03T00:00:00.000Z",
+  //   "total_collected": "12345678.00",
+  //   "total_payments": "1"
+  // }
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await api.get("/collector/all-money-daily");
+      setTotayPaid(res.data);
+    };
+    fetch();
+  }, []);
+
   return (
     <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mb-6">
       <Card style={{ background: "#FFF0F5", border: 0 }}>
@@ -101,7 +121,7 @@ const CardsStatistic = () => {
           setModalData({
             type: "todayPaid",
             title: "Bugun to'laganlar",
-            users: stats.todayPaidUsers,
+            users: totayPaid,
           })
         }
         style={{ background: "#FFF7E6", border: 0 }}

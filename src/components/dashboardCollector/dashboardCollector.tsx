@@ -187,11 +187,13 @@ export default function DashboardPage() {
       title: "Jami narx",
       dataIndex: "total_cost",
       key: "total_cost",
+      render: (text: any) => Number(text).toLocaleString(),
     },
     {
       title: "Umumiy hisob",
       dataIndex: "total_amount",
       key: "total_amount",
+      render: (text: any) => Number(text).toLocaleString(),
     },
     {
       title: "Oylik hisob",
