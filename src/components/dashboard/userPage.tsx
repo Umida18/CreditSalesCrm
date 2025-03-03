@@ -549,7 +549,10 @@ export default function UsersPage() {
                 <div className="flex items-center space-x-2">
                   <DollarSign className="w-4 h-4" />
                   <span>
-                    Narxi <span className="font-bold">{user.cost}</span>
+                    Narxi{" "}
+                    <span className="font-bold">
+                      {Number(user.cost).toLocaleString()}
+                    </span>
                   </span>
                 </div>
               </div>

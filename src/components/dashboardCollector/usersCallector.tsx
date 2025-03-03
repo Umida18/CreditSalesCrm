@@ -212,6 +212,7 @@ export default function UsersCollec() {
       title: "Narxi",
       dataIndex: "cost",
       key: "cost",
+      render: (text: any) => Number(text).toLocaleString(),
     },
     {
       title: "Raqam 1",
@@ -445,7 +446,10 @@ export default function UsersCollec() {
                   <div className="flex items-center space-x-2">
                     <DollarSign className="w-4 h-4" />
                     <span>
-                      Narxi <span className="font-bold">{user.cost}</span>
+                      Narxi{" "}
+                      <span className="font-bold">
+                        {Number(user.cost).toLocaleString()}
+                      </span>
                     </span>
                   </div>
                   <div className="flex justify-between gap-3 items-center">

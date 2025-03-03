@@ -75,7 +75,12 @@ const PaymentList = ({
     { title: "Ismi", dataIndex: "name", key: "name" },
     { title: "Maxsulot nomi", dataIndex: "product_name", key: "product_name" },
     { title: "Manzili", dataIndex: "zone_name", key: "zone_name" },
-    { title: "Narxi", dataIndex: "cost", key: "cost" },
+    {
+      title: "Narxi",
+      dataIndex: "cost",
+      key: "cost",
+      render: (text: any) => Number(text).toLocaleString(),
+    },
     {
       title: "Berilgan vaqti",
       dataIndex: "given_day",

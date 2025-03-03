@@ -22,17 +22,23 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
       <Divider style={{ marginBlock: 4 }} />
       <div className=" flex justify-between items-center">
         <p className="text-sm text-gray-500">Jami narx:</p>
-        <p className="text-gray-600">{item.total_cost}</p>
+        <p className="text-gray-600">
+          {Number(item.total_cost).toLocaleString()}
+        </p>
       </div>
       <Divider style={{ marginBlock: 4 }} />
       <div className=" flex justify-between items-center">
         <p className="text-sm text-gray-500">Umumiy hisob:</p>
-        <p className="text-gray-600 ">{item.total_amount}</p>
+        <p className="text-gray-600 ">
+          {Number(item.total_amount).toLocaleString()}
+        </p>
       </div>
       <Divider style={{ marginBlock: 4 }} />
       <div className=" flex justify-between items-center">
         <p className="text-sm text-gray-500">Oylik hisob:</p>
-        <p className="text-gray-600 ">{item.monthly_amount}</p>
+        <p className="text-gray-600 ">
+          {Number(item.monthly_amount).toLocaleString()}
+        </p>
       </div>
       <Divider style={{ marginBlock: 4 }} />
       <div className=" flex justify-between items-center">
