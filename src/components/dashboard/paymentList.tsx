@@ -121,8 +121,28 @@ const PaymentList = ({
 
     return [
       { label: "Ismi", value: user.name },
-      { label: "Telefon raqami", value: user.phone_number },
-      { label: "Qo'shimcha telefon raqami", value: user.phone_number2 },
+      {
+        label: "Telefon raqami",
+        value: (
+          <a
+            href={`tel:${user.phone_number}`}
+            className="text-blue-500 underline"
+          >
+            {user.phone_number}
+          </a>
+        ),
+      },
+      {
+        label: "Qo'shimcha telefon raqami",
+        value: (
+          <a
+            href={`tel:${user.phone_number2}`}
+            className="text-blue-500 underline"
+          >
+            {user.phone_number2}
+          </a>
+        ),
+      },
       { label: "Mahsulot nomi", value: user.product_name },
       { label: "Narxi", value: `${Number(user.cost).toLocaleString()} USZ` },
       {

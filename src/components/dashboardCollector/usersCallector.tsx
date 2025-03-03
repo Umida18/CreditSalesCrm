@@ -218,6 +218,11 @@ export default function UsersCollec() {
       title: "Raqam 1",
       dataIndex: "phone_number",
       key: "phone",
+      render: (phone: any) => (
+        <a href={`tel:${phone}`} className="text-blue-500 underline">
+          {phone}
+        </a>
+      ),
     },
 
     {
@@ -431,7 +436,13 @@ export default function UsersCollec() {
                   <Phone className="w-4 h-4" />
                   <span>
                     Raqam:{" "}
-                    <span className="font-bold">{user.phone_number}</span>
+                    <a
+                      href={`tel:${user.phone_number}`}
+                      className="text-blue-500 !underline font-bold"
+                    >
+                      {user.phone_number}
+                    </a>
+                    {/* <span className="font-bold">{user.phone_number}</span> */}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">

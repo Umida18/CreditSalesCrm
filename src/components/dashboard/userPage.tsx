@@ -536,7 +536,13 @@ export default function UsersPage() {
                   <Phone className="w-4 h-4" />
                   <span>
                     Raqam:{" "}
-                    <span className="font-bold">{user.phone_number}</span>
+                    <a
+                      href={`tel:${user.phone_number}`}
+                      className="text-blue-500 !underline font-bold"
+                    >
+                      {user.phone_number}
+                    </a>
+                    {/* <span className="font-bold">{user.phone_number}</span> */}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
