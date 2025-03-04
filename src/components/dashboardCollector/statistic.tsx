@@ -1,16 +1,28 @@
 import { useState, useEffect } from "react";
 import { Select, Button, Spin, Empty } from "antd";
 import { BarChart2, Filter } from "lucide-react";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaUsers } from "react-icons/fa";
 import StatisticCard from "./statisticCard";
 import CollectorTable from "./statisticTable";
 import { CollectorLayout } from "../collectorLayout";
 import { BASE_URL } from "../../config";
+import TodayPaymentsModal from "./totadpaymentModal";
+import axios from "axios";
+
+interface TodayPayment {
+  zone_name: string;
+  login: string;
+  id: number;
+  day: string;
+  total_collected: string;
+  total_payments: string;
+}
 
 export default function StatisticsPage() {
   const [loading, setLoading] = useState(true);
   const [thisMonthStats, setThisMonthStats] = useState([]);
   const [oldMonthStats, setOldMonthStats] = useState([]);
+  const [todayStats, setTodayStats] = useState<TodayPayment[]>([]);
   const [collectorStats, setCollectorStats] = useState([]);
   const [filteredStats, setFilteredStats] = useState([]);
   const [zones, setZones] = useState([]);
@@ -18,8 +30,9 @@ export default function StatisticsPage() {
   const [rowCount2, setRowCount2] = useState<number | null>(null);
   const [selectedZone, setSelectedZone] = useState(undefined);
   const [isFiltered, setIsFiltered] = useState(false);
-  console.log("collectorStats", collectorStats);
-  console.log("thisMonthStats", thisMonthStats);
+  const [isTodayModalOpen, setIsTodayModalOpen] = useState(false);
+  // console.log("collectorStats", collectorStats);
+  console.log("todayStats", todayStats);
 
   const collectorId =
     typeof window !== "undefined" ? localStorage.getItem("collectorId") : null;
@@ -34,11 +47,17 @@ export default function StatisticsPage() {
       const response = await fetch(
         `${BASE_URL}/collector/statistic/${collectorId}`
       );
+      const res = await axios.get(
+        `${BASE_URL}/collector/all-money-daily-by-collector/${collectorId}`
+      );
+
       const data = await response.json();
+      // const data1 = await res.json();
       setThisMonthStats(data.this_month.rows);
       setOldMonthStats(data.old_month.rows);
       setRowCount1(data.this_month.rowCount);
       setRowCount2(data.old_month.rowCount);
+      setTodayStats(res.data);
 
       const collectorResponse = await fetch(
         `${BASE_URL}/collector/statistic-by-users-all/${collectorId}?page=${1}`,
@@ -99,15 +118,22 @@ export default function StatisticsPage() {
     setFilteredStats([]);
   };
 
+  const closeTodayModal = () => {
+    setIsTodayModalOpen(false);
+  };
+
+  const totalAmount = todayStats.reduce(
+    (sum, payment) => sum + Number(payment.total_collected),
+    0
+  );
   const displayData = isFiltered ? filteredStats : collectorStats;
   console.log("thisMonthStats", thisMonthStats);
-
   return (
     <CollectorLayout>
       <div className="container mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Collector Statistics</h1>
+        <h1 className="text-2xl font-bold mb-6">Yig'uvchi Statistikasi</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatisticCard
             title="Bu Oy Jami"
             count={rowCount1}
@@ -129,6 +155,14 @@ export default function StatisticsPage() {
               )
               .toFixed(2)}
             icon={<BarChart2 className="h-8 w-8 text-green-500" />}
+          />
+
+          <StatisticCard
+            title="Bugun Yig'ilgan Summa"
+            value={totalAmount}
+            count={todayStats.length}
+            icon={<FaUsers className="h-8 w-8 text-green-400" />}
+            setIsTodayModalOpen={setIsTodayModalOpen}
           />
           <StatisticCard
             title="Jami Foydalanuvchilar"
@@ -174,6 +208,12 @@ export default function StatisticsPage() {
           <Empty description="Ma'lumot mavjud emas" />
         )}
       </div>
+
+      <TodayPaymentsModal
+        isOpen={isTodayModalOpen}
+        onClose={closeTodayModal}
+        payments={todayStats}
+      />
     </CollectorLayout>
   );
 }

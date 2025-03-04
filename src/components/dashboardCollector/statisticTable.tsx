@@ -46,7 +46,7 @@ export default function ResponsiveCollectorTable({
       title: "Narx",
       dataIndex: "cost",
       key: "cost",
-      render: (value) => `$${value.toFixed(2)}`,
+      render: (value) => `${Number(value).toLocaleString()}`,
     },
     {
       title: "Hudud",
