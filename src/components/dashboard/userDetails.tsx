@@ -352,6 +352,10 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       { label: "Mahsulot nomi", value: user.product_name },
       { label: "Narxi", value: `${Number(user.cost).toLocaleString()} USZ` },
       {
+        label: "So'nggi to'lov",
+        value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
+      },
+      {
         label: "Oylik to'lov",
         value: `${Number(user.monthly_income).toLocaleString()} UZS`,
       },
@@ -369,20 +373,6 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
     ];
   };
 
-  // const renderDetailItem = (
-  //   icon: React.ReactNode,
-  //   label: string,
-  //   value: string | number
-  // ) => (
-  //   <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-  //     <div className="flex items-center mb-2 text-gray-600">
-  //       {icon}
-  //       <span className="ml-2 font-medium">{label}</span>
-  //     </div>
-  //     <div className="text-lg">{value}</div>
-  //   </div>
-  // );
-
   useEffect(() => {
     const fetchPaymentHistory = async () => {
       try {
@@ -390,7 +380,6 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
 
         setPaymentHistory(response.data || []);
       } catch (err) {
-        // setError("To'lov tarixini olishda xatolik yuz berdi");
         message.error("To'lov tarixini olishda xatolik yuz berdi");
       }
     };

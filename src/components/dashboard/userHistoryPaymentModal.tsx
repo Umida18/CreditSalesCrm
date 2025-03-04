@@ -32,8 +32,9 @@ const UserHistoryPaymentModal: React.FC<UserDetailsModalProps> = ({
   onClose,
 }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
-
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
+  const id = localStorage.getItem("collectorId");
+  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const handleResize = () => {
@@ -73,8 +74,9 @@ const UserHistoryPaymentModal: React.FC<UserDetailsModalProps> = ({
   useEffect(() => {
     const fetchPaymentHistory = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/payment/history/${1}`);
+        const response = await fetch(`${BASE_URL}/payment/history/${id}`);
         const data = await response.json();
+
         setPaymentHistory(data.result || []);
       } catch (err) {
         message.error("To'lov tarixini olishda xatolik yuz berdi");
