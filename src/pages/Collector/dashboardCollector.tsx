@@ -1,13 +1,13 @@
 import { Button, Spin, Table, notification } from "antd";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
-import PaymentModal from "../dashboard/paymenModal";
+import PaymentModal from "../Admin/components/paymenModal";
 // import TableHeader from "../dashboard/header";
 // import DashboardCard from "../dashboard/cardResponsiv";
 import { useNavigate } from "react-router-dom";
 import { BsPeople } from "react-icons/bs";
-import { CollectorLayout } from "../collectorLayout";
-import DashboardCard from "./cardResponsiveCollector";
+import { CollectorLayout } from "../../components/collectorLayout";
+import DashboardCard from "./components/cardResponsiveCollector";
 
 export default function DashboardPage() {
   const [data, setData] = useState<any[]>([]);

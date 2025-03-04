@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { BASE_URL } from "../../config";
+import { BASE_URL } from "../../../config";
 import { Modal } from "antd";
 
 const PaymentModal = ({ isOpen, closeModal, handlePayment, userName }: any) => {

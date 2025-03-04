@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, Input, Form, message, Select } from "antd";
 import { MdAdd } from "react-icons/md";
-import { BASE_URL } from "../../config";
+import { BASE_URL } from "../../../config";
 
 const Header = ({ selectedZone, setData }: any) => {
   const [isModalVisible, setIsModalVisible] = useState(false);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Table, Button, Typography } from "antd";
-import { BASE_URL } from "../../config";
+import { BASE_URL } from "../../../config";
 
 const { Title, Text } = Typography;
 

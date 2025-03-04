@@ -2,7 +2,7 @@ import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Table, Button, Modal, Input, notification, Card, Spin } from "antd";
 import axios from "axios";
-import { MainLayout } from "../mainlayout";
+import { MainLayout } from "../../components/mainlayout";
 import { BASE_URL } from "../../config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

@@ -2,7 +2,7 @@ import type React from "react";
 import { useEffect, useState, useCallback } from "react";
 import { Button, Input, Modal, Table, Card, Spin, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { MainLayout } from "../mainlayout";
+import { MainLayout } from "../../components/mainlayout";
 import api from "../../Api/Api";
 import { PlusCircle, Edit2 } from "lucide-react";
 import { FaBuilding } from "react-icons/fa";

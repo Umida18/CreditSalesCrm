@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Table } from "antd";
-import { MainLayout } from "../mainlayout";
+import { MainLayout } from "../../components/mainlayout";
 import api from "../../Api/Api";
 import { Banknote, MapPin, Calendar } from "lucide-react";
 import dayjs from "dayjs";

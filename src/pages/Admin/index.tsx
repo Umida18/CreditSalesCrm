@@ -2,12 +2,12 @@
 
 import { Button, Table, notification } from "antd";
 import { MainLayout } from "../../components/mainlayout";
-import CardsStatistic from "../../components/dashboard/cardsStatistic";
+import CardsStatistic from "./components/cardsStatistic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
-import PaymentModal from "./paymenModal";
-import TableHeader from "./header";
-import DashboardCard from "./cardResponsiv";
+import PaymentModal from "./components/paymenModal";
+import TableHeader from "./components/header";
+import DashboardCard from "./components/cardResponsiv";
 import { useNavigate } from "react-router-dom";
 import { BsPeople } from "react-icons/bs";
 

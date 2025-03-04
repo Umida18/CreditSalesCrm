@@ -16,8 +16,8 @@ import { Edit2, Save, X } from "lucide-react";
 //   FileText,
 //   Calendar,
 // } from "lucide-react";
-import { BASE_URL } from "../../config";
-import api from "../../Api/Api";
+import { BASE_URL } from "../../../config";
+import api from "../../../Api/Api";
 
 interface UserDetails {
   id: number;

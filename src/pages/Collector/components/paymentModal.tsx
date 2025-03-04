@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   DatePicker,
@@ -6,68 +6,55 @@ import {
   Input,
   Form,
   message,
-  Select,
   InputNumber,
 } from "antd";
 import { BsCash } from "react-icons/bs";
-import api from "../../Api/Api";
 import { useParams } from "react-router-dom";
-import { BASE_URL } from "../../config";
+import { BASE_URL } from "../../../config";
 import moment from "moment";
 
 const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
   const [form] = Form.useForm();
-
   const [isMonthlyPayment, setIsMonthlyPayment] = useState(false);
   const { id } = useParams();
-  const [selectedZone, setSelectedZone] = useState<
-    { id: number; zone_name: string }[]
-  >([]);
-  const [collectors, setCollectors] = useState<{ id: number; login: string }[]>(
-    []
-  );
-  const [selectedCollector, setSelectedCollector] = useState<number | null>(
-    null
-  );
+  //   const [selectedZone, setSelectedZone] = useState<
+  //     { id: number; zone_name: string }[]
+  //   >([]);
+
   const idCollector = localStorage.getItem("collectorId");
 
-  useEffect(() => {
-    const fetchZone = async () => {
-      try {
-        const res = await api.get(`/zone`);
-        setSelectedZone(res.data);
-      } catch (error) {
-        console.error("Failed to fetch zone:", error);
-      }
-    };
-    fetchZone();
-  }, [id]);
+  //   useEffect(() => {
+  //     const fetchZone = async () => {
+  //       try {
+  //         const res = await api.get(`/zone`);
+  //         setSelectedZone(res.data);
+  //       } catch (error) {
+  //         console.error("Failed to fetch zone:", error);
+  //       }
+  //     };
+  //     fetchZone();
+  //   }, [id]);
 
-  useEffect(() => {
-    const fetchCollector = async () => {
-      if (!selectedZone) return;
+  //   useEffect(() => {
+  //     const fetchCollector = async () => {
+  //       if (!selectedZone) return;
 
-      try {
-        const res = await api.get("/collector");
+  //       try {
+  //         const res = await api.get("/collector");
 
-        setCollectors(res.data);
-      } catch (error) {
-        console.error("Failed to fetch collectors:", error);
-      }
-    };
+  //         setCollectors(res.data);
+  //       } catch (error) {
+  //         console.error("Failed to fetch collectors:", error);
+  //       }
+  //     };
 
-    fetchCollector();
-  }, [selectedZone]);
+  //     fetchCollector();
+  //   }, [selectedZone]);
 
   const handleSubmit = async (values: any) => {
-    if (!selectedCollector) {
-      message.error("Collectorni tanlang");
-      return;
-    }
-
     const paymentData = {
       amount: Number(values.amount),
-      collector_id: idCollector ? idCollector : values.collector,
+      collector_id: idCollector,
       zone_id: id,
       payment_month: isMonthlyPayment
         ? moment().format("MMMM")
@@ -96,8 +83,9 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
       onClose();
       fetchUsers();
       form.resetFields();
-      setSelectedCollector(null);
     } catch (error) {
+      console.log(error);
+
       message.error("Failed to add payment");
     }
   };
@@ -145,24 +133,6 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
             <DatePicker className="w-full" />
           </Form.Item>
         )}
-        {/* {!idCollector && ( */}
-        <Form.Item
-          name="collector"
-          label="Yig'uvchini"
-          rules={[{ required: true }]}
-        >
-          <Select
-            placeholder="Yig'uvchini tanlang"
-            onChange={(value) => setSelectedCollector(value)}
-          >
-            {collectors.map((collector) => (
-              <Select.Option key={collector.id} value={collector.id}>
-                {collector.login}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        {/* )} */}
         {/* <Form.Item name="zone" label="Hudud" rules={[{ required: true }]}>
           <Select
             placeholder="Hududni tanlang"

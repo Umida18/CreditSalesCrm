@@ -23,8 +23,8 @@ import {
   Hash,
   Users,
 } from "lucide-react";
-import { BASE_URL } from "../../config";
-import api from "../../Api/Api";
+import { BASE_URL } from "../../../config";
+import api from "../../../Api/Api";
 
 const { Text, Title } = Typography;
 

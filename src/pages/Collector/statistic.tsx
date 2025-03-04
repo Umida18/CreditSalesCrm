@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Select, Button, Spin, Empty } from "antd";
 import { BarChart2, Filter } from "lucide-react";
 import { FaUser, FaUsers } from "react-icons/fa";
-import StatisticCard from "./statisticCard";
-import CollectorTable from "./statisticTable";
-import { CollectorLayout } from "../collectorLayout";
+import StatisticCard from "./components/statisticCard";
+import CollectorTable from "./components/statisticTable";
+import { CollectorLayout } from "../../components/collectorLayout";
 import { BASE_URL } from "../../config";
-import TodayPaymentsModal from "./totadpaymentModal";
+import TodayPaymentsModal from "./components/totadpaymentModal";
 import axios from "axios";
 
 interface TodayPayment {

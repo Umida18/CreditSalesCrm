@@ -28,9 +28,9 @@ import {
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash, BsCashCoin } from "react-icons/bs";
-import PaymentModal from "./paymenModal";
-import UserDetailsModal from "./userDetails";
-import UserHistoryPaymentModal from "./userHistoryPaymentModal";
+import PaymentModal from "./components/paymenModal";
+import UserDetailsModal from "./components/userDetails";
+import UserHistoryPaymentModal from "./components/userHistoryPaymentModal";
 import moment from "moment";
 import api from "../../Api/Api";
 

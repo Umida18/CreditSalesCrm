@@ -15,7 +15,7 @@ import { Modal, Spin, Table, message, Input, Select } from "antd";
 //   Calendar,
 // } from "lucide-react";
 // import { BASE_URL } from "../../config";
-import api from "../../Api/Api";
+import api from "../../../Api/Api";
 
 interface UserDetails {
   id: number;

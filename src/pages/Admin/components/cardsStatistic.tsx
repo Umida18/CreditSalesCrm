@@ -1,8 +1,8 @@
 import { Card } from "antd";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../../config";
+import { BASE_URL } from "../../../config";
 import PaymentList from "./paymentList";
-import api from "../../Api/Api";
+import api from "../../../Api/Api";
 
 const CardsStatistic = () => {
   const [stats, setStats] = useState<any>({

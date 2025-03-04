@@ -1,15 +1,15 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Table, Alert, Select, Button, Input, message } from "antd";
-import { MainLayout } from "../../components/mainlayout";
-import { BASE_URL } from "../../config";
+import { MainLayout } from "../../../components/mainlayout";
+import { BASE_URL } from "../../../config";
 import { User, Building2, Phone, DollarSign, Search } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash, BsCashCoin } from "react-icons/bs";
 // import UserDetailsModal from "../dashboard/userDetails";
-import UserHistoryPaymentModal from "../dashboard/userHistoryPaymentModal";
-import { CollectorLayout } from "../collectorLayout";
+import UserHistoryPaymentModal from "../../Admin/components/userHistoryPaymentModal";
+import { CollectorLayout } from "../../../components/collectorLayout";
 import UserDetailsModal from "./userDetailsCollector";
 import PaymentModal from "./paymentModal";
 

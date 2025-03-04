@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login";
-import Home from "./pages/home/home";
-import Zone from "./components/zone";
-import Collector from "./components/collector/collector";
-import Workplace from "./components/workplace/workplace";
+import Home from "./pages/Admin/home";
+import Zone from "./pages/Admin/Zone";
+import Collector from "./pages/Admin/collector";
+import Workplace from "./pages/Admin/workplace";
 import { ToastContainer } from "react-toastify";
 import CollectorLoginPage from "./pages/collectorLogin";
-import UsersPage from "./components/dashboard/userPage";
-import DashboardCollector from "./components/dashboardCollector/dashboardCollector";
-import UsersCollec from "./components/dashboardCollector/usersCallector";
-import StatisticsContent from "./components/dashboardCollector/statistic";
+import UsersPage from "./pages/Admin/userPage";
+import DashboardCollector from "./pages/Collector/dashboardCollector";
+import UsersCollec from "./pages/Collector/components/usersCallector";
+import StatisticsContent from "./pages/Collector/statistic";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ConfigProvider } from "antd";
 

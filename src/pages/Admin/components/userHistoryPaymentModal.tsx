@@ -3,7 +3,7 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { Modal, Table, message } from "antd";
 
-import { BASE_URL } from "../../config";
+import { BASE_URL } from "../../../config";
 
 interface UserDetails {
   id: number;
