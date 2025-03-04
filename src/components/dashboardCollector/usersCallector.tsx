@@ -224,18 +224,17 @@ export default function UsersCollec() {
         </a>
       ),
     },
-
     {
-      title: "To'lov holati",
-      dataIndex: "payment_status",
-      key: "payment_status",
-      render: (status: boolean) => (
+      title: "So'nggi to'lov miqdori",
+      dataIndex: "last_payment_amount",
+      key: "last_payment_amount",
+      render: (amount: string, record: { payment_status: boolean }) => (
         <span
-          className={`px-2 py-1 rounded-full text-xs ${
-            status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          className={`font-medium ${
+            record.payment_status ? "text-green-500" : "text-red-500"
           }`}
         >
-          {status ? "To'langan" : "To'lanmagan"}
+          {amount ? Number(amount).toLocaleString() + " UZS" : "0 UZS"}
         </span>
       ),
     },

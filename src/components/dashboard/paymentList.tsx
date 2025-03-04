@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import {
   Modal,
@@ -211,8 +209,8 @@ const PaymentList = ({
   };
 
   const renderUserInfo = (user: any) => {
-    const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
-    const paymentStatusColor = user.payment_status ? "green" : "red";
+    // const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
+    // const paymentStatusColor = user.payment_status ? "green" : "red";
 
     const userInfo = [
       { label: "Ismi", value: user.name, icon: User },
@@ -233,6 +231,10 @@ const PaymentList = ({
         value: `${Number(user.monthly_income).toLocaleString()} UZS`,
         icon: CreditCard,
       },
+      {
+        label: "So'nggi to'lov",
+        value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
+      },
       { label: "Manzili", value: user.zone_name, icon: MapPin },
       {
         label: "Berilgan vaqti",
@@ -242,17 +244,17 @@ const PaymentList = ({
       { label: "Ish joyi", value: user.workplace_name, icon: MapPin },
       { label: "Olingan muddati", value: `${user.time} oyga`, icon: Clock },
       { label: "Malumot", value: user.description },
-      {
-        label: "O'tgan oylik tolov holati",
-        value: paymentStatus,
-        color: paymentStatusColor,
-      },
+      // {
+      //   label: "O'tgan oylik tolov holati",
+      //   value: paymentStatus,
+      //   color: paymentStatusColor,
+      // },
     ];
 
     return (
       <List
         dataSource={userInfo}
-        renderItem={(item) => (
+        renderItem={(item: any) => (
           <List.Item>
             <Space align="center">
               {item.icon && <item.icon size={16} className="text-blue-500" />}

@@ -27,8 +27,8 @@ const UserModal = ({ user, closeModal }: any) => {
   if (!user) return null;
 
   const givenDayFormatted = formatDate(user.given_day);
-  const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
-  const paymentStatusColor = user.payment_status ? "green" : "red";
+  // const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
+  // const paymentStatusColor = user.payment_status ? "green" : "red";
 
   const userInfo = [
     { label: "Ismi", value: user.name },
@@ -66,9 +66,13 @@ const UserModal = ({ user, closeModal }: any) => {
     { label: "Olingan muddati", value: `${user.time} oyga` },
     { label: "Malumot", value: user.description },
     {
-      label: "O'tgan oylik tolov holati",
-      value: <Text style={{ color: paymentStatusColor }}>{paymentStatus}</Text>,
+      label: "So'nggi to'lov",
+      value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
     },
+    // {
+    //   label: "O'tgan oylik tolov holati",
+    //   value: <Text style={{ color: paymentStatusColor }}>{paymentStatus}</Text>,
+    // },
   ];
 
   const paymentColumns = [

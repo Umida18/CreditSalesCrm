@@ -59,16 +59,16 @@ export default function ResponsiveCollectorTable({
       key: "workplace_name",
     },
     {
-      title: "To'lo'v Statusi",
-      dataIndex: "payment_status",
-      key: "payment_status",
-      render: (value) => (
+      title: "So'nggi to'lov miqdori",
+      dataIndex: "last_payment_amount",
+      key: "last_payment_amount",
+      render: (amount: string, record: { payment_status: boolean }) => (
         <span
-          className={`px-2 py-1 rounded-full text-xs ${
-            value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          className={`font-medium ${
+            record.payment_status ? "text-green-500" : "text-red-500"
           }`}
         >
-          {value ? "To'langan" : "To'lanmagan"}
+          {amount ? Number(amount).toLocaleString() + " UZS" : "0 UZS"}
         </span>
       ),
     },

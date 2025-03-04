@@ -322,8 +322,8 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   ];
 
   const getUserInfo = (user: any) => {
-    const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
-    const paymentStatusColor = user.payment_status ? "green" : "red";
+    // const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
+    // const paymentStatusColor = user.payment_status ? "green" : "red";
 
     return [
       { label: "Ismi", value: user.name },
@@ -365,11 +365,15 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       { label: "Olingan muddati", value: `${user.time} oyga` },
       { label: "Malumot", value: user.description },
       {
-        label: "O'tgan oylik tolov holati",
-        value: (
-          <span style={{ color: paymentStatusColor }}>{paymentStatus}</span>
-        ),
+        label: "So'nggi to'lov",
+        value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
       },
+      // {
+      //   label: "O'tgan oylik tolov holati",
+      //   value: (
+      //     <span style={{ color: paymentStatusColor }}>{paymentStatus}</span>
+      //   ),
+      // },
     ];
   };
 
