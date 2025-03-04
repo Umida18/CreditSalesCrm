@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Modal, DatePicker, Radio, Input, Form, message } from "antd";
+import {
+  Modal,
+  DatePicker,
+  Radio,
+  Input,
+  Form,
+  message,
+  InputNumber,
+} from "antd";
 import { BsCash } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { BASE_URL } from "../../config";
@@ -97,7 +105,17 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
           label="To'lo'v miqdori"
           rules={[{ required: true }]}
         >
-          <Input prefix={<BsCash className="text-gray-400" />} type="number" />
+          <InputNumber
+            className="!w-full"
+            prefix={<BsCash className="text-gray-400" />}
+            formatter={(value: any) =>
+              value
+                ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                : "0"
+            }
+            parser={(value) => (value ? value.replace(/\s/g, "") : "0")}
+            min={0}
+          />
         </Form.Item>
 
         <Form.Item name="isMonthly" label="Bu oy uchunmi?">

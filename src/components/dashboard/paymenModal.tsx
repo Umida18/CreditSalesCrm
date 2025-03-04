@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Modal, DatePicker, Radio, Input, Form, message, Select } from "antd";
+import {
+  Modal,
+  DatePicker,
+  Radio,
+  Input,
+  Form,
+  message,
+  Select,
+  InputNumber,
+} from "antd";
 import { BsCash } from "react-icons/bs";
 import api from "../../Api/Api";
 import { useParams } from "react-router-dom";
@@ -8,6 +17,7 @@ import moment from "moment";
 
 const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
   const [form] = Form.useForm();
+
   const [isMonthlyPayment, setIsMonthlyPayment] = useState(false);
   const { id } = useParams();
   const [selectedZone, setSelectedZone] = useState<
@@ -107,7 +117,17 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
           label="To'lo'v miqdori"
           rules={[{ required: true }]}
         >
-          <Input prefix={<BsCash className="text-gray-400" />} type="number" />
+          <InputNumber
+            className="!w-full"
+            prefix={<BsCash className="text-gray-400" />}
+            formatter={(value: any) =>
+              value
+                ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                : "0"
+            }
+            parser={(value) => (value ? value.replace(/\s/g, "") : "0")}
+            min={0}
+          />
         </Form.Item>
 
         <Form.Item name="isMonthly" label="Bu oy uchunmi?">
