@@ -328,8 +328,12 @@ export default function UsersPage() {
       title: "So'nggi to'lov miqdori",
       dataIndex: "last_payment_amount",
       key: "last_payment_amount",
-      render: (amount: string) => (
-        <span className="font-medium">
+      render: (amount: string, record: { payment_status: boolean }) => (
+        <span
+          className={`font-medium ${
+            record.payment_status ? "text-green-500" : "text-red-500"
+          }`}
+        >
           {amount ? Number(amount).toLocaleString() + " UZS" : "0 UZS"}
         </span>
       ),
@@ -506,10 +510,6 @@ export default function UsersPage() {
                     </span>
                   </h3>
                 </div>
-                <span className={`px-2 py-1 rounded-full font-bold`}>
-                  <span className="font-medium ">So'ngi To'lov:</span>{" "}
-                  {user.last_payment_amount}
-                </span>
               </div>
 
               <div className="grid grid-cols-1 gap-2 text-sm ">
@@ -557,11 +557,17 @@ export default function UsersPage() {
                   </span>
                 </div>
                 <span
-                  className={`px-0 py-1 rounded-full flex items-center  space-x-2 font-bold mb-3`}
+                  className={` py-1 rounded-full flex items-center gap-2 font-bold ${
+                    user.payment_status ? "text-green-500" : "text-red-500"
+                  }`}
                 >
-                  <BsCashCoin className="w-4 h-4" />
-                  <span className="font-medium mr-1">So'ngi To'lov:</span>{" "}
-                  {Number(user.last_payment_amount).toLocaleString()}
+                  <BsCashCoin className="w-4 h-4 mt-1 text-black" />
+                  <span>
+                    <span className="font-medium text-black mr-1">
+                      So'ngi To'lov:
+                    </span>{" "}
+                    {Number(user.last_payment_amount).toLocaleString()}
+                  </span>
                 </span>
               </div>
             </div>
