@@ -6,7 +6,7 @@ import { BASE_URL } from "../../config";
 import { User, Building2, Phone, DollarSign, Search } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
-import { BsCash } from "react-icons/bs";
+import { BsCash, BsCashCoin } from "react-icons/bs";
 // import UserDetailsModal from "../dashboard/userDetails";
 import UserHistoryPaymentModal from "../dashboard/userHistoryPaymentModal";
 import { CollectorLayout } from "../collectorLayout";
@@ -25,6 +25,7 @@ interface UserData {
   cost: any;
   zone_id: number;
   workplace_id: number;
+  last_payment_amount: number;
 }
 
 interface Workplace {
@@ -406,15 +407,6 @@ export default function UsersCollec() {
                     </span>
                   </h3>
                 </div>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs ${
-                    user.payment_status
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {user.payment_status ? "To'langan" : "To'lanmagan"}
-                </span>
               </div>
 
               <div className="grid grid-cols-1 gap-2 text-sm ">
@@ -451,6 +443,19 @@ export default function UsersCollec() {
                     <span className="font-bold">{user.product_name}</span>
                   </span>
                 </div>
+                <span
+                  className={` py-1 rounded-full flex items-center gap-2 font-bold ${
+                    user.payment_status ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  <BsCashCoin className="w-4 h-4 mt-1 text-black" />
+                  <span>
+                    <span className="font-medium text-black mr-1">
+                      So'ngi To'lov:
+                    </span>{" "}
+                    {Number(user.last_payment_amount).toLocaleString()}
+                  </span>
+                </span>
 
                 <div className="flex items-center justify-between space-x-2">
                   <div className="flex items-center space-x-2">
@@ -462,6 +467,7 @@ export default function UsersCollec() {
                       </span>
                     </span>
                   </div>
+
                   <div className="flex justify-between gap-3 items-center">
                     <button
                       className=" cursor-pointer"

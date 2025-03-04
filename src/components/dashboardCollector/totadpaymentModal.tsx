@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Modal, Table, Card, List, Typography } from "antd";
-import { DollarSign, MapPin, User, Calendar, CreditCard } from "lucide-react";
+import { DollarSign, MapPin, Calendar, CreditCard } from "lucide-react";
 import dayjs from "dayjs";
 
 interface TodayPayment {
@@ -83,7 +83,7 @@ export default function TodayPaymentsModal({
     <List
       dataSource={payments}
       renderItem={(payment) => (
-        <div className="my-3 shadow-xl rounded-2xl">
+        <div className="my-3 shadow-lg rounded-2xl">
           <Card
             className="mb-4 rounded-lg shadow-2xl hover:shadow-lg transition-shadow duration-300"
             bodyStyle={{ padding: "16px" }}
@@ -100,24 +100,20 @@ export default function TodayPaymentsModal({
                 <div className="flex items-center bg-gray-100 px-2 py-1 rounded-lg">
                   <Calendar size={14} className="text-gray-500 mr-1" />
                   <Typography.Text type="secondary" className="text-xs">
-                    {payment.day}
+                    {payment.day
+                      ? dayjs(payment.day).format("DD.MM.YYYY HH:mm:ss")
+                      : "-"}
                   </Typography.Text>
                 </div>
               </div>
 
               {/* Zone and Login Info */}
-              <div className="bg-gray-100 p-3 rounded-lg mb-3">
-                <div className="flex items-center mb-2">
+
+              <div className=" rounded-lg mb-3">
+                <div className="flex items-center ">
                   <MapPin size={16} className="text-green-500 mr-2" />
                   <Typography.Text strong className="text-gray-700">
                     {payment.zone_name}
-                  </Typography.Text>
-                </div>
-
-                <div className="flex items-center">
-                  <User size={16} className="text-purple-500 mr-2" />
-                  <Typography.Text className="text-gray-600">
-                    {payment.login}
                   </Typography.Text>
                 </div>
               </div>

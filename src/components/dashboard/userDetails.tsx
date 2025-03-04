@@ -228,7 +228,6 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
     },
   ];
 
-  // Add a custom renderer for mobile view
   const mobileRenderer = (record: any) => {
     const editable = isEditing(record);
     return (
@@ -351,10 +350,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       },
       { label: "Mahsulot nomi", value: user.product_name },
       { label: "Narxi", value: `${Number(user.cost).toLocaleString()} USZ` },
-      {
-        label: "So'nggi to'lov",
-        value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
-      },
+
       {
         label: "Oylik to'lov",
         value: `${Number(user.monthly_income).toLocaleString()} UZS`,
@@ -367,6 +363,10 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       {
         label: "So'nggi to'lov",
         value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
+      },
+      {
+        label: "To'lov",
+        value: `${Number(user.payment).toLocaleString()} UZS`,
       },
       // {
       //   label: "O'tgan oylik tolov holati",

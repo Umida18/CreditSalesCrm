@@ -170,8 +170,9 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
         );
       },
     },
-    { title: "To'lov haqida", dataIndex: "description", key: "description" },
+    { title: "To'lo'v haqida", dataIndex: "description", key: "description" },
     { title: "Yig'uvchi", dataIndex: "login", key: "login" },
+    { title: "To'lo'v", dataIndex: "payment", key: "payment" },
     {
       title: "To'lov miqdori",
       dataIndex: "payment_amount",
@@ -358,6 +359,10 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       { label: "Ish joyi", value: user.workplace_name },
       { label: "Olingan muddati", value: `${user.time} oyga` },
       { label: "Malumot", value: user.description },
+      {
+        label: "To'lov",
+        value: `${Number(user.payment).toLocaleString()} UZS`,
+      },
       {
         label: "So'nggi to'lov",
         value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,

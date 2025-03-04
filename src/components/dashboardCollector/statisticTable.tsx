@@ -20,6 +20,7 @@ interface CollectorData {
   description: string;
   given_day: string;
   updatedat: string;
+  last_payment_amount: number;
 }
 
 interface CollectorTableProps {
@@ -95,7 +96,7 @@ export default function ResponsiveCollectorTable({
         </p>
         <Space className="items-center">
           <DollarSign className="w-4 h-4 text-green-500" />
-          <Text>{`$${item.cost.toFixed(2)}`}</Text>
+          <Text>{`${Number(item.cost).toLocaleString()} `}</Text>
         </Space>
         <Space className="items-center">
           <MapPin className="w-4 h-4 text-blue-500" />
@@ -110,13 +111,11 @@ export default function ResponsiveCollectorTable({
           <Text>
             {
               <span
-                className={`px-2 py-1 rounded-full text-xs ${
-                  item.payment_status
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
+                className={` ${
+                  item.payment_status ? " text-green-800" : " text-red-800"
                 }`}
               >
-                {item.payment_status ? "To'langan" : "To'lanmagan"}
+                {Number(item.last_payment_amount).toLocaleString()}
               </span>
             }
           </Text>
@@ -124,13 +123,13 @@ export default function ResponsiveCollectorTable({
         <p>
           Oylik daromad:{" "}
           <span className=" font-semibold text-[16px]">
-            ${item.monthly_income.toFixed(2)}
+            {Number(item.monthly_income).toLocaleString()}
           </span>
         </p>
         <p>
           To'lo'v:{" "}
           <span className=" font-semibold text-[16px]">
-            {item.payment.toFixed(2)}{" "}
+            {Number(item.payment).toLocaleString()}
           </span>
         </p>
       </div>
