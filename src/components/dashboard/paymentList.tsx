@@ -1,8 +1,34 @@
-import { Modal, Table, Button, message } from "antd";
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
+import {
+  Modal,
+  Table,
+  Button,
+  message,
+  List,
+  Card,
+  Typography,
+  Space,
+  Divider,
+} from "antd";
+import {
+  ArrowLeft,
+  Calendar,
+  DollarSign,
+  MapPin,
+  Phone,
+  ShoppingBag,
+  User,
+  CreditCard,
+  Clock,
+  Hash,
+  Users,
+} from "lucide-react";
 import { BASE_URL } from "../../config";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import api from "../../Api/Api";
+
+const { Text, Title } = Typography;
 
 const PaymentList = ({
   type,
@@ -17,7 +43,16 @@ const PaymentList = ({
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log("paymentHistory", paymentHistory);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
+  useEffect(() => {
+    const checkIfMobile = () => setIsMobile(window.innerWidth < 768);
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   const titles = {
     notPaid: "To'lamaganlar Ro'yxati",
@@ -53,11 +88,7 @@ const PaymentList = ({
 
   const fetchPaymentHistory = async (userId: string) => {
     try {
-      console.log("userId123456", userId);
       const response = await api.get(`/payment/history/${userId}`);
-      console.log("responsehistory", response.data);
-      console.log("response", response);
-
       setPaymentHistory(response.data || []);
     } catch (err) {
       setError("To'lov tarixini olishda xatolik yuz berdi");
@@ -67,7 +98,11 @@ const PaymentList = ({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+    return `${date.getDate().toString().padStart(2, "0")}.${(
+      date.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}.${date.getFullYear()}`;
   };
 
   const columns = [
@@ -85,113 +120,28 @@ const PaymentList = ({
       title: "Berilgan vaqti",
       dataIndex: "given_day",
       key: "given_day",
-      render: (text: string) =>
-        text ? new Date(text).toLocaleString("en-GB") : "Noma'lum",
+      render: (text: string) => (text ? formatDate(text) : "Noma'lum"),
     },
     { title: "Muddati", dataIndex: "time", key: "time" },
     { title: "Tel nomer", dataIndex: "phone_number", key: "phone_number" },
     { title: "Sotuvchi", dataIndex: "seller", key: "seller" },
   ];
 
-  const userInfoColumns = [
-    { title: "Ma'lumot", dataIndex: "label", key: "label" },
-    { title: "Qiymat", dataIndex: "value", key: "value" },
-  ];
-
-  const paymentColumns = [
-    {
-      title: "Sana",
-      dataIndex: "payment_date",
-      key: "payment_date",
-      render: formatDate,
-    },
-    {
-      title: "Manzili",
-      dataIndex: "zone_name",
-      key: "zone_name",
-    },
-    { title: "Oy", dataIndex: "payment_month", key: "payment_month" },
-    { title: "To'lov haqida", dataIndex: "description", key: "description" },
-    { title: "Yig'uvchi", dataIndex: "login", key: "login" },
-  ];
-
-  const getUserInfo = (user: any) => {
-    const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
-    const paymentStatusColor = user.payment_status ? "green" : "red";
-
-    return [
-      { label: "Ismi", value: user.name },
-      {
-        label: "Telefon raqami",
-        value: (
-          <a
-            href={`tel:${user.phone_number}`}
-            className="text-blue-500 underline"
-          >
-            {user.phone_number}
-          </a>
-        ),
-      },
-      {
-        label: "Qo'shimcha telefon raqami",
-        value: (
-          <a
-            href={`tel:${user.phone_number2}`}
-            className="text-blue-500 underline"
-          >
-            {user.phone_number2}
-          </a>
-        ),
-      },
-      { label: "Mahsulot nomi", value: user.product_name },
-      { label: "Narxi", value: `${Number(user.cost).toLocaleString()} USZ` },
-      {
-        label: "Oylik to'lov",
-        value: `${Number(user.monthly_income).toLocaleString()} UZS`,
-      },
-      { label: "Manzili", value: user.zone_name },
-      { label: "Berilgan vaqti", value: formatDate(user.given_day) },
-      { label: "Ish joyi", value: user.workplace_name },
-      { label: "Olingan muddati", value: `${user.time} oyga` },
-      { label: "Malumot", value: user.description },
-      {
-        label: "O'tgan oylik tolov holati",
-        value: (
-          <span style={{ color: paymentStatusColor }}>{paymentStatus}</span>
-        ),
-      },
-    ];
-  };
-
-  // console.log("paymentHistory34567", paymentHistory);
-
   const todayPaidUsers = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Zona",
-      dataIndex: "zone_name",
-      key: "zone_name",
-    },
-    {
-      title: "Yig'uvchi",
-      dataIndex: "login",
-      key: "login",
-    },
+    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Zona", dataIndex: "zone_name", key: "zone_name" },
+    { title: "Yig'uvchi", dataIndex: "login", key: "login" },
     {
       title: "Kun",
       dataIndex: "day",
       key: "day",
-      render: (text: string) => new Date(text).toLocaleDateString(), // Formats date
+      render: (text: string) => formatDate(text),
     },
     {
       title: "Jami yig'ilgan",
       dataIndex: "total_collected",
       key: "total_collected",
-      render: (text: any) => Number(text).toLocaleString() + " UZS", // Formats number with commas
+      render: (text: any) => Number(text).toLocaleString() + " UZS",
     },
     {
       title: "Jami foydalanuvchi",
@@ -200,83 +150,324 @@ const PaymentList = ({
     },
   ];
 
+  const renderMobileList = (data: any[], columns: any[]) => {
+    const paginatedData = data.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize
+    );
+
+    return (
+      <>
+        <List
+          dataSource={paginatedData}
+          renderItem={(item) => (
+            <Card
+              className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-lg overflow-hidden"
+              onClick={() => type !== "todayPaid" && openUserDetails(item.id)}
+            >
+              <div className="flex flex-col space-y-2">
+                {columns.map((column) => (
+                  <div key={column.key} className="flex items-center">
+                    {column.icon && (
+                      <column.icon size={16} className="mr-2 text-blue-500" />
+                    )}
+                    <Text type="secondary" className="mr-2">
+                      {column.title}:
+                    </Text>
+                    <Text strong>
+                      {column.render
+                        ? column.render(item[column.dataIndex])
+                        : item[column.dataIndex]}
+                    </Text>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+        />
+        <div className="flex justify-center mt-4">
+          <Button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+          >
+            Oldingi
+          </Button>
+          <Text strong className="mx-4">
+            {currentPage} / {Math.ceil(data.length / pageSize)}
+          </Text>
+          <Button
+            disabled={currentPage === Math.ceil(data.length / pageSize)}
+            onClick={() =>
+              setCurrentPage((prev) =>
+                Math.min(Math.ceil(data.length / pageSize), prev + 1)
+              )
+            }
+          >
+            Keyingi
+          </Button>
+        </div>
+      </>
+    );
+  };
+
+  const renderUserInfo = (user: any) => {
+    const paymentStatus = user.payment_status ? "To'landi" : "Qarz";
+    const paymentStatusColor = user.payment_status ? "green" : "red";
+
+    const userInfo = [
+      { label: "Ismi", value: user.name, icon: User },
+      { label: "Telefon raqami", value: user.phone_number, icon: Phone },
+      {
+        label: "Qo'shimcha telefon raqami",
+        value: user.phone_number2,
+        icon: Phone,
+      },
+      { label: "Mahsulot nomi", value: user.product_name, icon: ShoppingBag },
+      {
+        label: "Narxi",
+        value: `${Number(user.cost).toLocaleString()} USZ`,
+        icon: DollarSign,
+      },
+      {
+        label: "Oylik to'lov",
+        value: `${Number(user.monthly_income).toLocaleString()} UZS`,
+        icon: CreditCard,
+      },
+      { label: "Manzili", value: user.zone_name, icon: MapPin },
+      {
+        label: "Berilgan vaqti",
+        value: formatDate(user.given_day),
+        icon: Calendar,
+      },
+      { label: "Ish joyi", value: user.workplace_name, icon: MapPin },
+      { label: "Olingan muddati", value: `${user.time} oyga`, icon: Clock },
+      { label: "Malumot", value: user.description },
+      {
+        label: "O'tgan oylik tolov holati",
+        value: paymentStatus,
+        color: paymentStatusColor,
+      },
+    ];
+
+    return (
+      <List
+        dataSource={userInfo}
+        renderItem={(item) => (
+          <List.Item>
+            <Space align="center">
+              {item.icon && <item.icon size={16} className="text-blue-500" />}
+              <Text type="secondary">{item.label}:</Text>
+              {item.label.includes("telefon") ? (
+                <a
+                  href={`tel:${item.value}`}
+                  className="text-blue-500 underline"
+                >
+                  {item.value}
+                </a>
+              ) : (
+                <Text strong style={item.color ? { color: item.color } : {}}>
+                  {item.value}
+                </Text>
+              )}
+            </Space>
+          </List.Item>
+        )}
+      />
+    );
+  };
+
   return (
     <Modal
       open={true}
       onCancel={onClose}
       footer={null}
       title={
-        selectedUser ? (
-          <div>
-            <Button onClick={closeUserDetails} style={{ marginBottom: 20 }}>
-              <IoMdArrowRoundBack className="mt-1" />
-            </Button>{" "}
-            <span className="ml-4" style={{ fontWeight: 700, fontSize: 24 }}>
-              {titles[type]}
-            </span>
-          </div>
-        ) : (
-          <span style={{ fontWeight: 700, fontSize: 24 }}>{titles[type]}</span>
-        )
+        <Space>
+          {selectedUser && (
+            <Button onClick={closeUserDetails} icon={<ArrowLeft size={16} />} />
+          )}
+          <Title level={4}>{titles[type]}</Title>
+        </Space>
       }
-      className="overflow-y-auto !min-h-[600px] sticky xl:min-w-[1000px]"
-      style={{ borderRadius: "12px", top: 20 }}
+      width={isMobile ? "100%" : "80%"}
+      style={{ top: 20 }}
     >
       {selectedUser ? (
-        <div className="max-h-[600px] overflow-y-auto">
-          {/* <Button
-            onClick={closeUserDetails}
-            style={{ marginBottom: 16, marginTop: 20 }}
-          >
-            <IoMdArrowRoundBack className="mt-1" /> Orqaga
-          </Button> */}
-          <h3 className="font-bold text-[20px] my-5" style={{ marginTop: 20 }}>
+        <div className="max-h-[70vh] overflow-y-auto px-4">
+          <Title level={5} className="mt-4 mb-2">
             To'liq malumot
-          </h3>
-          <Table
-            dataSource={getUserInfo(selectedUser)}
-            columns={userInfoColumns}
-            showHeader={false}
-            pagination={false}
-            bordered
-            loading={loading}
-          />
-          <h3 className="font-bold text-[20px] my-5" style={{ marginTop: 20 }}>
+          </Title>
+          {renderUserInfo(selectedUser)}
+          <Divider />
+          <Title level={5} className="mt-4 mb-2">
             To'lov Tarixi
-          </h3>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <Table
-            dataSource={paymentHistory}
-            columns={paymentColumns}
-            pagination={{ pageSize: 5 }}
-            bordered
-            loading={loading}
-          />
+          </Title>
+          {error && <Text type="danger">{error}</Text>}
+          {isMobile ? (
+            renderMobileList(paymentHistory, [
+              {
+                title: "Sana",
+                dataIndex: "payment_date",
+                key: "payment_date",
+                render: formatDate,
+                icon: Calendar,
+              },
+              {
+                title: "Manzili",
+                dataIndex: "zone_name",
+                key: "zone_name",
+                icon: MapPin,
+              },
+              {
+                title: "Oy",
+                dataIndex: "payment_month",
+                key: "payment_month",
+                icon: Clock,
+              },
+              {
+                title: "To'lov haqida",
+                dataIndex: "description",
+                key: "description",
+                icon: CreditCard,
+              },
+              {
+                title: "Yig'uvchi",
+                dataIndex: "login",
+                key: "login",
+                icon: User,
+              },
+            ])
+          ) : (
+            <Table
+              dataSource={paymentHistory}
+              columns={[
+                {
+                  title: "Sana",
+                  dataIndex: "payment_date",
+                  key: "payment_date",
+                  render: formatDate,
+                },
+                { title: "Manzili", dataIndex: "zone_name", key: "zone_name" },
+                {
+                  title: "Oy",
+                  dataIndex: "payment_month",
+                  key: "payment_month",
+                },
+                {
+                  title: "To'lov haqida",
+                  dataIndex: "description",
+                  key: "description",
+                },
+                { title: "Yig'uvchi", dataIndex: "login", key: "login" },
+              ]}
+              pagination={{ pageSize: 5 }}
+              bordered
+              loading={loading}
+            />
+          )}
         </div>
-      ) : type !== "todayPaid" ? (
-        <Table
-          className="!min-h-[500px]"
-          dataSource={Array.isArray(users) ? users.flat() : []}
-          columns={columns}
-          rowKey="id"
-          onRow={(record) => ({
-            onClick: () => openUserDetails(record.id),
-            style: { cursor: "pointer" },
-          })}
-          pagination={{ pageSize: 5 }}
-          scroll={{ x: true }}
-          bordered
-        />
+      ) : isMobile ? (
+        <div className="px-4">
+          {renderMobileList(
+            users,
+            type === "todayPaid"
+              ? [
+                  { title: "ID", dataIndex: "id", key: "id", icon: Hash },
+                  {
+                    title: "Zona",
+                    dataIndex: "zone_name",
+                    key: "zone_name",
+                    icon: MapPin,
+                  },
+                  {
+                    title: "Yig'uvchi",
+                    dataIndex: "login",
+                    key: "login",
+                    icon: User,
+                  },
+                  {
+                    title: "Kun",
+                    dataIndex: "day",
+                    key: "day",
+                    render: formatDate,
+                    icon: Calendar,
+                  },
+                  {
+                    title: "Jami yig'ilgan",
+                    dataIndex: "total_collected",
+                    key: "total_collected",
+                    render: (text: any) =>
+                      Number(text).toLocaleString() + " UZS",
+                    icon: DollarSign,
+                  },
+                  {
+                    title: "Jami foydalanuvchi",
+                    dataIndex: "total_payments",
+                    key: "total_payments",
+                    icon: Users,
+                  },
+                ]
+              : [
+                  { title: "Id", dataIndex: "id", key: "id", icon: Hash },
+                  { title: "Ismi", dataIndex: "name", key: "name", icon: User },
+                  {
+                    title: "Maxsulot nomi",
+                    dataIndex: "product_name",
+                    key: "product_name",
+                    icon: ShoppingBag,
+                  },
+                  {
+                    title: "Manzili",
+                    dataIndex: "zone_name",
+                    key: "zone_name",
+                    icon: MapPin,
+                  },
+                  {
+                    title: "Narxi",
+                    dataIndex: "cost",
+                    key: "cost",
+                    render: (text: any) =>
+                      Number(text).toLocaleString() + " UZS",
+                    icon: DollarSign,
+                  },
+                  {
+                    title: "Berilgan vaqti",
+                    dataIndex: "given_day",
+                    key: "given_day",
+                    render: (text: string) =>
+                      text ? formatDate(text) : "Noma'lum",
+                    icon: Calendar,
+                  },
+                  {
+                    title: "Muddati",
+                    dataIndex: "time",
+                    key: "time",
+                    icon: Clock,
+                  },
+                  {
+                    title: "Tel nomer",
+                    dataIndex: "phone_number",
+                    key: "phone_number",
+                    icon: Phone,
+                  },
+                  {
+                    title: "Sotuvchi",
+                    dataIndex: "seller",
+                    key: "seller",
+                    icon: User,
+                  },
+                ]
+          )}
+        </div>
       ) : (
         <Table
-          className="!min-h-[500px]"
-          dataSource={Array.isArray(users) ? users.flat() : []}
-          columns={todayPaidUsers}
+          dataSource={users}
+          columns={type === "todayPaid" ? todayPaidUsers : columns}
           rowKey="id"
-          // onRow={(record) => ({
-          //   onClick: () => openUserDetails(record.id),
-          //   style: { cursor: "pointer" },
-          // })}
+          onRow={(record) => ({
+            onClick: () => type !== "todayPaid" && openUserDetails(record.id),
+            style: { cursor: type !== "todayPaid" ? "pointer" : "default" },
+          })}
           pagination={{ pageSize: 5 }}
           scroll={{ x: true }}
           bordered
