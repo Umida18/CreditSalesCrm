@@ -23,7 +23,6 @@ import {
   Search,
   Pen,
   Trash,
-  LassoSelect,
 } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
