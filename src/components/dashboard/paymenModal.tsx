@@ -55,8 +55,6 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
       return;
     }
 
-    console.log("values", values);
-
     const paymentData = {
       amount: Number(values.amount),
       collector_id: idCollector ? idCollector : values.collector,

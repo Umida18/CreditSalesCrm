@@ -51,7 +51,6 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
-  console.log("paymentHistory234567", paymentHistory);
 
   useEffect(() => {
     const handleResize = () => {
@@ -65,7 +64,6 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  console.log("userData", userData);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -384,14 +382,11 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   //     <div className="text-lg">{value}</div>
   //   </div>
   // );
-  console.log("userData?.id4444444", userData?.id);
 
   useEffect(() => {
     const fetchPaymentHistory = async () => {
       try {
         const response = await api.get(`/payment/history/${userData?.id}`);
-        console.log("responsehistory", response.data);
-        console.log("response", response);
 
         setPaymentHistory(response.data || []);
       } catch (err) {

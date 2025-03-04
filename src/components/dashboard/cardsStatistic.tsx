@@ -15,8 +15,6 @@ const CardsStatistic = () => {
     monthPaidUsers: [],
   });
 
-  // console.log("stats", stats);
-
   const [modalData, setModalData] = useState<any>(null);
   const [totayPaid, setTotayPaid] = useState<any>();
 
@@ -28,11 +26,6 @@ const CardsStatistic = () => {
       fetch(`${BASE_URL}/main/month`).then((res) => res.json()),
     ])
       .then(([allMoney, notPaid, today, month]) => {
-        // console.log("Jami pul:", allMoney);
-        // console.log("To'lamaganlar:", notPaid);
-        // console.log("Bugun to'laganlar:", today);
-        // console.log("Bu oy to'laganlar:", month);
-
         setStats({
           allMoney,
           headPay: notPaid || 0,

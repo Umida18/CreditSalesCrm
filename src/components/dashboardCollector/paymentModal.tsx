@@ -14,7 +14,6 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
   //   >([]);
 
   const idCollector = localStorage.getItem("collectorId");
-  console.log("idCollectorsdfgh", idCollector);
 
   //   useEffect(() => {
   //     const fetchZone = async () => {
@@ -45,8 +44,6 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
   //   }, [selectedZone]);
 
   const handleSubmit = async (values: any) => {
-    console.log("values", values);
-
     const paymentData = {
       amount: Number(values.amount),
       collector_id: idCollector,

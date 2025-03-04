@@ -69,9 +69,7 @@ export default function DashboardPage() {
           throw new Error("Ma'lumotlarni yuklashda xatolik yuz berdi");
         }
         const responseData = await response.json();
-        console.log(data);
-        console.log(url);
-        console.log(responseData.zones);
+
         setData(responseData.zones || []);
 
         // Zonalar ma'lumotlarini olish

@@ -54,7 +54,6 @@ export function CollectorLayout({ children }: { children: React.ReactNode }) {
     const f = async () => {
       const res = await api.get(`/collector/${id}`);
       setColec(res.data);
-      console.log("colec", colec);
     };
     f();
   }, []);

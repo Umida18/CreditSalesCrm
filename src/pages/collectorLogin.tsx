@@ -27,13 +27,11 @@ export default function CollectorLoginPage() {
         login: values.login,
         password: values.password,
       });
-      console.log("res", res);
 
       localStorage.setItem("tokenCollector", res.data.token);
       localStorage.setItem("collectorId", res.data.id);
 
       navigate("/collectorDashboard");
-      console.log("Success:", values);
     } catch (error) {
       console.log(error);
     } finally {

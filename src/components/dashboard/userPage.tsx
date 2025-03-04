@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
@@ -21,10 +23,11 @@ import {
   Search,
   Pen,
   Trash,
+  LassoSelect,
 } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
-import { BsCash } from "react-icons/bs";
+import { BsCash, BsCashCoin } from "react-icons/bs";
 import PaymentModal from "./paymenModal";
 import UserDetailsModal from "./userDetails";
 import UserHistoryPaymentModal from "./userHistoryPaymentModal";
@@ -49,6 +52,7 @@ interface UserData {
   seller: string;
   passport_series: string;
   description: string;
+  last_payment_amount: any;
 }
 
 interface Workplace {
@@ -81,11 +85,12 @@ export default function UsersPage() {
   const [editingUser, setEditingUser] = useState<UserData | null>(null);
   const [form] = Form.useForm();
 
+  console.log("users", users);
+
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`${BASE_URL}/users/filter/${id}?page=${1}`);
-      console.log("222222response", response);
 
       const data = await response.json();
       setUsers(data);
@@ -276,7 +281,6 @@ export default function UsersPage() {
     );
 
     if (confirmDelete) {
-      console.log("Delete bosildi");
       try {
         await api.delete(`/users/delete/${id}`);
         message.success("Muvaffaqiyatli ochirildi");
@@ -322,16 +326,12 @@ export default function UsersPage() {
       render: (text: any) => <a href={`tel:${text}`}>{text}</a>,
     },
     {
-      title: "To'lov holati",
-      dataIndex: "payment_status",
-      key: "payment_status",
-      render: (status: boolean) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs ${
-            status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-          }`}
-        >
-          {status ? "To'langan" : "To'lanmagan"}
+      title: "So'nggi to'lov miqdori",
+      dataIndex: "last_payment_amount",
+      key: "last_payment_amount",
+      render: (amount: string) => (
+        <span className="font-medium">
+          {amount ? Number(amount).toLocaleString() + " UZS" : "0 UZS"}
         </span>
       ),
     },
@@ -412,8 +412,6 @@ export default function UsersPage() {
       setIsSearching(false);
     }
   }, [searchQuery]);
-
-  console.log("users", users);
 
   return (
     <MainLayout>
@@ -509,14 +507,9 @@ export default function UsersPage() {
                     </span>
                   </h3>
                 </div>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs ${
-                    user.payment_status
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {user.payment_status ? "To'langan" : "To'lanmagan"}
+                <span className={`px-2 py-1 rounded-full font-bold`}>
+                  <span className="font-medium ">So'ngi To'lov:</span>{" "}
+                  {user.last_payment_amount}
                 </span>
               </div>
 
@@ -554,15 +547,23 @@ export default function UsersPage() {
                     <span className="font-bold">{user.product_name}</span>
                   </span>
                 </div>
+
                 <div className="flex items-center space-x-2">
                   <DollarSign className="w-4 h-4" />
                   <span>
-                    Narxi{" "}
+                    Narxi:{" "}
                     <span className="font-bold">
                       {Number(user.cost).toLocaleString()}
                     </span>
                   </span>
                 </div>
+                <span
+                  className={`px-0 py-1 rounded-full flex items-center  space-x-2 font-bold mb-3`}
+                >
+                  <BsCashCoin className="w-4 h-4" />
+                  <span className="font-medium mr-1">So'ngi To'lov:</span>{" "}
+                  {Number(user.last_payment_amount).toLocaleString()}
+                </span>
               </div>
             </div>
 

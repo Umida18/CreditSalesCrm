@@ -4,7 +4,6 @@ import { BASE_URL } from "../config";
 export const login = async (data: { username: string; password: string }) => {
   try {
     const response = await axios.post(`${BASE_URL}/login`, data);
-    console.log("Login response:", response);
 
     const token = response.data?.token;
     const user = response.data?.user; // Assuming user info is returned in the response.
@@ -47,7 +46,6 @@ export const register = async (data: {
   balance: number;
 }) => {
   try {
-    console.log("Sending registration data:", data);
     const response = await axios.post(`${BASE_URL}/auth/register`, data);
 
     const token = response.data?.token;

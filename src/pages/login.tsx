@@ -17,11 +17,9 @@ export default function LoginPage() {
         name: values.name,
         password: values.password,
       });
-      console.log("res", res);
 
       localStorage.setItem("token", res.data.token);
       navigate("/");
-      console.log("Success:", values);
     } catch (error) {
       console.log(error);
     } finally {

@@ -30,13 +30,10 @@ interface UserDetailsModalProps {
 const UserHistoryPaymentModal: React.FC<UserDetailsModalProps> = ({
   isOpen,
   onClose,
-  userData,
 }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
-  console.log("userData", userData);
-  console.log("userData?.id", userData?.id);
 
   useEffect(() => {
     const handleResize = () => {

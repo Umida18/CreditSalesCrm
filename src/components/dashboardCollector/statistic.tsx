@@ -31,8 +31,6 @@ export default function StatisticsPage() {
   const [selectedZone, setSelectedZone] = useState(undefined);
   const [isFiltered, setIsFiltered] = useState(false);
   const [isTodayModalOpen, setIsTodayModalOpen] = useState(false);
-  // console.log("collectorStats", collectorStats);
-  console.log("todayStats", todayStats);
 
   const collectorId =
     typeof window !== "undefined" ? localStorage.getItem("collectorId") : null;
@@ -127,7 +125,6 @@ export default function StatisticsPage() {
     0
   );
   const displayData = isFiltered ? filteredStats : collectorStats;
-  console.log("thisMonthStats", thisMonthStats);
   return (
     <CollectorLayout>
       <div className="container mx-auto">
