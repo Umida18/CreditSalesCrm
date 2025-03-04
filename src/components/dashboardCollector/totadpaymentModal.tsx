@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Modal, Table, Card, List, Typography } from "antd";
 import { DollarSign, MapPin, User, Calendar, CreditCard } from "lucide-react";
+import dayjs from "dayjs";
 
 interface TodayPayment {
   zone_name: string;
@@ -58,7 +59,7 @@ export default function TodayPaymentsModal({
       title: "Sana",
       dataIndex: "day",
       key: "day",
-      //   render: (day: string) => format(new Date(day), "dd.MM.yyyy"),
+      render: (text: any) => (text ? dayjs(text).format("DD.MM.YYYY") : "-"),
     },
     {
       title: "Yig'ilgan Summa",
