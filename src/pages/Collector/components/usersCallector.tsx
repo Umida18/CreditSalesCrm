@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { Table, Alert, Select, Button, Input, message } from "antd";
 import { MainLayout } from "../../../components/mainlayout";
 import { BASE_URL } from "../../../config";
-import { User, Building2, Phone, DollarSign, Search } from "lucide-react";
+import { User, Building2, Phone, DollarSign, Search, X } from "lucide-react";
 import { ProductFilled } from "@ant-design/icons";
 import { PiUniteSquare } from "react-icons/pi";
 import { BsCash, BsCashCoin } from "react-icons/bs";
@@ -323,7 +323,7 @@ export default function UsersCollec() {
         </p>
       </div>
       <div className="flex justify-between xl:flex-row flex-col xl:items-center items-start">
-        <div className="mb-4 space-x-4 flex items-center gap-1">
+        <div className="mb-4 flex items-center gap-1">
           <Input
             placeholder="Qidirish (telefon, ism yoki ID)"
             value={searchQuery}
@@ -333,33 +333,52 @@ export default function UsersCollec() {
           <Button type="primary" onClick={handleSearch} loading={isSearching}>
             <Search className="size-4" />
           </Button>
+          <Button
+            onClick={() => {
+              setSearchQuery("");
+              handleSearch();
+              fetchUsers();
+            }}
+          >
+            <X />
+          </Button>
         </div>
-
-        <div className="flex gap-2  flex-col xl:items-center items-start">
-          <div className="mb-4 space-x-4 flex items-center flex-col gap-1">
-            <Select
-              placeholder="Workplace"
-              value={workplaceId}
-              onChange={(value) => {
-                setWorkplaceId(value);
-                handleFilterWorkplace(value);
-              }}
-              style={{ width: 180 }}
-            >
-              {workplaces.map((workplace) => (
-                <Select.Option key={workplace.id} value={workplace.id}>
-                  {workplace.workplace_name}
-                </Select.Option>
-              ))}
-            </Select>
+        <div className="flex gap-2 xl:flex-row flex-col xl:items-center items-start">
+          <div className="mb-4 flex items-center flex-col gap-1">
+            <div className="flex items-center gap-1">
+              <Select
+                placeholder="Workplace"
+                value={workplaceId}
+                onChange={(value) => {
+                  setWorkplaceId(value);
+                  handleFilterWorkplace(value);
+                }}
+                style={{ width: 180 }}
+              >
+                {workplaces.map((workplace) => (
+                  <Select.Option key={workplace.id} value={workplace.id}>
+                    {workplace.workplace_name}
+                  </Select.Option>
+                ))}
+              </Select>
+              <Button
+                onClick={() => {
+                  setWorkplaceId(null);
+                  fetchUsers();
+                }}
+              >
+                <X />
+              </Button>
+            </div>
             {workplaceError && (
               <p className="text-red-500 text-sm mt-1">{workplaceError}</p>
             )}
           </div>
 
-          <div className="mb-4 space-x-4 flex items-center gap-1">
+          <div className="mb-4 flex items-center gap-1">
             <Select
               placeholder="To'lov holati"
+              value={paymentStatus}
               onChange={(value) => setPaymentStatus(value)}
               style={{ width: 180 }}
             >
@@ -374,6 +393,13 @@ export default function UsersCollec() {
               }}
             >
               <Search className="size-4" />
+            </Button>
+            <Button
+              onClick={() => {
+                setPaymentStatus(null);
+              }}
+            >
+              <X />
             </Button>
           </div>
         </div>

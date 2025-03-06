@@ -58,6 +58,12 @@ interface Workplace {
   workplace_name: string;
 }
 
+interface Zones {
+  id: number;
+  zone_name: string;
+  description: string;
+}
+
 export default function UsersPage() {
   const { id } = useParams();
   const [users, setUsers] = useState<UserData[]>([]);
@@ -78,6 +84,7 @@ export default function UsersPage() {
   const [workplaceError, setWorkplaceError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [zones, setZones] = useState<Zones[] | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<UserData | null>(null);
   const [form] = Form.useForm();
@@ -101,9 +108,11 @@ export default function UsersPage() {
   const fetchWorkplaces = useCallback(async () => {
     try {
       const response = await fetch(`${BASE_URL}/workplace`);
+      const zon = await api.get("/zone");
       if (!response.ok)
         throw new Error("Ish joylarini yuklashda xatolik yuz berdi");
       const data = await response.json();
+      setZones(zon.data);
       setWorkplaces(data);
     } catch (err: any) {
       setError(err.message);
@@ -238,7 +247,8 @@ export default function UsersPage() {
       setEditingUser(userData);
       form.setFieldsValue({
         ...userData,
-        // workplace_name: work,
+        workplace_id: userData.workplace_name,
+        zone_id: userData.zone_name,
         given_day: moment(userData.given_day),
       });
       setIsEditModalOpen(true);
@@ -247,11 +257,13 @@ export default function UsersPage() {
       setError(err.message);
     }
   };
+  console.log("userData", editingUser);
 
   const handleEditSubmit = async (values: any) => {
     try {
-      const work = workplaces?.find(
-        (w: any) => w?.workplace_name === editingUser?.workplace_name
+      const zoneId = zones?.find((i) => i.zone_name === values.zone_id)?.id;
+      const workId = workplaces.find(
+        (i) => i.workplace_name === values.workplace_id
       )?.id;
 
       await fetch(`${BASE_URL}/users/update/${editingUser?.id}`, {
@@ -262,8 +274,8 @@ export default function UsersPage() {
 
         body: JSON.stringify({
           ...values,
-          workplace_id: work,
-          zone_id: id,
+          workplace_id: workId,
+          zone_id: zoneId,
           given_day: values.given_day.toISOString(),
         }),
       });
@@ -475,7 +487,7 @@ export default function UsersPage() {
               <Button
                 onClick={() => {
                   setWorkplaceId(null);
-                  // handleFilterWorkplace(null);
+                  fetchUsers();
                 }}
               >
                 <X />
@@ -702,6 +714,39 @@ export default function UsersPage() {
                 min={0}
               />
             </Form.Item>
+            <Form.Item
+              name="workplace_id"
+              label="Ish joyi"
+              rules={[
+                { required: true, message: "Iltimos, ish joyini tanlang" },
+              ]}
+            >
+              <Select placeholder="Ish joyini tanlang">
+                {workplaces.map((workplace) => (
+                  <Select.Option
+                    key={workplace.id}
+                    value={workplace.workplace_name}
+                  >
+                    {workplace.workplace_name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="zone_id"
+              label="Hudud"
+              rules={[{ required: true, message: "Iltimos, hududni tanlang" }]}
+            >
+              <Select placeholder="Hududni tanlang">
+                {zones?.map((zone: Zones) => (
+                  <Select.Option key={zone.id} value={zone.zone_name}>
+                    {zone.zone_name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
             <Form.Item
               name="phone_number"
               label="Telefon raqami"
