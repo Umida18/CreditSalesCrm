@@ -113,7 +113,7 @@ export default function UsersPage() {
   useEffect(() => {
     fetchUsers();
     fetchWorkplaces();
-  }, [fetchUsers, fetchWorkplaces, workplaceId]);
+  }, [fetchUsers, fetchWorkplaces]);
 
   const handleFilterWorkplace = async (selectedWorkplaceId?: number) => {
     try {
@@ -447,6 +447,7 @@ export default function UsersPage() {
             onClick={() => {
               setSearchQuery("");
               handleSearch();
+              fetchUsers();
             }}
           >
             <X />
