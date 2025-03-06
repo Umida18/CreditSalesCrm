@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, Input, Form, message, Select } from "antd";
+import { Modal, Input, Form, message, Select, InputNumber } from "antd";
 import { MdAdd } from "react-icons/md";
 import { BASE_URL } from "../../../config";
 
@@ -158,7 +158,16 @@ const Header = ({ selectedZone, setData }: any) => {
               name="cost"
               rules={[{ required: true, message: "Narxni kiriting!" }]}
             >
-              <Input type="number" />
+              <InputNumber
+                className="!w-full"
+                formatter={(value: any) =>
+                  value
+                    ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                    : "0"
+                }
+                parser={(value) => (value ? value.replace(/\s/g, "") : "0")}
+                min={0}
+              />
             </Form.Item>
             <Form.Item
               label="Telefon raqami"

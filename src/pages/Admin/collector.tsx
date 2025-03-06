@@ -4,6 +4,7 @@ import { MainLayout } from "../../components/mainlayout";
 import api from "../../Api/Api";
 import { Banknote, MapPin, Calendar } from "lucide-react";
 import dayjs from "dayjs";
+import { v4 as uuidv4 } from "uuid";
 
 const Collector = () => {
   const [data, setData] = useState<any>([]);
@@ -63,6 +64,12 @@ const Collector = () => {
       </MainLayout>
     );
   }
+  console.log("data", data);
+
+  const formattedData = data.map((item: any) => ({
+    ...item,
+    uuid: uuidv4(), // Agar `id` yo‘q bo‘lsa, unikal id beramiz
+  }));
 
   return (
     <MainLayout>
@@ -71,10 +78,10 @@ const Collector = () => {
       {/* Desktop view */}
       <div className="hidden md:block">
         <Table
-          dataSource={data}
+          dataSource={formattedData}
           columns={columns}
           loading={loading}
-          rowKey="id"
+          rowKey="uuid"
           pagination={{ pageSize: 10 }}
         />
       </div>
@@ -85,7 +92,7 @@ const Collector = () => {
           <div className="text-center">Loading...</div>
         ) : (
           <div className="space-y-4">
-            {data.map((item: any) => (
+            {formattedData.map((item: any) => (
               <div className="my-2">
                 <Card key={item.id} className="bg-white shadow-md">
                   <p className="text-2xl my-2 font-semibold">{item.login}</p>

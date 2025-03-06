@@ -10,6 +10,7 @@ import {
   Form,
   DatePicker,
   message,
+  InputNumber,
 } from "antd";
 import { MainLayout } from "../../components/mainlayout";
 import { BASE_URL } from "../../config";
@@ -112,7 +113,7 @@ export default function UsersPage() {
   useEffect(() => {
     fetchUsers();
     fetchWorkplaces();
-  }, [fetchUsers, fetchWorkplaces]);
+  }, [fetchUsers, fetchWorkplaces, workplaceId]);
 
   const handleFilterWorkplace = async (selectedWorkplaceId?: number) => {
     try {
@@ -140,12 +141,15 @@ export default function UsersPage() {
     }
   };
 
-  const handleFilterUsers = async () => {
+  const handleFilterUsers = useCallback(async () => {
     if (!workplaceId) {
       setWorkplaceError("Ish joyini ham tanlang");
       return;
+    } else if (workplaceId) {
+      setWorkplaceError(null);
     }
     setWorkplaceError(null);
+
     try {
       setLoading(true);
       const response = await fetch(`${BASE_URL}/users/filter?page=${1}`, {
@@ -155,10 +159,13 @@ export default function UsersPage() {
         },
         body: JSON.stringify({
           zone_id: Number(id),
+          workplace_id: workplaceId,
           payment_status: paymentStatus,
         }),
       });
+
       if (!response.ok) throw new Error("Filtrlashda xatolik yuz berdi");
+
       const data = await response.json();
       setUsers(data);
     } catch (err: any) {
@@ -166,7 +173,8 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, workplaceId, paymentStatus, workplaceError]);
+
   const handleOpenPaymentModal = (userId: number) => {
     setSelectedUserId(userId);
     setIsPaymentModalOpen(true);
@@ -466,7 +474,7 @@ export default function UsersPage() {
               <Button
                 onClick={() => {
                   setWorkplaceId(null);
-                  handleFilterWorkplace(undefined);
+                  // handleFilterWorkplace(null);
                 }}
               >
                 <X />
@@ -682,7 +690,16 @@ export default function UsersPage() {
               <Input />
             </Form.Item>
             <Form.Item name="cost" label="Narxi" rules={[{ required: true }]}>
-              <Input type="number" />
+              <InputNumber
+                formatter={(value: any) =>
+                  value
+                    ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                    : "0"
+                }
+                className="!w-full"
+                parser={(value) => (value ? value.replace(/\s/g, "") : "0")}
+                min={0}
+              />
             </Form.Item>
             <Form.Item
               name="phone_number"
@@ -694,33 +711,11 @@ export default function UsersPage() {
             <Form.Item name="phone_number2" label="Qo'shimcha telefon raqami">
               <Input />
             </Form.Item>
-            {/* <Form.Item
-              name="workplace_id"
-              label="Ish joyi ID"
-              rules={[{ required: true }]}
-            >
-              <Select
-                placeholder="Workplace"
-                value={"workplace_name"}
-                style={{ width: 180 }}
-              >
-                {workplaces.map((workplace) => (
-                  <Select.Option key={workplace.id} value={workplace.id}>
-                    {workplace.workplace_name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item> */}
+
             <Form.Item name="time" label="Vaqt" rules={[{ required: true }]}>
               <Input type="number" />
             </Form.Item>
-            {/* <Form.Item
-              name="zone_id"
-              label="Hudud ID"
-              rules={[{ required: true }]}
-            >
-              <Input />
-            </Form.Item> */}
+
             <Form.Item name="seller" label="Sotuvchi">
               <Input />
             </Form.Item>
@@ -735,7 +730,7 @@ export default function UsersPage() {
               label="Berilgan sana"
               rules={[{ required: true }]}
             >
-              <DatePicker showTime />
+              <DatePicker className="!w-full" showTime />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
