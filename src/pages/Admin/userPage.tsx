@@ -29,8 +29,8 @@ import { PiUniteSquare } from "react-icons/pi";
 import { BsCash, BsCashCoin } from "react-icons/bs";
 import PaymentModal from "./components/paymenModal";
 import UserDetailsModal from "./components/userDetails";
-import moment from "moment";
 import api from "../../Api/Api";
+import dayjs from "dayjs";
 
 interface UserData {
   id: number;
@@ -249,7 +249,7 @@ export default function UsersPage() {
         ...userData,
         workplace_id: userData.workplace_name,
         zone_id: userData.zone_name,
-        given_day: moment(userData.given_day),
+        given_day: userData.given_day ? dayjs(userData.given_day) : null,
       });
       setIsEditModalOpen(true);
       fetchUsers();
@@ -776,7 +776,11 @@ export default function UsersPage() {
               label="Berilgan sana"
               rules={[{ required: true }]}
             >
-              <DatePicker className="!w-full" showTime />
+              <DatePicker
+                className="!w-full"
+                showTime
+                // format="YYYY-MM-DD HH:mm:ss"
+              />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">

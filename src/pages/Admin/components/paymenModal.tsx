@@ -71,10 +71,10 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
       zone_id: id,
       payment_month: isMonthlyPayment
         ? moment().format("MMMM")
-        : values.paymentDate.format("MMMM"), // Hozirgi oy
+        : values.paymentDate.format("MMMM"),
       payment_date: isMonthlyPayment
-        ? moment().format("YYYY-MM-DD") // Bugungi sana
-        : values.paymentDate.format("YYYY-MM-DD"), // Tanlangan sana
+        ? moment().format("YYYY-MM-DD HH:mm:ss")
+        : values.paymentDate,
       type: isMonthlyPayment,
       description: values.description,
     };
@@ -142,7 +142,7 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
             label="Sana"
             rules={[{ required: true }]}
           >
-            <DatePicker className="w-full" />
+            <DatePicker className="w-full" showTime />
           </Form.Item>
         )}
         {/* {!idCollector && ( */}
