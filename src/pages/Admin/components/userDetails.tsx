@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import { useState, useEffect } from "react";
 import { Modal, Spin, Table, message, Input, Button, Select } from "antd";
@@ -105,10 +103,10 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
         )
       );
       setEditingKey(null);
-      message.success("Payment history updated successfully");
+      message.success("Toʻlov tarixi muvaffaqiyatli yangilandi");
     } catch (error) {
       console.error("Error updating payment history:", error);
-      message.error("Failed to update payment history");
+      message.error("Toʻlov tarixini yangilab boʻlmadi");
     }
   };
 

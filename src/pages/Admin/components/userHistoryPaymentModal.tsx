@@ -34,7 +34,7 @@ const UserHistoryPaymentModal: React.FC<UserDetailsModalProps> = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const id = localStorage.getItem("collectorId");
-  console.log("paymentHistory", paymentHistory);
+  // console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const handleResize = () => {

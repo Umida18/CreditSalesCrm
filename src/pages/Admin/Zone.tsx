@@ -1,10 +1,9 @@
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button, Modal, Input, notification, Card, Spin } from "antd";
+import { Table, Button, Modal, Input, Card, Spin, message } from "antd";
 import axios from "axios";
 import { MainLayout } from "../../components/mainlayout";
 import { BASE_URL } from "../../config";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Edit2, PlusCircle, Download, MapPin } from "lucide-react";
 import { FaMapMarkedAlt } from "react-icons/fa";
@@ -24,16 +23,6 @@ const Zone: React.FC = () => {
   const [editId, setEditId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const openNotification = useCallback(
-    (type: "success" | "error", message: string) => {
-      notification[type]({
-        message: message,
-        placement: "topRight",
-      });
-    },
-    []
-  );
-
   const fetchZones = useCallback(async () => {
     setLoading(true);
     try {
@@ -42,11 +31,11 @@ const Zone: React.FC = () => {
       setData(result);
     } catch (error) {
       console.error("Error fetching zones:", error);
-      openNotification("error", "Hududlarni yuklashda xatolik yuz berdi.");
+      message.error("Hududlarni yuklashda xatolik yuz berdi.");
     } finally {
       setLoading(false);
     }
-  }, [openNotification]);
+  }, []);
 
   useEffect(() => {
     fetchZones();
@@ -63,10 +52,10 @@ const Zone: React.FC = () => {
       setZoneName("");
       setDescription("");
       fetchZones();
-      openNotification("success", "Hudud muvaffaqiyatli qo'shildi!");
+      message.success("Hudud muvaffaqiyatli qo'shildi!");
     } catch (error) {
       console.error("Error adding zone:", error);
-      openNotification("error", "Hudud qo'shishda xatolik yuz berdi.");
+      message.error("Hudud qo'shishda xatolik yuz berdi.");
     } finally {
       setLoading(false);
     }
@@ -84,10 +73,10 @@ const Zone: React.FC = () => {
       setDescription("");
       setEditId(null);
       fetchZones();
-      toast.success("Hudud muvaffaqiyatli yangilandi!");
+      message.success("Hudud muvaffaqiyatli yangilandi!");
     } catch (error) {
       console.error("Error updating zone:", error);
-      openNotification("error", "Hudud yangilashda xatolik yuz berdi!");
+      message.error("Hudud yangilashda xatolik yuz berdi!");
     } finally {
       setLoading(false);
     }
@@ -110,7 +99,7 @@ const Zone: React.FC = () => {
       document.body.removeChild(link);
     } catch (error) {
       console.error("Error downloading file:", error);
-      openNotification("error", "Faylni yuklashda xatolik yuz berdi.");
+      message.error("Faylni yuklashda xatolik yuz berdi.");
     }
   };
 

@@ -79,14 +79,14 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
         throw new Error("Payment failed");
       }
 
-      message.success("Payment added successfully");
+      message.success("Toʻlov muvaffaqiyatli qoʻshildi");
       onClose();
       fetchUsers();
       form.resetFields();
     } catch (error) {
       console.log(error);
 
-      message.error("Failed to add payment");
+      message.error("Toʻlov qoʻshib boʻlmadi");
     }
   };
 

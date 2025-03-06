@@ -11,32 +11,34 @@ import DashboardCollector from "./pages/Collector/dashboardCollector";
 import UsersCollec from "./pages/Collector/components/usersCallector";
 import StatisticsContent from "./pages/Collector/statistic";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, App as AntApp } from "antd";
 
 function App() {
   return (
     <ConfigProvider>
-      <ErrorBoundary>
-        <BrowserRouter>
-          <ToastContainer />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-            {/* <Route path="/collector" element={<Collector />} /> */}
-            <Route path="/collector" element={<Collector />} />
-            <Route path="/collectorLogin" element={<CollectorLoginPage />} />
-            <Route path="/zone" element={<Zone />} />
-            <Route
-              path="/collectorDashboard"
-              element={<DashboardCollector />}
-            />
-            <Route path="/workplace" element={<Workplace />} />
-            <Route path="/statistic" element={<StatisticsContent />} />
-            <Route path="/users/:id" element={<UsersPage />} />
-            <Route path="/usersCollector/:id" element={<UsersCollec />} />
-          </Routes>
-        </BrowserRouter>
-      </ErrorBoundary>
+      <AntApp>
+        <ErrorBoundary>
+          <BrowserRouter>
+            <ToastContainer />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage />} />
+              {/* <Route path="/collector" element={<Collector />} /> */}
+              <Route path="/collector" element={<Collector />} />
+              <Route path="/collectorLogin" element={<CollectorLoginPage />} />
+              <Route path="/zone" element={<Zone />} />
+              <Route
+                path="/collectorDashboard"
+                element={<DashboardCollector />}
+              />
+              <Route path="/workplace" element={<Workplace />} />
+              <Route path="/statistic" element={<StatisticsContent />} />
+              <Route path="/users/:id" element={<UsersPage />} />
+              <Route path="/usersCollector/:id" element={<UsersCollec />} />
+            </Routes>
+          </BrowserRouter>
+        </ErrorBoundary>
+      </AntApp>
     </ConfigProvider>
   );
 }

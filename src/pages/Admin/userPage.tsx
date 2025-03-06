@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
@@ -30,7 +28,6 @@ import { PiUniteSquare } from "react-icons/pi";
 import { BsCash, BsCashCoin } from "react-icons/bs";
 import PaymentModal from "./components/paymenModal";
 import UserDetailsModal from "./components/userDetails";
-import UserHistoryPaymentModal from "./components/userHistoryPaymentModal";
 import moment from "moment";
 import api from "../../Api/Api";
 
@@ -67,8 +64,7 @@ export default function UsersPage() {
   const [error, setError] = useState("");
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
-  const [isOpenUserHistoryModalOpen, setIsOpenUserHistoryModal] =
-    useState(false);
+
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedUserDetails, setSelectedUserDetails] = useState(null);
   const [userDetailsLoading, setUserDetailsLoading] = useState(false);
@@ -221,10 +217,6 @@ export default function UsersPage() {
     setIsUserDetailsModalOpen(false);
     setSelectedUserDetails(null);
   };
-  const handleCloseUserHistoryModal = () => {
-    setIsOpenUserHistoryModal(false);
-    setSelectedUserDetails(null);
-  };
 
   const handleEditUser = async (userId: number) => {
     try {
@@ -268,10 +260,15 @@ export default function UsersPage() {
         }),
       });
 
+      message.success("Foydalanuvchi muvaffaqiyatli tahrirlandi!");
+
       setIsEditModalOpen(false);
       fetchUsers();
     } catch (err: any) {
       setError(err.message);
+      message.error(
+        err.message || "Foydalanuvchini tahrirlashda xatolik yuz berdi."
+      );
     }
   };
 
@@ -653,11 +650,6 @@ export default function UsersPage() {
           fetchUsers={fetchUsers}
         />
       )}
-      <UserHistoryPaymentModal
-        isOpen={isOpenUserHistoryModalOpen}
-        onClose={handleCloseUserHistoryModal}
-        userData={selectedUserDetails}
-      />
 
       <UserDetailsModal
         isOpen={isUserDetailsModalOpen}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Input, Form, Typography } from "antd";
+import { Button, Input, Form, Typography, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import api from "../Api/Api";
 import { useNavigate } from "react-router-dom";
@@ -31,9 +31,12 @@ export default function CollectorLoginPage() {
       localStorage.setItem("tokenCollector", res.data.token);
       localStorage.setItem("collectorId", res.data.id);
 
+      message.success("Muvaffaqiyatli login!");
+
       navigate("/collectorDashboard");
     } catch (error) {
       console.log(error);
+      message.error("Login yoki parol noto‘g‘ri, qayta urinib ko‘ring!");
     } finally {
       setLoading(false);
     }

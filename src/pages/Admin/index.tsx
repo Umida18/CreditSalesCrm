@@ -1,6 +1,4 @@
-"use client";
-
-import { Button, Table, notification } from "antd";
+import { Button, Table, message } from "antd";
 import { MainLayout } from "../../components/mainlayout";
 import CardsStatistic from "./components/cardsStatistic";
 import { useEffect, useState } from "react";
@@ -108,10 +106,7 @@ export default function DashboardPage() {
       );
 
       if (response.ok) {
-        notification.success({
-          message: "To'lov muvaffaqiyatli amalga oshirildi!",
-          placement: "topRight",
-        });
+        message.success("To'lov muvaffaqiyatli amalga oshirildi!");
 
         closePaymentModal();
         const updatedData = data.map((user: any) =>
@@ -125,11 +120,7 @@ export default function DashboardPage() {
       }
     } catch (error: any) {
       setError(error.message);
-      notification.error({
-        message: "To'lovda xatolik yuz berdi!",
-        description: error.message,
-        placement: "topRight",
-      });
+      message.error("To'lovda xatolik yuz berdi!");
     }
   };
 

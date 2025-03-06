@@ -50,18 +50,18 @@ const Workplace: React.FC = () => {
         workplace_name: zoneName,
         description,
       });
-      message.success("Workplace added successfully!");
+      message.success("Ish joyiga muvaffaqiyat qo'shildi!");
       setModalVisible(false);
       fetchWorkplaces();
     } catch (error) {
       console.error("Error adding workplace:", error);
-      message.error("Failed to add workplace");
+      message.error("Ish joyini qo‘shishda xatolik yuz berdi");
     }
   };
 
   const handleUpdateZone = async () => {
     if (!zoneName || !description) {
-      message.error("Please fill in both fields");
+      message.error("Iltimos, ikkala maydonni ham toʻldiring");
       return;
     }
 
@@ -70,12 +70,12 @@ const Workplace: React.FC = () => {
         workplace_name: zoneName,
         description,
       });
-      message.success("Workplace updated successfully!");
+      message.success("Ish joyi muvaffaqiyatli yangilandi!");
       setModalVisible(false);
       fetchWorkplaces();
     } catch (error) {
       console.error("Error updating workplace:", error);
-      message.error("Failed to update workplace");
+      message.error("Ish joyini yangilashda xatolik yuz berdi");
     }
   };
 

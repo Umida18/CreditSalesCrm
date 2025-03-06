@@ -88,6 +88,7 @@ const PaymentList = ({
     try {
       const response = await api.get(`/payment/history/${userId}`);
       setPaymentHistory(response.data || []);
+      console.log("response", response);
     } catch (err) {
       setError("To'lov tarixini olishda xatolik yuz berdi");
       message.error("To'lov tarixini olishda xatolik yuz berdi");
