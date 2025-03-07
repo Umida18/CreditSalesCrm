@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Layout, Menu, Button, theme } from "antd";
@@ -13,6 +11,7 @@ import {
 import { CiLocationOn } from "react-icons/ci";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { BiBasket } from "react-icons/bi";
 
 const { Header, Sider, Content } = Layout;
 
@@ -36,6 +35,11 @@ const menuItems = [
     key: "/collector",
     icon: <BsFillPersonLinesFill />,
     label: "Yig'uvchilar",
+  },
+  {
+    key: "/korzinka",
+    icon: <BiBasket />,
+    label: "Korzinka",
   },
 ];
 

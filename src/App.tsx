@@ -12,6 +12,7 @@ import UsersCollec from "./pages/Collector/components/usersCallector";
 import StatisticsContent from "./pages/Collector/statistic";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ConfigProvider, App as AntApp } from "antd";
+import Korzinka from "./pages/Admin/korzinka";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/collector" element={<Collector />} />
               <Route path="/collectorLogin" element={<CollectorLoginPage />} />
               <Route path="/zone" element={<Zone />} />
+              <Route path="/korzinka" element={<Korzinka />} />
               <Route
                 path="/collectorDashboard"
                 element={<DashboardCollector />}
