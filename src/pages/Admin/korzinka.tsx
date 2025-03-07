@@ -146,7 +146,9 @@ const Korzinka = () => {
       render: (record: RecycleItem) => (
         <Space direction="vertical" size="small">
           <div className="flex items-center">
-            <Text className="mr-2">{record.phone_number}</Text>
+            <Text className="mr-2">
+              <a href={`tel:${record.phone_number}`}>{record.phone_number}</a>
+            </Text>
             <Button
               type="text"
               className="p-0 flex items-center"
@@ -158,7 +160,10 @@ const Korzinka = () => {
           {record.phone_number2 && (
             <div className="flex items-center">
               <Text type="secondary" className="mr-2">
-                {record.phone_number2}
+                <a href={`tel:${record.phone_number2}`}>
+                  {" "}
+                  {record.phone_number2}
+                </a>
               </Text>
               <Button
                 type="text"
@@ -328,10 +333,10 @@ const Korzinka = () => {
                   <Calendar className="w-5 h-5 mr-2 text-orange-500 mt-0.5" />
                   <div>
                     <Text className="block">
-                      Created: {dayjs(item.given_day).format("DD/MM/YYYY")}
+                      Yaratilgan: {dayjs(item.given_day).format("DD/MM/YYYY")}
                     </Text>
                     <Text type="secondary">
-                      Updated: {dayjs(item.updatedat).format("DD/MM/YYYY")}
+                      Yangilangan: {dayjs(item.updatedat).format("DD/MM/YYYY")}
                     </Text>
                   </div>
                 </div>
@@ -352,12 +357,12 @@ const Korzinka = () => {
                   <CreditCard className="w-5 h-5 mr-2 text-teal-500 mt-0.5" />
                   <div>
                     <Text className="block">
-                      Last Payment:{" "}
+                      Oxirgi to'lov:{" "}
                       {parseFloat(item.last_payment_amount).toLocaleString()}{" "}
                       UZS
                     </Text>
                     <Text type="secondary">
-                      Date: {dayjs(item.last_payment_date).format("DD/MM/YYYY")}
+                      Sana: {dayjs(item.last_payment_date).format("DD/MM/YYYY")}
                     </Text>
                   </div>
                 </div>
@@ -379,7 +384,7 @@ const Korzinka = () => {
       <div>
         <div className="flex justify-between items-center mb-4">
           <Title level={isMobile ? 3 : 2} className="m-0">
-            Recycled Items
+            Korzinka
           </Title>
         </div>
 
