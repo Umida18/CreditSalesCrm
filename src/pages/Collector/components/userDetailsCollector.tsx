@@ -49,6 +49,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [editingKey] = useState<string | null>(null);
+  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const handleResize = () => {
@@ -170,9 +171,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
         );
       },
     },
-    { title: "To'lo'v haqida", dataIndex: "description", key: "description" },
     { title: "Yig'uvchi", dataIndex: "login", key: "login" },
-    { title: "To'lo'v", dataIndex: "payment", key: "payment" },
     {
       title: "To'lov miqdori",
       dataIndex: "payment_amount",
@@ -260,10 +259,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
             <span>{record.payment_month}</span>
           )}
         </div>
-        <div className="flex justify-between">
-          <span className="font-semibold">To'lov haqida:</span>
-          <span>{record.description}</span>
-        </div>
+
         <div className="flex justify-between">
           <span className="font-semibold">Yig'uvchi:</span>
           <span>{record.login}</span>
