@@ -91,8 +91,6 @@ export default function UsersPage() {
   const [editingUser, setEditingUser] = useState<UserData | null>(null);
   const [form] = Form.useForm();
 
-  console.log("users", users);
-
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
@@ -259,7 +257,6 @@ export default function UsersPage() {
       setError(err.message);
     }
   };
-  console.log("userData", editingUser);
 
   const handleEditSubmit = async (values: any) => {
     try {
@@ -293,7 +290,7 @@ export default function UsersPage() {
       );
     }
   };
-  
+
   const handleDeleteUser = async (id: number) => {
     try {
       await api.delete(`/users/delete/${id}`);
@@ -399,7 +396,7 @@ export default function UsersPage() {
             <Pen className="text-[8px] size-4 text-green-600" />
           </Button>
           <Popconfirm
-            title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz?"
+            title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz? Bu amalni ortga qaytarib bo‘lmaydi."
             onConfirm={() => handleDeleteUser(record.id)}
             okText="Ha"
             cancelText="Yo'q"

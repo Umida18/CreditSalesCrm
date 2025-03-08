@@ -26,6 +26,11 @@ const menuItems = [
     icon: <CiLocationOn />,
     label: "Statistika",
   },
+  {
+    key: "/collectorBasket",
+    icon: <CiLocationOn />,
+    label: "Korzinka",
+  },
 ];
 
 export function CollectorLayout({ children }: { children: React.ReactNode }) {

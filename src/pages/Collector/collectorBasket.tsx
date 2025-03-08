@@ -5,7 +5,6 @@ import {
   Space,
   Typography,
   Tag,
-  Popconfirm,
   message,
   Card,
   List,
@@ -22,10 +21,9 @@ import {
   Info,
 } from "lucide-react";
 import api from "../../Api/Api";
-import { MainLayout } from "../../components/mainlayout";
 import dayjs from "dayjs";
-import UserDetailsModal from "./components/userDetails";
-import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+import UserDetailsModal from "./components/userDetailsCollector";
+import { CollectorLayout } from "../../components/collectorLayout";
 // import { ShoppingCartX } from "lucide-react";
 // import { useMediaQuery } from "react-responsive";
 
@@ -55,7 +53,7 @@ interface RecycleItem {
 
 const { Title, Text } = Typography;
 
-const Korzinka = () => {
+const CollectorBasket = () => {
   const [recycleItems, setRecycleItems] = useState<RecycleItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
@@ -91,18 +89,6 @@ const Korzinka = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const handleDelete = async (id: number) => {
-    try {
-      await api.delete(`/recycle/out/${id}`);
-      message.success("Muvaffaqiyatli oʻchirildi");
-
-      fetchData();
-    } catch (error) {
-      console.error("Error deleting item:", error);
-      message.error("O‘chirib bo‘lmadi");
-    }
-  };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -229,18 +215,8 @@ const Korzinka = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (record: RecycleItem) => (
+      render: () => (
         <div className=" flex items-center justify-center gap-3">
-          <Popconfirm
-            title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz?"
-            onConfirm={() => handleDelete(record.id)}
-            okText="Ha"
-            cancelText="Yo'q"
-          >
-            <Button danger className="flex items-center justify-center">
-              <MdOutlineRemoveShoppingCart className="w-4 h-4 mr-1" />
-            </Button>
-          </Popconfirm>
           <Button onClick={() => setIsUserDetailsModalOpen(true)}>
             Batafsil
           </Button>
@@ -272,21 +248,6 @@ const Korzinka = () => {
               }
               actions={[
                 <div className=" flex items-center justify-center gap-3">
-                  <Popconfirm
-                    key="delete"
-                    title="Are you sure you want to delete this item?"
-                    onConfirm={() => handleDelete(item.id)}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <Button
-                      danger
-                      className="flex items-center justify-center "
-                    >
-                      <MdOutlineRemoveShoppingCart className="w-4 h-4 " />
-                    </Button>
-                  </Popconfirm>
-
                   <Button
                     onClick={() => {
                       setSelectedUserDetails(item);
@@ -409,7 +370,7 @@ const Korzinka = () => {
   };
 
   return (
-    <MainLayout>
+    <CollectorLayout>
       <div>
         <div className="flex justify-between items-center mb-4">
           <Title level={isMobile ? 3 : 2} className="m-0">
@@ -443,8 +404,8 @@ const Korzinka = () => {
         userData={selectedUserDetails}
         // loading={userDetailsLoading}
       />
-    </MainLayout>
+    </CollectorLayout>
   );
 };
 
-export default Korzinka;
+export default CollectorBasket;
