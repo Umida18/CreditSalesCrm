@@ -98,14 +98,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     setNotificationModalOpen(true);
 
     setModalData({
-      type: "notPaid",
-      title: "To'lamaganlar Ro'yxati",
+      type: "paid",
+      title: "To'laganlar Ro'yxati",
       users: notificationData,
     });
   };
 
   const closeNotificationModal = () => {
     setNotificationModalOpen(false);
+    setModalData(null);
   };
 
   // Desktop Sidebar

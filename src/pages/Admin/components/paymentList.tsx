@@ -44,6 +44,7 @@ const PaymentList = ({
   const [isMobile, setIsMobile] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
+  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobile(window.innerWidth < 768);
@@ -108,7 +109,7 @@ const PaymentList = ({
     { title: "Id", dataIndex: "id", key: "id" },
     { title: "Ismi", dataIndex: "name", key: "name" },
     { title: "Maxsulot nomi", dataIndex: "product_name", key: "product_name" },
-    { title: "Manzili", dataIndex: "zone_name", key: "zone_name" },
+    { title: "Hudud", dataIndex: "zone_name", key: "zone_name" },
     {
       title: "Narxi",
       dataIndex: "cost",
@@ -162,7 +163,7 @@ const PaymentList = ({
           renderItem={(item) => (
             <Card
               className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-lg overflow-hidden"
-              onClick={() => type !== "todayPaid" && openUserDetails(item.id)}
+              // onClick={() => type !== "todayPaid" && openUserDetails(item.id)}
             >
               <div className="flex flex-col space-y-2">
                 {columns.map((column) => (
@@ -236,7 +237,7 @@ const PaymentList = ({
         label: "So'nggi to'lov",
         value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
       },
-      { label: "Manzili", value: user.zone_name, icon: MapPin },
+      { label: "Hudud", value: user.zone_name, icon: MapPin },
       {
         label: "Berilgan vaqti",
         value: formatDate(user.given_day),
@@ -295,187 +296,194 @@ const PaymentList = ({
       width={isMobile ? "100%" : "80%"}
       style={{ top: 20 }}
     >
-      {selectedUser ? (
-        <div className="max-h-[70vh] overflow-y-auto px-4">
-          <Title level={5} className="mt-4 mb-2">
-            To'liq malumot
-          </Title>
-          {renderUserInfo(selectedUser)}
-          <Divider />
-          <Title level={5} className="mt-4 mb-2">
-            To'lov Tarixi
-          </Title>
-          {error && <Text type="danger">{error}</Text>}
-          {isMobile ? (
-            renderMobileList(paymentHistory, [
-              {
-                title: "Sana",
-                dataIndex: "payment_date",
-                key: "payment_date",
-                render: formatDate,
-                icon: Calendar,
-              },
-              {
-                title: "Manzili",
-                dataIndex: "zone_name",
-                key: "zone_name",
-                icon: MapPin,
-              },
-              {
-                title: "Oy",
-                dataIndex: "payment_month",
-                key: "payment_month",
-                icon: Clock,
-              },
-              {
-                title: "To'lov haqida",
-                dataIndex: "description",
-                key: "description",
-                icon: CreditCard,
-              },
-              {
-                title: "Yig'uvchi",
-                dataIndex: "login",
-                key: "login",
-                icon: User,
-              },
-            ])
-          ) : (
-            <Table
-              dataSource={paymentHistory}
-              columns={[
+      <div className="xl:h-auto h-[600px] overflow-auto">
+        {selectedUser ? (
+          <div className="max-h-[70vh] overflow-y-auto px-4">
+            <Title level={5} className="mt-4 mb-2">
+              To'liq malumot
+            </Title>
+            {renderUserInfo(selectedUser)}
+            <Divider />
+            <Title level={5} className="mt-4 mb-2">
+              To'lov Tarixi
+            </Title>
+            {error && <Text type="danger">{error}</Text>}
+            {isMobile ? (
+              renderMobileList(paymentHistory, [
                 {
                   title: "Sana",
                   dataIndex: "payment_date",
                   key: "payment_date",
                   render: formatDate,
+                  icon: Calendar,
                 },
-                { title: "Manzili", dataIndex: "zone_name", key: "zone_name" },
+                {
+                  title: "Hudud",
+                  dataIndex: "zone_name",
+                  key: "zone_name",
+                  icon: MapPin,
+                },
                 {
                   title: "Oy",
                   dataIndex: "payment_month",
                   key: "payment_month",
+                  icon: Clock,
                 },
                 {
                   title: "To'lov haqida",
                   dataIndex: "description",
                   key: "description",
+                  icon: CreditCard,
                 },
-                { title: "Yig'uvchi", dataIndex: "login", key: "login" },
-              ]}
-              pagination={{ pageSize: 5 }}
-              bordered
-              loading={loading}
-            />
-          )}
-        </div>
-      ) : isMobile ? (
-        <div className="px-4">
-          {renderMobileList(
-            users,
-            type === "todayPaid"
-              ? [
-                  { title: "ID", dataIndex: "id", key: "id", icon: Hash },
+                {
+                  title: "Yig'uvchi",
+                  dataIndex: "login",
+                  key: "login",
+                  icon: User,
+                },
+              ])
+            ) : (
+              <Table
+                dataSource={paymentHistory}
+                columns={[
                   {
-                    title: "Zona",
-                    dataIndex: "zone_name",
-                    key: "zone_name",
-                    icon: MapPin,
-                  },
-                  {
-                    title: "Yig'uvchi",
-                    dataIndex: "login",
-                    key: "login",
-                    icon: User,
-                  },
-                  {
-                    title: "Kun",
-                    dataIndex: "day",
-                    key: "day",
+                    title: "Sana",
+                    dataIndex: "payment_date",
+                    key: "payment_date",
                     render: formatDate,
-                    icon: Calendar,
+                  },
+                  { title: "Hudud", dataIndex: "zone_name", key: "zone_name" },
+                  {
+                    title: "Oy",
+                    dataIndex: "payment_month",
+                    key: "payment_month",
                   },
                   {
-                    title: "Jami yig'ilgan",
-                    dataIndex: "total_collected",
-                    key: "total_collected",
-                    render: (text: any) =>
-                      Number(text).toLocaleString() + " UZS",
-                    icon: DollarSign,
+                    title: "To'lov haqida",
+                    dataIndex: "description",
+                    key: "description",
                   },
-                  {
-                    title: "Jami foydalanuvchi",
-                    dataIndex: "total_payments",
-                    key: "total_payments",
-                    icon: Users,
-                  },
-                ]
-              : [
-                  { title: "Id", dataIndex: "id", key: "id", icon: Hash },
-                  { title: "Ismi", dataIndex: "name", key: "name", icon: User },
-                  {
-                    title: "Maxsulot nomi",
-                    dataIndex: "product_name",
-                    key: "product_name",
-                    icon: ShoppingBag,
-                  },
-                  {
-                    title: "Manzili",
-                    dataIndex: "zone_name",
-                    key: "zone_name",
-                    icon: MapPin,
-                  },
-                  {
-                    title: "Narxi",
-                    dataIndex: "cost",
-                    key: "cost",
-                    render: (text: any) =>
-                      Number(text).toLocaleString() + " UZS",
-                    icon: DollarSign,
-                  },
-                  {
-                    title: "Berilgan vaqti",
-                    dataIndex: "given_day",
-                    key: "given_day",
-                    render: (text: string) =>
-                      text ? formatDate(text) : "Noma'lum",
-                    icon: Calendar,
-                  },
-                  {
-                    title: "Muddati",
-                    dataIndex: "time",
-                    key: "time",
-                    icon: Clock,
-                  },
-                  {
-                    title: "Tel nomer",
-                    dataIndex: "phone_number",
-                    key: "phone_number",
-                    icon: Phone,
-                  },
-                  {
-                    title: "Sotuvchi",
-                    dataIndex: "seller",
-                    key: "seller",
-                    icon: User,
-                  },
-                ]
-          )}
-        </div>
-      ) : (
-        <Table
-          dataSource={users}
-          columns={type === "todayPaid" ? todayPaidUsers : columns}
-          rowKey="id"
-          onRow={(record) => ({
-            onClick: () => type !== "todayPaid" && openUserDetails(record.id),
-            style: { cursor: type !== "todayPaid" ? "pointer" : "default" },
-          })}
-          pagination={{ pageSize: 5 }}
-          scroll={{ x: true }}
-          bordered
-        />
-      )}
+                  { title: "Yig'uvchi", dataIndex: "login", key: "login" },
+                ]}
+                pagination={{ pageSize: 5 }}
+                bordered
+                loading={loading}
+              />
+            )}
+          </div>
+        ) : isMobile ? (
+          <div className="px-4">
+            {renderMobileList(
+              users,
+              type === "todayPaid"
+                ? [
+                    { title: "ID", dataIndex: "id", key: "id", icon: Hash },
+                    {
+                      title: "Zona",
+                      dataIndex: "zone_name",
+                      key: "zone_name",
+                      icon: MapPin,
+                    },
+                    {
+                      title: "Yig'uvchi",
+                      dataIndex: "login",
+                      key: "login",
+                      icon: User,
+                    },
+                    {
+                      title: "Kun",
+                      dataIndex: "day",
+                      key: "day",
+                      render: formatDate,
+                      icon: Calendar,
+                    },
+                    {
+                      title: "Jami yig'ilgan",
+                      dataIndex: "total_collected",
+                      key: "total_collected",
+                      render: (text: any) =>
+                        Number(text).toLocaleString() + " UZS",
+                      icon: DollarSign,
+                    },
+                    {
+                      title: "Jami foydalanuvchi",
+                      dataIndex: "total_payments",
+                      key: "total_payments",
+                      icon: Users,
+                    },
+                  ]
+                : [
+                    { title: "Id", dataIndex: "id", key: "id", icon: Hash },
+                    {
+                      title: "Ismi",
+                      dataIndex: "name",
+                      key: "name",
+                      icon: User,
+                    },
+                    {
+                      title: "Maxsulot nomi",
+                      dataIndex: "product_name",
+                      key: "product_name",
+                      icon: ShoppingBag,
+                    },
+                    {
+                      title: "Hudud",
+                      dataIndex: "zone_name",
+                      key: "zone_name",
+                      icon: MapPin,
+                    },
+                    {
+                      title: "Narxi",
+                      dataIndex: "cost",
+                      key: "cost",
+                      render: (text: any) =>
+                        Number(text).toLocaleString() + " UZS",
+                      icon: DollarSign,
+                    },
+                    {
+                      title: "Berilgan vaqti",
+                      dataIndex: "given_day",
+                      key: "given_day",
+                      render: (text: string) =>
+                        text ? formatDate(text) : "Noma'lum",
+                      icon: Calendar,
+                    },
+                    {
+                      title: "Muddati",
+                      dataIndex: "time",
+                      key: "time",
+                      icon: Clock,
+                    },
+                    {
+                      title: "Tel nomer",
+                      dataIndex: "phone_number",
+                      key: "phone_number",
+                      icon: Phone,
+                    },
+                    {
+                      title: "Sotuvchi",
+                      dataIndex: "seller",
+                      key: "seller",
+                      icon: User,
+                    },
+                  ]
+            )}
+          </div>
+        ) : (
+          <Table
+            dataSource={users}
+            columns={type === "todayPaid" ? todayPaidUsers : columns}
+            rowKey="id"
+            onRow={(record) => ({
+              onClick: () => type !== "todayPaid" && openUserDetails(record.id),
+              style: { cursor: type !== "todayPaid" ? "pointer" : "default" },
+            })}
+            pagination={{ pageSize: 5 }}
+            scroll={{ x: true }}
+            bordered
+          />
+        )}
+      </div>
     </Modal>
   );
 };
