@@ -12,6 +12,7 @@ import {
 import { CiLocationOn } from "react-icons/ci";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../Api/Api";
+import { BiBasket } from "react-icons/bi";
 
 const { Header, Sider, Content } = Layout;
 
@@ -28,7 +29,7 @@ const menuItems = [
   },
   {
     key: "/collectorBasket",
-    icon: <CiLocationOn />,
+    icon: <BiBasket />,
     label: "Korzinka",
   },
 ];
