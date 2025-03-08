@@ -22,7 +22,6 @@ import {
   DollarSign,
   Search,
   Pen,
-  Trash,
   X,
   Trash2,
 } from "lucide-react";
@@ -639,12 +638,19 @@ export default function UsersPage() {
                 >
                   <Pen className="text-[8px] size-5" />
                 </button>
-                <button
-                  className="bg-red-600 py-1 px-1 text-[15px] text-white rounded-md cursor-pointer"
-                  onClick={() => handleDeleteUser(user.id)}
+                <Popconfirm
+                  title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz?"
+                  onConfirm={() => handleDeleteUser(user.id)}
+                  okText="Ha"
+                  cancelText="Yo'q"
                 >
-                  <Trash className="text-[8px] size-5" />
-                </button>
+                  <Button
+                    danger
+                    className="flex !px-1.5 items-center justify-center"
+                  >
+                    <Trash2 className="w-4 h-4 mr-1" />
+                  </Button>
+                </Popconfirm>
                 <button
                   className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
                   onClick={() => handleOpenUserDetailsModal(user.id)}

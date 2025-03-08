@@ -1,17 +1,20 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Layout, Menu, Button, theme } from "antd";
+import { Layout, Menu, Button, theme, Badge } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   DashboardOutlined,
   UserOutlined,
   LogoutOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 import { CiLocationOn } from "react-icons/ci";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { BiBasket } from "react-icons/bi";
+import PaymentList from "../pages/Admin/components/paymentList";
+import api from "../Api/Api";
 
 const { Header, Sider, Content } = Layout;
 
@@ -47,10 +50,16 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const [_, setNotificationModalOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [notificationData, setNotificationData] = useState();
+  const [modalData, setModalData] = useState<any>(null);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
+  console.log("notificationData", notificationData);
 
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -69,6 +78,34 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
+  };
+
+  const fetchNotificationCount = async () => {
+    try {
+      const response = await api.get(`/recycle/paid-all`);
+      setNotificationData(response.data.rows);
+      setNotificationCount(response.data.rowCount);
+    } catch (error) {
+      console.error("Error fetching notification count:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotificationCount();
+  }, []);
+
+  const openNotificationModal = () => {
+    setNotificationModalOpen(true);
+
+    setModalData({
+      type: "notPaid",
+      title: "To'lamaganlar Ro'yxati",
+      users: notificationData,
+    });
+  };
+
+  const closeNotificationModal = () => {
+    setNotificationModalOpen(false);
   };
 
   // Desktop Sidebar
@@ -184,22 +221,37 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </button>
           <div>
-            <button
-              onClick={toggleMobileSidebar}
-              className="text-base w-6 h-6 xl:hidden mt-3 block"
-            >
-              {<MenuUnfoldOutlined />}
-            </button>
+            <div>
+              <button
+                onClick={toggleMobileSidebar}
+                className="text-base w-6 h-6 xl:hidden mt-3 block"
+              >
+                {<MenuUnfoldOutlined />}
+              </button>
+            </div>
           </div>
-          <div className="flex items-center xl:mt-0 mt-3 gap-3">
-            <img
-              src="/img.jpg"
-              alt="Profile picture"
-              className="object-cover w-12 h-12 rounded-full border border-gray-300"
-            />
-            <div className="text-[16px] font-semibold leading-4">
-              <span>Avaz</span>
-              <p>Azizov</p>
+
+          <div className="flex justify-center items-center gap-12">
+            <div className="flex justify-center items-center">
+              <Badge count={notificationCount} overflowCount={99}>
+                <Button
+                  type="text"
+                  icon={<BellOutlined style={{ fontSize: "20px" }} />}
+                  onClick={openNotificationModal}
+                  className="flex items-center justify-center h-10 w-10"
+                />
+              </Badge>
+            </div>
+            <div className="flex items-center xl:mt-0 mt-3 gap-3">
+              <img
+                src="/img.jpg"
+                alt="Profile picture"
+                className="object-cover w-12 h-12 rounded-full border border-gray-300"
+              />
+              <div className="text-[16px] font-semibold leading-4">
+                <span>Avaz</span>
+                <p>Azizov</p>
+              </div>
             </div>
           </div>
         </Header>
@@ -218,6 +270,19 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
+
+      {modalData && (
+        <PaymentList
+          type={modalData.type}
+          users={modalData.users}
+          onClose={closeNotificationModal}
+        />
+      )}
+
+      {/* <NotificationModal
+        isOpen={notificationModalOpen}
+        onClose={closeNotificationModal}
+      /> */}
     </Layout>
   );
 }
