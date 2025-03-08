@@ -25,6 +25,7 @@ import {
 import api from "../../Api/Api";
 import { MainLayout } from "../../components/mainlayout";
 import dayjs from "dayjs";
+import UserDetailsModal from "./components/userDetails";
 // import { ShoppingCartX } from "lucide-react";
 // import { useMediaQuery } from "react-responsive";
 
@@ -57,8 +58,12 @@ const { Title, Text } = Typography;
 const Korzinka = () => {
   const [recycleItems, setRecycleItems] = useState<RecycleItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
+  const [selectedUserDetails, setSelectedUserDetails] = useState<any | null>(
+    null
+  );
+  console.log("selectedUserDetails1111", selectedUserDetails);
 
-  // Check if the screen is mobile size
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -68,7 +73,6 @@ const Korzinka = () => {
 
     window.addEventListener("resize", handleResize);
 
-    // Cleanup listener on unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -104,6 +108,11 @@ const Korzinka = () => {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     message.success("Copied to clipboard");
+  };
+
+  const handleCloseUserDetailsModal = () => {
+    setIsUserDetailsModalOpen(false);
+    setSelectedUserDetails(null);
   };
 
   const columns = [
@@ -222,16 +231,21 @@ const Korzinka = () => {
       title: "Actions",
       key: "actions",
       render: (record: RecycleItem) => (
-        <Popconfirm
-          title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz? Bu amalni ortga qaytarib bo‘lmaydi."
-          onConfirm={() => handleDelete(record.id)}
-          okText="Ha"
-          cancelText="Yo'q"
-        >
-          <Button danger className="flex items-center justify-center">
-            <Trash2 className="w-4 h-4 mr-1" />
+        <div className=" flex items-center justify-center gap-3">
+          <Popconfirm
+            title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz? Bu amalni ortga qaytarib bo‘lmaydi."
+            onConfirm={() => handleDelete(record.id)}
+            okText="Ha"
+            cancelText="Yo'q"
+          >
+            <Button danger className="flex items-center justify-center">
+              <Trash2 className="w-4 h-4 mr-1" />
+            </Button>
+          </Popconfirm>
+          <Button onClick={() => setIsUserDetailsModalOpen(true)}>
+            Batafsil
           </Button>
-        </Popconfirm>
+        </div>
       ),
     },
   ];
@@ -259,21 +273,32 @@ const Korzinka = () => {
                 </div>
               }
               actions={[
-                <Popconfirm
-                  key="delete"
-                  title="Are you sure you want to delete this item?"
-                  onConfirm={() => handleDelete(item.id)}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button
-                    danger
-                    className="flex items-center justify-center mx-auto"
+                <div className=" flex items-center justify-center gap-3">
+                  <Popconfirm
+                    key="delete"
+                    title="Are you sure you want to delete this item?"
+                    onConfirm={() => handleDelete(item.id)}
+                    okText="Yes"
+                    cancelText="No"
                   >
-                    <Trash2 className="w-4 h-4 mr-1" />
-                    Delete
+                    <Button
+                      danger
+                      className="flex items-center justify-center "
+                    >
+                      <Trash2 className="w-4 h-4 " />
+                      Delete
+                    </Button>
+                  </Popconfirm>
+
+                  <Button
+                    onClick={() => {
+                      setSelectedUserDetails(item);
+                      setIsUserDetailsModalOpen(true);
+                    }}
+                  >
+                    To'lov tarixi
                   </Button>
-                </Popconfirm>,
+                </div>,
               ]}
             >
               <div className="space-y-3">
@@ -296,7 +321,11 @@ const Korzinka = () => {
                   <Phone className="w-5 h-5 mr-2 text-blue-500 mt-0.5" />
                   <div>
                     <div className="flex items-center">
-                      <Text className="mr-2">{item.phone_number}</Text>
+                      <Text className="mr-2">
+                        <a href={`tel:${item.phone_number}`}>
+                          {item.phone_number}
+                        </a>
+                      </Text>
                       <Button
                         type="text"
                         className="p-0 flex items-center"
@@ -308,7 +337,9 @@ const Korzinka = () => {
                     {item.phone_number2 && (
                       <div className="flex items-center mt-1">
                         <Text type="secondary" className="mr-2">
-                          {item.phone_number2}
+                          <a href={`tel:${item.phone_number2}`}>
+                            {item.phone_number2}
+                          </a>
                         </Text>
                         <Button
                           type="text"
@@ -400,9 +431,21 @@ const Korzinka = () => {
             pagination={{ pageSize: 10 }}
             scroll={{ x: 1400 }}
             className="overflow-x-auto "
+            onRow={(record: any) => ({
+              onClick: () => {
+                setSelectedUserDetails(record);
+                setIsUserDetailsModalOpen(true);
+              },
+            })}
           />
         )}
       </div>
+      <UserDetailsModal
+        isOpen={isUserDetailsModalOpen}
+        onClose={handleCloseUserDetailsModal}
+        userData={selectedUserDetails}
+        // loading={userDetailsLoading}
+      />
     </MainLayout>
   );
 };

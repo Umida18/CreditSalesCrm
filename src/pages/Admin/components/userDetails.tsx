@@ -37,7 +37,7 @@ interface UserDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   userData: UserDetails | null;
-  loading: boolean;
+  loading?: boolean;
 }
 
 const UserDetailsModal: React.FC<UserDetailsModalProps> = ({

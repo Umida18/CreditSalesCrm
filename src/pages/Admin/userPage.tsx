@@ -293,6 +293,7 @@ export default function UsersPage() {
       );
     }
   };
+  
   const handleDeleteUser = async (id: number) => {
     try {
       await api.delete(`/users/delete/${id}`);
@@ -635,7 +636,7 @@ export default function UsersPage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between min-h-full mt-3 w-full">
+            <div className="flex items-center justify-between min-h-full mt-6 w-full">
               <div className="flex justify-between w-full  items-center">
                 <button
                   className=" cursor-pointer"
@@ -652,12 +653,20 @@ export default function UsersPage() {
                     <BsCash />
                   </span>
                 </button>
-                <button
-                  className="bg-green-600 py-1 px-1 text-[12px] text-white rounded-md cursor-pointer"
+                <Button
+                  onClick={() => handleAddBasket(user.id)}
+                  className="flex !px-1.5 items-center justify-center"
+                >
+                  <MdOutlineAddShoppingCart className="w-4 h-4 " />
+                </Button>
+                <Button
+                  style={{ border: "1px solid green" }}
+                  className="flex !px-1.5 items-center justify-center"
+                  // className="bg-green-600 py-1 px-1 text-[12px] text-white rounded-md cursor-pointer"
                   onClick={() => handleEditUser(user.id)}
                 >
-                  <Pen className="text-[8px] size-5" />
-                </button>
+                  <Pen className="text-[8px] size-4 text-green-600" />
+                </Button>
                 <Popconfirm
                   title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz?"
                   onConfirm={() => handleDeleteUser(user.id)}
@@ -668,15 +677,16 @@ export default function UsersPage() {
                     danger
                     className="flex !px-1.5 items-center justify-center"
                   >
-                    <Trash2 className="w-4 h-4 mr-1" />
+                    <Trash2 className="w-4 h-4 " />
                   </Button>
                 </Popconfirm>
-                <button
-                  className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
+                <Button
+                  // style={{ border: "2px solid blue" }}
+                  // className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
                   onClick={() => handleOpenUserDetailsModal(user.id)}
                 >
                   Batafsil
-                </button>
+                </Button>
                 {/* <button
                   className="bg-blue-600 py-1 px-3 text-white rounded-md cursor-pointer"
                   onClick={() => handleOpenUserHistoryModal(user.id)}
