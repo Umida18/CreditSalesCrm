@@ -109,7 +109,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     setModalData(null);
   };
 
-  // Desktop Sidebar
   const DesktopSidebar = () => (
     <Sider
       trigger={null}
