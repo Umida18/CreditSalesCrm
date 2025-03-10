@@ -65,6 +65,7 @@ const Korzinka = () => {
   );
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  console.log("recycleItems", recycleItems);
 
   useEffect(() => {
     const handleResize = () => {
@@ -148,10 +149,10 @@ const Korzinka = () => {
       title: "Mahsulot",
       dataIndex: "product_name",
       key: "product_name",
-      render: (text: string, record: RecycleItem) => (
+      render: (text: string) => (
         <Space direction="vertical" size="small">
           <Text>{text}</Text>
-          <Text type="secondary">{record.description}</Text>
+          {/* <Text type="secondary">{record.description}</Text> */}
         </Space>
       ),
     },
@@ -159,7 +160,7 @@ const Korzinka = () => {
       title: "Narx",
       dataIndex: "cost",
       key: "cost",
-      render: (cost: number) => `${cost.toLocaleString()} UZS`,
+      render: (cost: number) => `${cost.toLocaleString()}`,
     },
     {
       title: "Contact",
@@ -198,24 +199,7 @@ const Korzinka = () => {
         </Space>
       ),
     },
-    {
-      title: "To'lov holati",
-      key: "payment_status",
-      render: (record: RecycleItem) => (
-        <Space direction="vertical" size="small">
-          <Tag color={record.payment_status ? "success" : "error"}>
-            {record.payment_status ? "To'langan" : "To'lanmagan"}
-          </Tag>
-          <Text type="secondary">
-            Oxirgi to'lov:{" "}
-            {parseFloat(record.last_payment_amount).toLocaleString()} UZS
-          </Text>
-          <Text type="secondary">
-            Sana: {dayjs(record.last_payment_date).format("DD/MM/YYYY")}
-          </Text>
-        </Space>
-      ),
-    },
+
     {
       title: "Location",
       key: "location",
@@ -227,13 +211,37 @@ const Korzinka = () => {
       ),
     },
     {
-      title: "Sana",
-      key: "date",
+      title: "To'lo'v",
+      key: "payment",
+      dataIndex: "payment",
+    },
+    // {
+    //   title: "Sana",
+    //   key: "date",
+    //   render: (record: RecycleItem) => (
+    //     <Space direction="vertical" size="small">
+    //       <Text>{dayjs(record.given_day).format("DD/MM/YYYY")}</Text>
+    //       <Text type="secondary">
+    //         Updated: {dayjs(record.updatedat).format("DD/MM/YYYY")}
+    //       </Text>
+    //     </Space>
+    //   ),
+    // },
+
+    {
+      title: "To'lov holati",
+      key: "payment_status",
       render: (record: RecycleItem) => (
         <Space direction="vertical" size="small">
-          <Text>{dayjs(record.given_day).format("DD/MM/YYYY")}</Text>
+          <Tag color={record.payment_status ? "success" : "error"}>
+            {record.payment_status ? "To'langan" : "To'lanmagan"}
+          </Tag>
           <Text type="secondary">
-            Updated: {dayjs(record.updatedat).format("DD/MM/YYYY")}
+            Oxirgi to'lov:{" "}
+            {parseFloat(record.last_payment_amount).toLocaleString()}
+          </Text>
+          <Text type="secondary">
+            Sana: {dayjs(record.last_payment_date).format("DD/MM/YYYY")}
           </Text>
         </Space>
       ),
@@ -267,7 +275,11 @@ const Korzinka = () => {
               <Trash2 className="w-4 h-4 " />
             </Button>
           </Popconfirm>
-          <Button onClick={() => setIsUserDetailsModalOpen(true)}>
+          <Button
+            onClick={() => {
+              setIsUserDetailsModalOpen(true);
+            }}
+          >
             Batafsil
           </Button>
         </div>
@@ -452,7 +464,7 @@ const Korzinka = () => {
             rowKey="id"
             loading={loading}
             pagination={{ pageSize: 10 }}
-            scroll={{ x: 1400 }}
+            // scroll={{ x: 1400 }}
             className="overflow-x-auto "
             onRow={(record: any) => ({
               onClick: () => {

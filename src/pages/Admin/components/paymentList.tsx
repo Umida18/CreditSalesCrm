@@ -66,11 +66,11 @@ const PaymentList = ({
     setLoading(true);
     try {
       const userResponse = await fetch(`${BASE_URL}/users/${userId}`);
-      if (!userResponse.ok) {
-        throw new Error(
-          "Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi"
-        );
-      }
+      // if (!userResponse.ok) {
+      //   throw new Error(
+      //     "Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi"
+      //   );
+      // }
       const userData = await userResponse.json();
       setSelectedUser(userData);
       await fetchPaymentHistory(userId);
@@ -198,7 +198,7 @@ const PaymentList = ({
           renderItem={(item) => (
             <Card
               className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-lg overflow-hidden"
-              // onClick={() => type !== "todayPaid" && openUserDetails(item.id)}
+              onClick={() => type !== "todayPaid" && openUserDetails(item.id)}
             >
               <div className="flex flex-col space-y-2">
                 {columns.map((column) => (
