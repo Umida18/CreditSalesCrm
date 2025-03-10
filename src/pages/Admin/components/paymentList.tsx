@@ -46,7 +46,7 @@ const PaymentList = ({
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 10;
   console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
@@ -400,7 +400,7 @@ const PaymentList = ({
                   },
                   { title: "Yig'uvchi", dataIndex: "login", key: "login" },
                 ]}
-                pagination={{ pageSize: 5 }}
+                pagination={{ pageSize: 10 }}
                 bordered
                 loading={loading}
               />
@@ -517,7 +517,7 @@ const PaymentList = ({
               onClick: () => type !== "todayPaid" && openUserDetails(record.id),
               style: { cursor: type !== "todayPaid" ? "pointer" : "default" },
             })}
-            pagination={{ pageSize: 5 }}
+            pagination={{ pageSize: 10 }}
             scroll={{ x: true }}
             bordered
           />

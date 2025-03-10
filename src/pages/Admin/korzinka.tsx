@@ -322,10 +322,10 @@ const Korzinka = () => {
                 <div className=" flex items-center justify-center gap-3">
                   <Popconfirm
                     key="delete"
-                    title="Are you sure you want to delete this item?"
+                    title="Bu foydalanuvchini korzinkadan chiqarib tashlamoqchimisiz?"
                     onConfirm={() => handleDelete(item.id)}
-                    okText="Yes"
-                    cancelText="No"
+                    okText="Ha"
+                    cancelText="Yo'q"
                   >
                     <Button
                       danger
@@ -462,7 +462,7 @@ const Korzinka = () => {
           </List.Item>
         )}
         pagination={{
-          pageSize: 5,
+          pageSize: 10,
           size: "small",
           showSizeChanger: false,
         }}

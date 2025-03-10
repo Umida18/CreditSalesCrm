@@ -361,7 +361,7 @@ const CollectorBasket = () => {
           </List.Item>
         )}
         pagination={{
-          pageSize: 5,
+          pageSize: 10,
           size: "small",
           showSizeChanger: false,
         }}

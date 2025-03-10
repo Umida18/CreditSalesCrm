@@ -124,7 +124,7 @@ const UserModal = ({ user, closeModal }: any) => {
           ...item,
         }))}
         columns={paymentColumns}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 10 }}
         bordered
       />
 

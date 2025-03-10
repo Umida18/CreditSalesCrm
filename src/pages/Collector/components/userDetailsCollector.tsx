@@ -442,7 +442,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
             // style={{ minWidth: "100%" }}
             dataSource={paymentHistory}
             columns={paymentColumns}
-            pagination={{ pageSize: 5 }}
+            pagination={{ pageSize: 10 }}
             bordered
             loading={loading}
             scroll={{ x: true }}

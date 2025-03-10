@@ -153,7 +153,7 @@ export default function TodayPaymentsModal({
           </Card>
         </div>
       )}
-      pagination={{ pageSize: 5 }}
+      pagination={{ pageSize: 10 }}
     />
   );
 

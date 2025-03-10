@@ -427,7 +427,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           <Table
             dataSource={paymentHistory}
             columns={paymentColumns}
-            pagination={{ pageSize: 5 }}
+            pagination={{ pageSize: 10 }}
             bordered
             loading={loading}
             scroll={{ x: true }}
