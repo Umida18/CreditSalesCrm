@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { BASE_URL } from "../../../config";
 import api from "../../../Api/Api";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
 
 const { Text, Title } = Typography;
 
@@ -32,10 +33,12 @@ const PaymentList = ({
   type,
   users,
   onClose,
+  basket,
 }: {
   type: "notPaid" | "todayPaid" | "monthPaid";
   users: any[];
   onClose: () => void;
+  basket?: boolean;
 }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
@@ -76,6 +79,17 @@ const PaymentList = ({
       message.error("Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddBasket = async (id: number) => {
+    try {
+      await api.put(`/recycle/to/${id}`);
+      message.success("Muvaffaqiyatli qoshildi");
+      // fetchUsers();
+    } catch (error) {
+      console.log(error);
+      message.error("An error occurred while adding the user");
     }
   };
 
@@ -127,6 +141,24 @@ const PaymentList = ({
     { title: "Sotuvchi", dataIndex: "seller", key: "seller" },
   ];
 
+  if (basket) {
+    columns.push({
+      title: "Qo'shish",
+      key: "addToBasket",
+      render: (_: any, record: { id: any }) => (
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAddBasket(record.id);
+          }}
+          className="flex !px-1.5 items-center justify-center"
+        >
+          <MdOutlineAddShoppingCart className="w-4 h-4" />
+        </Button>
+      ),
+    } as any);
+  }
+
   const todayPaidUsers = [
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Zona", dataIndex: "zone_name", key: "zone_name" },
@@ -147,6 +179,9 @@ const PaymentList = ({
       title: "Jami foydalanuvchi",
       dataIndex: "total_payments",
       key: "total_payments",
+    },
+    {
+      title: "Actions",
     },
   ];
 
@@ -472,9 +507,13 @@ const PaymentList = ({
         ) : (
           <Table
             dataSource={users}
-            columns={type === "todayPaid" ? todayPaidUsers : columns}
+            columns={
+              type === "todayPaid"
+                ? todayPaidUsers
+                : (columns as unknown as any)
+            }
             rowKey="id"
-            onRow={(record) => ({
+            onRow={(record: any) => ({
               onClick: () => type !== "todayPaid" && openUserDetails(record.id),
               style: { cursor: type !== "todayPaid" ? "pointer" : "default" },
             })}

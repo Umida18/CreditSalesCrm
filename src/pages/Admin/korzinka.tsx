@@ -20,6 +20,7 @@ import {
   Package,
   User,
   Info,
+  Trash2,
 } from "lucide-react";
 import api from "../../Api/Api";
 import { MainLayout } from "../../components/mainlayout";
@@ -112,6 +113,17 @@ const Korzinka = () => {
   const handleCloseUserDetailsModal = () => {
     setIsUserDetailsModalOpen(false);
     setSelectedUserDetails(null);
+  };
+
+  const handleDeleteUser = async (id: number) => {
+    try {
+      await api.delete(`/users/delete/${id}`);
+      message.success("Muvaffaqiyatli ochirildi");
+      fetchData();
+    } catch (error) {
+      console.log(error);
+      message.error("An error occurred while deleting the user");
+    }
   };
 
   const columns = [
@@ -231,14 +243,28 @@ const Korzinka = () => {
       key: "actions",
       render: (record: RecycleItem) => (
         <div className=" flex items-center justify-center gap-3">
-          <Popconfirm
+          {/* <Popconfirm
             title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz?"
             onConfirm={() => handleDelete(record.id)}
             okText="Ha"
             cancelText="Yo'q"
+          > */}
+          <Button
+            onClick={() => handleDelete(record.id)}
+            danger
+            className="flex items-center justify-center"
           >
-            <Button danger className="flex items-center justify-center">
-              <MdOutlineRemoveShoppingCart className="w-4 h-4 mr-1" />
+            <MdOutlineRemoveShoppingCart className="w-4 h-4 mr-1" />
+          </Button>
+          {/* </Popconfirm> */}
+          <Popconfirm
+            title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz? Bu amalni ortga qaytarib bo‘lmaydi."
+            onConfirm={() => handleDeleteUser(record.id)}
+            okText="Ha"
+            cancelText="Yo'q"
+          >
+            <Button danger className="flex !px-1.5 items-center justify-center">
+              <Trash2 className="w-4 h-4 " />
             </Button>
           </Popconfirm>
           <Button onClick={() => setIsUserDetailsModalOpen(true)}>

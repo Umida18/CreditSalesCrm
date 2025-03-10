@@ -135,6 +135,7 @@ const CardsStatistic = () => {
           type={modalData.type}
           users={modalData.users}
           onClose={() => setModalData(null)}
+          basket={false}
         />
       )}
     </div>

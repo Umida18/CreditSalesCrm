@@ -276,6 +276,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           type={modalData.type}
           users={modalData.users}
           onClose={closeNotificationModal}
+          basket={true}
         />
       )}
 
