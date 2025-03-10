@@ -171,13 +171,13 @@ const Korzinka = () => {
             <Text className="mr-2">
               <a href={`tel:${record.phone_number}`}>{record.phone_number}</a>
             </Text>
-            <Button
+            {/* <Button
               type="text"
               className="p-0 flex items-center"
               onClick={() => copyToClipboard(record.phone_number)}
             >
               <Copy className="w-4 h-4" />
-            </Button>
+            </Button> */}
           </div>
           {record.phone_number2 && (
             <div className="flex items-center">
@@ -187,13 +187,13 @@ const Korzinka = () => {
                   {record.phone_number2}
                 </a>
               </Text>
-              <Button
+              {/* <Button
                 type="text"
                 className="p-0 flex items-center"
                 onClick={() => copyToClipboard(record.phone_number2)}
               >
                 <Copy className="w-4 h-4" />
-              </Button>
+              </Button> */}
             </div>
           )}
         </Space>
