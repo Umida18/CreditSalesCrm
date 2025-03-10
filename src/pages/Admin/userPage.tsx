@@ -74,7 +74,7 @@ export default function UsersPage() {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
 
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<UserData | null>(null);
   const [selectedUserDetails, setSelectedUserDetails] = useState(null);
   const [userDetailsLoading, setUserDetailsLoading] = useState(false);
   const [searchParams] = useSearchParams();
@@ -184,7 +184,7 @@ export default function UsersPage() {
     }
   }, [id, workplaceId, paymentStatus, workplaceError]);
 
-  const handleOpenPaymentModal = (userId: number) => {
+  const handleOpenPaymentModal = (userId: UserData) => {
     setSelectedUserId(userId);
     setIsPaymentModalOpen(true);
   };
@@ -370,7 +370,7 @@ export default function UsersPage() {
             className=" cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenPaymentModal(record.id);
+              handleOpenPaymentModal(record);
             }}
           >
             <span
@@ -639,7 +639,7 @@ export default function UsersPage() {
                   className=" cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleOpenPaymentModal(user.id);
+                    handleOpenPaymentModal(user);
                   }}
                 >
                   <span

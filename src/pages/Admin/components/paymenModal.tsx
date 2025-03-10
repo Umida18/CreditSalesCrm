@@ -31,6 +31,8 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
   );
   const idCollector = localStorage.getItem("collectorId");
 
+  console.log("userId", userId);
+
   useEffect(() => {
     const fetchZone = async () => {
       try {
@@ -80,7 +82,7 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
     };
 
     try {
-      const response = await fetch(`${BASE_URL}/payment/add/${userId}`, {
+      const response = await fetch(`${BASE_URL}/payment/add/${userId.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +107,11 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
   return (
     <Modal
       style={{ top: 30 }}
-      title={<h2 className="text-2xl font-bold mb-4">To'lo'v qo'shish</h2>}
+      title={
+        <h2 className="text-2xl font-bold mb-4">
+          {`To'lo'v qo'shish: ${userId.name}`}{" "}
+        </h2>
+      }
       open={isOpen}
       onCancel={onClose}
       footer={null}

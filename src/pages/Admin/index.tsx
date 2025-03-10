@@ -1,9 +1,9 @@
-import { Button, Table, message } from "antd";
+import { Button, Table } from "antd";
 import { MainLayout } from "../../components/mainlayout";
 import CardsStatistic from "./components/cardsStatistic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../config";
-import PaymentModal from "./components/paymenModal";
+// import PaymentModal from "./components/paymenModal";
 import TableHeader from "./components/header";
 import DashboardCard from "./components/cardResponsiv";
 import { useNavigate } from "react-router-dom";
@@ -12,13 +12,13 @@ import { BsPeople } from "react-icons/bs";
 export default function DashboardPage() {
   const [data, setData] = useState<any[]>([]);
   const [zones, setZones] = useState([]);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  // const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  // const [selectedUser, setSelectedUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
   // const [currentPage, setCurrentPage] = useState(1);
   const [selectedZone, setSelectedZone] = useState<any>(null);
   const [_, setError] = useState("");
-  const [selectPayUser] = useState("");
+  // const [selectPayUser] = useState("");
   const [__, setTotalPages] = useState(1);
   const itemsPerPage = 20;
   const navigate = useNavigate();
@@ -87,42 +87,42 @@ export default function DashboardPage() {
     fetchData();
   }, [selectedZone]);
 
-  const closePaymentModal = () => {
-    setIsPaymentModalOpen(false);
-    setSelectedUser(null);
-  };
+  // const closePaymentModal = () => {
+  //   setIsPaymentModalOpen(false);
+  //   setSelectedUser(null);
+  // };
 
-  const handlePayment = async (paymentData: any) => {
-    try {
-      const response = await fetch(
-        `${BASE_URL}/payment/add/${selectedUser?.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(paymentData),
-        }
-      );
+  // const handlePayment = async (paymentData: any) => {
+  //   try {
+  //     const response = await fetch(
+  //       `${BASE_URL}/payment/add/${selectedUser?.id}`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(paymentData),
+  //       }
+  //     );
 
-      if (response.ok) {
-        message.success("To'lov muvaffaqiyatli amalga oshirildi!");
+  //     if (response.ok) {
+  //       message.success("To'lov muvaffaqiyatli amalga oshirildi!");
 
-        closePaymentModal();
-        const updatedData = data.map((user: any) =>
-          user.id === selectedUser?.id
-            ? { ...user, payment_status: true }
-            : user
-        );
-        setData(updatedData);
-      } else {
-        throw new Error("Xatolik");
-      }
-    } catch (error: any) {
-      setError(error.message);
-      message.error("To'lovda xatolik yuz berdi!");
-    }
-  };
+  //       closePaymentModal();
+  //       const updatedData = data.map((user: any) =>
+  //         user.id === selectedUser?.id
+  //           ? { ...user, payment_status: true }
+  //           : user
+  //       );
+  //       setData(updatedData);
+  //     } else {
+  //       throw new Error("Xatolik");
+  //     }
+  //   } catch (error: any) {
+  //     setError(error.message);
+  //     message.error("To'lovda xatolik yuz berdi!");
+  //   }
+  // };
 
   const filteredData = data.filter((item: any) => {
     const matchesSearch =
@@ -242,14 +242,14 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {isPaymentModalOpen && (
+      {/* {isPaymentModalOpen && (
         <PaymentModal
           isOpen={isPaymentModalOpen}
           onClose={closePaymentModal}
           handlePayment={handlePayment}
           userName={selectPayUser}
         />
-      )}
+      )} */}
     </MainLayout>
   );
 }
