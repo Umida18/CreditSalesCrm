@@ -251,27 +251,37 @@ const Korzinka = () => {
       key: "actions",
       render: (record: RecycleItem) => (
         <div className=" flex items-center justify-center gap-3">
-          {/* <Popconfirm
-            title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz?"
-            onConfirm={() => handleDelete(record.id)}
+          <Popconfirm
+            title="Bu foydalanuvchini korzinkadan chiqarib tashlamoqchimisiz?"
+            onConfirm={(e) => {
+              e?.stopPropagation();
+              handleDelete(record.id);
+            }}
             okText="Ha"
             cancelText="Yo'q"
-          > */}
-          <Button
-            onClick={() => handleDelete(record.id)}
-            danger
-            className="flex items-center justify-center"
           >
-            <MdOutlineRemoveShoppingCart className="w-4 h-4 mr-1" />
-          </Button>
-          {/* </Popconfirm> */}
+            <Button
+              onClick={(e) => e.stopPropagation()}
+              danger
+              className="flex items-center justify-center"
+            >
+              <MdOutlineRemoveShoppingCart className="w-4 h-4 mr-1" />
+            </Button>
+          </Popconfirm>
           <Popconfirm
             title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz? Bu amalni ortga qaytarib bo‘lmaydi."
-            onConfirm={() => handleDeleteUser(record.id)}
+            onConfirm={(e) => {
+              e?.stopPropagation();
+              handleDeleteUser(record.id);
+            }}
             okText="Ha"
             cancelText="Yo'q"
           >
-            <Button danger className="flex !px-1.5 items-center justify-center">
+            <Button
+              onClick={(e) => e.stopPropagation()}
+              danger
+              className="flex !px-1.5 items-center justify-center"
+            >
               <Trash2 className="w-4 h-4 " />
             </Button>
           </Popconfirm>
@@ -322,6 +332,20 @@ const Korzinka = () => {
                       className="flex items-center justify-center "
                     >
                       <MdOutlineRemoveShoppingCart className="w-4 h-4 " />
+                    </Button>
+                  </Popconfirm>
+                  <Popconfirm
+                    title="Bu foydalanuvchini oʻchirib tashlamoqchimisiz? Bu amalni ortga qaytarib bo‘lmaydi."
+                    onConfirm={() => handleDeleteUser(item.id)}
+                    okText="Ha"
+                    cancelText="Yo'q"
+                  >
+                    <Button
+                      onClick={(e) => e.stopPropagation()}
+                      danger
+                      className="flex !px-1.5 items-center justify-center"
+                    >
+                      <Trash2 className="w-4 h-4 " />
                     </Button>
                   </Popconfirm>
 
