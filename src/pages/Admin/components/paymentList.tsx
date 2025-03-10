@@ -331,7 +331,7 @@ const PaymentList = ({
       width={isMobile ? "100%" : "80%"}
       style={{ top: 20 }}
     >
-      <div className="xl:h-auto h-[600px] overflow-auto">
+      <div className="xl:h-auto !h-[600px] overflow-auto">
         {selectedUser ? (
           <div className="max-h-[70vh] overflow-y-auto px-4">
             <Title level={5} className="mt-4 mb-2">
