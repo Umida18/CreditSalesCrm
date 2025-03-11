@@ -162,7 +162,7 @@ export default function StatisticsPage() {
             setIsTodayModalOpen={setIsTodayModalOpen}
           />
           <StatisticCard
-            title="Jami Foydalanuvchilar"
+            title="Jami Xaridorlar"
             value={collectorStats.length}
             // number={}
             icon={<FaUser className="h-8 w-8 text-purple-500" />}

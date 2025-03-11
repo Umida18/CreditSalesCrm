@@ -42,12 +42,12 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
       </div>
       <Divider style={{ marginBlock: 4 }} />
       <div className=" flex justify-between items-center">
-        <p className="text-sm text-gray-500">Umumiy foydalanuvchilar:</p>
+        <p className="text-sm text-gray-500">Umumiy xaridorlar:</p>
         <p className="text-gray-600 ">{item.total_users}</p>
       </div>
       <Divider style={{ marginBlock: 4 }} />
       <div className=" flex justify-between items-center">
-        <p className="text-sm text-gray-500">Tolamagan foydalanuvchilar:</p>
+        <p className="text-sm text-gray-500">Tolamagan xaridorlar:</p>
         <p className="text-gray-600 ">{item.unpaid_users}</p>
       </div>
       <Divider style={{ marginBlock: 4 }} />
@@ -59,7 +59,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ item }) => {
             navigate(`/users/${item.zone_id}?title=${item.zone_name}`)
           }
         >
-          Foydalanuvchilar
+          Xaridorlar
         </Button>
       </div>
     </div>

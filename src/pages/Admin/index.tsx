@@ -169,12 +169,12 @@ export default function DashboardPage() {
       render: (text: any) => Number(text).toLocaleString(),
     },
     {
-      title: "Umumiy foydalanuvchilar",
+      title: "Umumiy xaridor",
       dataIndex: "total_users",
       key: "total_users",
     },
     {
-      title: "Tolamagan foydalanuvchilar",
+      title: "Tolamagan xaridor",
       dataIndex: "unpaid_users",
       key: "unpaid_users",
     },
@@ -188,7 +188,7 @@ export default function DashboardPage() {
           icon={<BsPeople size={16} />}
           onClick={() => handleRowClick(record)}
         >
-          Foydalanuvchilar
+          Xaridorlar
         </Button>
       ),
     },

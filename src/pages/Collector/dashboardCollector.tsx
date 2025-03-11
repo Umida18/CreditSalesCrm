@@ -201,12 +201,12 @@ export default function DashboardPage() {
       key: "monthly_amount",
     },
     {
-      title: "Umumiy foydalanuvchilar",
+      title: "Umumiy xaridorlar",
       dataIndex: "total_users",
       key: "total_users",
     },
     {
-      title: "Tolamagan foydalanuvchilar",
+      title: "Tolamagan xaridorlar",
       dataIndex: "unpaid_users",
       key: "unpaid_users",
     },
@@ -220,7 +220,7 @@ export default function DashboardPage() {
           icon={<BsPeople size={16} />}
           onClick={() => handleRowClick(record)}
         >
-          Foydalanuvchilar
+          Xaridorlar
         </Button>
       ),
     },

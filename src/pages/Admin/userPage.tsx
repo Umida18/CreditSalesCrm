@@ -455,10 +455,10 @@ export default function UsersPage() {
   return (
     <MainLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">Foydalanuvchilar ro'yxati</h1>
+        <h1 className="text-2xl font-bold mb-2">Xaridorlar ro'yxati</h1>
         <p className="text-gray-600">
           <span className="capitalize font-bold">{title}</span> tanlangan hudud
-          bo'yicha foydalanuvchilar
+          bo'yicha xaridorlar
         </p>
       </div>
 
