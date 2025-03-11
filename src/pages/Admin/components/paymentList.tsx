@@ -377,6 +377,13 @@ const PaymentList = ({
                   icon: Clock,
                 },
                 {
+                  title: "To'lov",
+                  dataIndex: "payment_amount",
+                  key: "payment_amount",
+                  icon: Clock,
+                  render: (t: any) => Number(t).toLocaleString(),
+                },
+                {
                   title: "To'lov haqida",
                   dataIndex: "description",
                   key: "description",
@@ -404,6 +411,11 @@ const PaymentList = ({
                     title: "Oy",
                     dataIndex: "payment_month",
                     key: "payment_month",
+                  },
+                  {
+                    title: "To'lov",
+                    dataIndex: "payment_amount",
+                    key: "payment_amount",
                   },
                   {
                     title: "To'lov haqida",
