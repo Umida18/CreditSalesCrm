@@ -276,6 +276,11 @@ const PaymentList = ({
         icon: DollarSign,
       },
       {
+        label: "Jami",
+        value: `${Number(user.payment).toLocaleString()} USZ`,
+        icon: DollarSign,
+      },
+      {
         label: "Oylik to'lov",
         value: `${Number(user.monthly_income).toLocaleString()} UZS`,
         icon: CreditCard,
@@ -376,6 +381,7 @@ const PaymentList = ({
                   key: "payment_month",
                   icon: Clock,
                 },
+
                 {
                   title: "To'lov",
                   dataIndex: "payment_amount",
@@ -499,6 +505,7 @@ const PaymentList = ({
                         Number(text).toLocaleString() + " UZS",
                       icon: DollarSign,
                     },
+
                     {
                       title: "Berilgan vaqti",
                       dataIndex: "given_day",
