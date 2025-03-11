@@ -94,9 +94,17 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     try {
       await api.put(`/recycle/to/${id}`);
 
-      const response = await api.get(`/recycle/paid-all`);
-      setNotificationData(response.data.rows);
-      setNotificationCount(response.data.rowCount);
+      setModalData((prevData: any) => {
+        if (prevData && prevData.users) {
+          return {
+            ...prevData,
+            users: prevData.users.filter((user: any) => user.id !== id),
+          };
+        }
+        return prevData;
+      });
+
+      fetchNotificationCount();
       message.success("Muvaffaqiyatli qoshildi");
     } catch (error) {
       console.log(error);
