@@ -19,6 +19,8 @@ export default function LoginPage() {
       });
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("name", res.data.admin_name);
+      // console.log("res", res);
 
       message.success("Muvaffaqiyatli login!");
 

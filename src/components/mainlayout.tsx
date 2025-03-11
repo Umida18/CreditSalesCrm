@@ -227,6 +227,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     </div>
   );
 
+  const name = localStorage.getItem("name");
   return (
     <Layout className="min-h-screen">
       <DesktopSidebar />
@@ -271,8 +272,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 className="object-cover w-12 h-12 rounded-full border border-gray-300"
               />
               <div className="text-[16px] font-semibold leading-4">
-                <span>Avaz</span>
-                <p>Azizov</p>
+                <span>{name}</span>
+                {/* <p>Azizov</p> */}
               </div>
             </div>
           </div>
