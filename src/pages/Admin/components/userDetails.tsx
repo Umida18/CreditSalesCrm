@@ -361,6 +361,10 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       { label: "Olingan muddati", value: `${user.time} oyga` },
       { label: "Malumot", value: user.description },
       {
+        label: "Qolgan summa",
+        value: `${Number(user.rest).toLocaleString()} UZS`,
+      },
+      {
         label: "So'nggi to'lov",
         value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
       },
@@ -389,6 +393,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
     };
     fetchPaymentHistory();
   }, [userData?.id]);
+  console.log("userData", userData);
 
   return (
     <Modal

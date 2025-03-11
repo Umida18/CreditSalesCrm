@@ -49,7 +49,6 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [editingKey] = useState<string | null>(null);
-  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const handleResize = () => {
@@ -355,6 +354,10 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       { label: "Ish joyi", value: user.workplace_name },
       { label: "Olingan muddati", value: `${user.time} oyga` },
       { label: "Malumot", value: user.description },
+      {
+        label: "Qolgan summa",
+        value: `${Number(user.rest).toLocaleString()} UZS`,
+      },
       {
         label: "To'lov",
         value: `${Number(user.payment).toLocaleString()} UZS`,
