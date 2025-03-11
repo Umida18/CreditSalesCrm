@@ -741,7 +741,7 @@ export default function UsersPage() {
                 formatter={(value: any) =>
                   value
                     ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-                    : "0"
+                    : ""
                 }
                 className="!w-full"
                 parser={(value) => (value ? value.replace(/\s/g, "") : "0")}

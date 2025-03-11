@@ -133,11 +133,11 @@ const Header = ({ selectedZone, setData }: any) => {
             form={form}
             onFinish={handleSubmit}
             layout="vertical"
-            initialValues={{
-              cost: 0,
-              time: 0,
-              phone_number2: "",
-            }}
+            // initialValues={{
+            //   cost: 0,
+            //   time: 0,
+            //   phone_number2: "",
+            // }}
           >
             <Form.Item
               label="Ism"
@@ -163,7 +163,7 @@ const Header = ({ selectedZone, setData }: any) => {
                 formatter={(value: any) =>
                   value
                     ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-                    : "0"
+                    : ""
                 }
                 parser={(value) => (value ? value.replace(/\s/g, "") : "0")}
                 min={0}

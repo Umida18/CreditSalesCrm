@@ -129,7 +129,7 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
             formatter={(value: any) =>
               value
                 ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-                : "0"
+                : ""
             }
             parser={(value) => (value ? value.replace(/\s/g, "") : "0")}
             min={0}
