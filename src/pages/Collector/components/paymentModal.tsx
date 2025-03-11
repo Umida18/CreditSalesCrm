@@ -130,7 +130,7 @@ const PaymentModal = ({ isOpen, onClose, userId, fetchUsers }: any) => {
             label="Sana"
             rules={[{ required: true }]}
           >
-            <DatePicker className="w-full" />
+            <DatePicker className="w-full" showTime />
           </Form.Item>
         )}
         {/* <Form.Item name="zone" label="Hudud" rules={[{ required: true }]}>
