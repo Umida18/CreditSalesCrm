@@ -217,6 +217,7 @@ export default function DashboardPage() {
         <Table
           columns={columns}
           loading={loading}
+          pagination={{ pageSize: 1000 }}
           dataSource={filteredData}
           rowClassName="cursor-pointer hover:bg-gray-50"
           onRow={(record) => ({

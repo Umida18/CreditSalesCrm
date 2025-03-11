@@ -34,11 +34,13 @@ const PaymentList = ({
   users,
   onClose,
   basket,
+  handleAddBasket,
 }: {
   type: "notPaid" | "todayPaid" | "monthPaid";
   users: any[];
   onClose: () => void;
   basket?: boolean;
+  handleAddBasket?: (id: number) => void;
 }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
@@ -47,7 +49,6 @@ const PaymentList = ({
   const [isMobile, setIsMobile] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobile(window.innerWidth < 768);
@@ -82,16 +83,26 @@ const PaymentList = ({
     }
   };
 
-  const handleAddBasket = async (id: number) => {
-    try {
-      await api.put(`/recycle/to/${id}`);
-      message.success("Muvaffaqiyatli qoshildi");
-      // fetchUsers();
-    } catch (error) {
-      console.log(error);
-      message.error("An error occurred while adding the user");
-    }
-  };
+  // const fetchNotificationCount = async () => {
+  //   try {
+  //     await api.get(`/recycle/paid-all`);
+  //   } catch (error) {
+  //     console.error("Error fetching notification count:", error);
+  //   }
+  // };
+
+  // const handleAddBasket = async (id: number) => {
+  //   try {
+  //     await api.put(`/recycle/to/${id}`);
+
+  //     await fetchNotificationCount();
+  //     message.success("Muvaffaqiyatli qoshildi");
+  //     // fetchUsers();
+  //   } catch (error) {
+  //     console.log(error);
+  //     message.error("An error occurred while adding the user");
+  //   }
+  // };
 
   const closeUserDetails = () => {
     setSelectedUser(null);
@@ -149,7 +160,7 @@ const PaymentList = ({
         <Button
           onClick={(e) => {
             e.stopPropagation();
-            handleAddBasket(record.id);
+            handleAddBasket?.(record.id);
           }}
           className="flex !px-1.5 items-center justify-center"
         >

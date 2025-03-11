@@ -1,6 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Layout, Menu, Button, theme, Badge } from "antd";
+import { Layout, Menu, Button, theme, Badge, message } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -87,6 +87,20 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       setNotificationCount(response.data.rowCount);
     } catch (error) {
       console.error("Error fetching notification count:", error);
+    }
+  };
+
+  const handleAddBasket = async (id: number) => {
+    try {
+      await api.put(`/recycle/to/${id}`);
+
+      const response = await api.get(`/recycle/paid-all`);
+      setNotificationData(response.data.rows);
+      setNotificationCount(response.data.rowCount);
+      message.success("Muvaffaqiyatli qoshildi");
+    } catch (error) {
+      console.log(error);
+      message.error("An error occurred while adding the user");
     }
   };
 
@@ -277,6 +291,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           users={modalData.users}
           onClose={closeNotificationModal}
           basket={true}
+          handleAddBasket={handleAddBasket}
         />
       )}
 
