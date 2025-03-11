@@ -305,6 +305,7 @@ export default function UsersPage() {
   const handleAddBasket = async (id: number) => {
     try {
       await api.put(`/recycle/to/${id}`);
+
       message.success("Muvaffaqiyatli qoshildi");
       fetchUsers();
     } catch (error) {

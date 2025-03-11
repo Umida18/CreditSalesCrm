@@ -49,6 +49,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
+  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const handleResize = () => {
@@ -172,6 +173,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
     },
     { title: "To'lov haqida", dataIndex: "description", key: "description" },
     { title: "Yig'uvchi", dataIndex: "login", key: "login" },
+
     {
       title: "To'lov miqdori",
       dataIndex: "payment_amount",
@@ -180,13 +182,13 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
         const editable = isEditing(record);
         return editable ? (
           <Input
-            value={text}
+            value={Number(text).toLocaleString()}
             onChange={(e) =>
               handleChange(e.target.value, record.id, "payment_amount")
             }
           />
         ) : (
-          text
+          Number(text).toLocaleString()
         );
       },
     },
@@ -391,9 +393,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   return (
     <Modal
       className="xl:min-w-[1000px]"
-      title={
-        <h2 className="text-2xl font-bold mb-4">Foydalanuvchi ma'lumotlari</h2>
-      }
+      title={<h2 className="text-2xl font-bold mb-4"></h2>}
       open={isOpen}
       onCancel={onClose}
       footer={null}

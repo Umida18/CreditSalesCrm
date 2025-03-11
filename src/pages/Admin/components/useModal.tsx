@@ -7,6 +7,7 @@ const { Title, Text } = Typography;
 const UserModal = ({ user, closeModal }: any) => {
   const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
   const [error, setError] = useState("");
+  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     if (user?.id) {

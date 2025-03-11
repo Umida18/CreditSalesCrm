@@ -180,13 +180,13 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
         const editable = isEditing(record);
         return editable ? (
           <Input
-            value={text}
+            value={Number(text).toLocaleString()}
             onChange={(e) =>
               handleChange(e.target.value, record.id, "payment_amount")
             }
           />
         ) : (
-          text
+          Number(text).toLocaleString()
         );
       },
     },

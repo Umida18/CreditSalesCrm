@@ -49,6 +49,7 @@ const PaymentList = ({
   const [isMobile, setIsMobile] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
+  console.log("paymentHistory", paymentHistory);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobile(window.innerWidth < 768);
