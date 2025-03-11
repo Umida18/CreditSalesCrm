@@ -422,6 +422,7 @@ const PaymentList = ({
                     title: "To'lov",
                     dataIndex: "payment_amount",
                     key: "payment_amount",
+                    render: (t: any) => Number(t).toLocaleString(),
                   },
                   {
                     title: "To'lov haqida",
