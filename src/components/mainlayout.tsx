@@ -27,12 +27,12 @@ const menuItems = [
   {
     key: "/zone",
     icon: <CiLocationOn />,
-    label: "Zone",
+    label: "Hudud",
   },
   {
     key: "/workplace",
     icon: <UserOutlined />,
-    label: "Workplace",
+    label: "Ishxona",
   },
   {
     key: "/collector",

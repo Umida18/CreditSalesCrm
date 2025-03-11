@@ -138,7 +138,7 @@ const Workplace: React.FC = () => {
           }}
           className="bg-blue-500 hover:bg-blue-600"
         >
-          Workplace qo'shish
+          Ishxona qo'shish
         </Button>
       </div>
 
@@ -195,14 +195,14 @@ const Workplace: React.FC = () => {
       </div>
 
       <Modal
-        title={editId ? "Update Workplace" : "Add Workplace"}
+        title={editId ? "Ish joyini yangilash" : "Ish joyini qo'shish"}
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         onOk={editId ? handleUpdateZone : handleAddZone}
       >
         <div className="my-3">
           <Input
-            placeholder="Zone name"
+            placeholder="Hudud name"
             value={zoneName}
             onChange={(e) => setZoneName(e.target.value)}
             className="mb-3"

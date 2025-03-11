@@ -1,68 +1,67 @@
-import { useEffect, useState } from "react"
-import { Modal, Table, Typography, Badge, Spin } from "antd"
-import type { TableColumnsType } from "antd"
-
+import { useEffect, useState } from "react";
+import { Modal, Table, Typography, Badge, Spin } from "antd";
+import type { TableColumnsType } from "antd";
 
 interface PaymentData {
-  id: number
-  name: string
-  product_name: string
-  cost: number
-  phone_number: string
-  phone_number2: string
-  time: number
-  seller: string
-  zone_name: string
-  workplace_name: string
-  payment_status: boolean
-  monthly_income: number
-  payment: number
-  passport_series: string
-  description: string
-  given_day: string
-  recycle: boolean
-  updatedat: string
-  last_payment_amount: string
-  last_payment_date: string
+  id: number;
+  name: string;
+  product_name: string;
+  cost: number;
+  phone_number: string;
+  phone_number2: string;
+  time: number;
+  seller: string;
+  zone_name: string;
+  workplace_name: string;
+  payment_status: boolean;
+  monthly_income: number;
+  payment: number;
+  passport_series: string;
+  description: string;
+  given_day: string;
+  recycle: boolean;
+  updatedat: string;
+  last_payment_amount: string;
+  last_payment_date: string;
 }
 
 interface NotificationModalProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
-  const [payments, setPayments] = useState<PaymentData[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [payments, setPayments] = useState<PaymentData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen) {
-      fetchPayments()
+      fetchPayments();
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   const fetchPayments = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       const response = await fetch("https://creditsale.uz/recycle/paid-all", {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
         },
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch payment data")
+        throw new Error("Failed to fetch payment data");
       }
 
-      const data = await response.json()
-      setPayments(Array.isArray(data) ? data : [])
+      const data = await response.json();
+      setPayments(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Error fetching payment data:", error)
+      console.error("Error fetching payment data:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const columns: TableColumnsType<PaymentData> = [
     {
@@ -99,12 +98,12 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
       key: "seller",
     },
     {
-      title: "Zone",
+      title: "Hudud",
       dataIndex: "zone_name",
       key: "zone_name",
     },
     {
-      title: "Workplace",
+      title: "Ishxona",
       dataIndex: "workplace_name",
       key: "workplace_name",
     },
@@ -112,24 +111,36 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
       title: "Last Payment",
       dataIndex: "last_payment_amount",
       key: "last_payment_amount",
-      render: (value) => new Intl.NumberFormat("uz-UZ").format(Number(value)) + " sum",
+      render: (value) =>
+        new Intl.NumberFormat("uz-UZ").format(Number(value)) + " sum",
     },
     {
       title: "Last Payment Date",
       dataIndex: "last_payment_date",
       key: "last_payment_date",
-    //   render: (date) => formatDate(date),
+      //   render: (date) => formatDate(date),
     },
     {
       title: "Status",
       dataIndex: "payment_status",
       key: "payment_status",
-      render: (status) => <Badge status={status ? "success" : "error"} text={status ? "Paid" : "Unpaid"} />,
+      render: (status) => (
+        <Badge
+          status={status ? "success" : "error"}
+          text={status ? "Paid" : "Unpaid"}
+        />
+      ),
     },
-  ]
+  ];
 
   return (
-    <Modal title="Payment Notifications" open={isOpen} onCancel={onClose} footer={null} width={1000}>
+    <Modal
+      title="Payment Notifications"
+      open={isOpen}
+      onCancel={onClose}
+      footer={null}
+      width={1000}
+    >
       {loading ? (
         <div className="flex justify-center items-center py-10">
           <Spin size="large" />
@@ -148,6 +159,5 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
         />
       )}
     </Modal>
-  )
+  );
 }
-

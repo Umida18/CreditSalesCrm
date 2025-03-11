@@ -61,7 +61,7 @@ const UserModal = ({ user, closeModal }: any) => {
       label: "Oylik to'lov",
       value: `${Number(user.monthly_income).toLocaleString()} so'm`,
     },
-    { label: "Manzili", value: user.zone },
+    { label: "Hudud", value: user.zone },
     { label: "Berilgan vaqti", value: givenDayFormatted },
     { label: "Ish joyi", value: user.workplace },
     { label: "Olingan muddati", value: `${user.time} oyga` },

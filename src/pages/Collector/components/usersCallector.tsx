@@ -347,7 +347,7 @@ export default function UsersCollec() {
           <div className="mb-4 flex items-center flex-col gap-1">
             <div className="flex items-center gap-1">
               <Select
-                placeholder="Workplace"
+                placeholder="Ishxona"
                 value={workplaceId}
                 onChange={(value) => {
                   setWorkplaceId(value);
