@@ -166,7 +166,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
             ))}
           </Select>
         ) : (
-          text
+          Number(text).toLocaleString()
         );
       },
     },
@@ -267,14 +267,14 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           <span className="font-semibold">To'lov miqdori:</span>
           {editable ? (
             <Input
-              value={record.payment_amount}
+              value={Number(record.payment_amount).toLocaleString()}
               onChange={(e) =>
                 handleChange(e.target.value, record.id, "payment_amount")
               }
               style={{ width: "50%" }}
             />
           ) : (
-            <span>{record.payment_amount}</span>
+            <span>{Number(record.payment_amount).toLocaleString()}</span>
           )}
         </div>
         {/* <div className="flex justify-end space-x-2">
