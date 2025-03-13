@@ -143,6 +143,17 @@ const PaymentList = ({
       render: (text: any) => Number(text).toLocaleString(),
     },
     {
+      title: "To'lov",
+      dataIndex: "payment",
+      render: (payment: any) => `${Number(payment).toLocaleString()}`,
+    },
+    {
+      title: "Qolgan summa",
+      dataIndex: "rest",
+      render: (rest: any) => `${Number(rest).toLocaleString()}`,
+    },
+
+    {
       title: "Berilgan vaqti",
       dataIndex: "given_day",
       key: "given_day",
@@ -281,13 +292,19 @@ const PaymentList = ({
         icon: DollarSign,
       },
       {
-        label: "Oylik to'lov",
+        label: "To'lov",
         value: `${Number(user.monthly_income).toLocaleString()} UZS`,
         icon: CreditCard,
       },
       {
         label: "So'nggi to'lov",
         value: `${Number(user.last_payment_amount).toLocaleString()} UZS`,
+        icon: CreditCard,
+      },
+      {
+        label: "Qolgan summa",
+        value: `${Number(user.rest).toLocaleString()} UZS`,
+        icon: CreditCard,
       },
       { label: "Hudud", value: user.zone_name, icon: MapPin },
       {
@@ -331,6 +348,8 @@ const PaymentList = ({
       />
     );
   };
+
+  console.log("selectedUser", selectedUser);
 
   return (
     <Modal
