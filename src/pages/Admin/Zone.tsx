@@ -7,6 +7,7 @@ import { BASE_URL } from "../../config";
 import "react-toastify/dist/ReactToastify.css";
 import { Edit2, PlusCircle, Download, MapPin } from "lucide-react";
 import { FaMapMarkedAlt } from "react-icons/fa";
+import api from "../../Api/Api";
 
 interface Zone {
   id: number;
@@ -103,6 +104,24 @@ const Zone: React.FC = () => {
     }
   };
 
+  const handleDownloadAll = async () => {
+    try {
+      const res = await api.get("https://creditsale.uz/excel-download-all", {
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "data.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      console.log("res.data", res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Joy nomi", dataIndex: "zone_name", key: "zone_name" },
@@ -136,6 +155,13 @@ const Zone: React.FC = () => {
             onClick={() => handleDownload(record.zone_name)}
           >
             Exel
+          </Button>
+          <Button
+            type="dashed"
+            icon={<Download size={16} />}
+            onClick={handleDownloadAll}
+          >
+            Exel Hammasi
           </Button>
         </div>
       ),
@@ -195,7 +221,7 @@ const Zone: React.FC = () => {
                     <p className="text-sm text-gray-500 mb-4">
                       {new Date(zone.createdat).toLocaleString("en-GB")}
                     </p>
-                    <div className="flex justify-end space-x-2">
+                    <div className="flex gap-2 flex-col mt-8">
                       <Button
                         type="primary"
                         icon={<Edit2 size={16} />}
@@ -214,6 +240,13 @@ const Zone: React.FC = () => {
                         onClick={() => handleDownload(zone.zone_name)}
                       >
                         Exel
+                      </Button>
+                      <Button
+                        type="dashed"
+                        icon={<Download size={16} />}
+                        onClick={handleDownloadAll}
+                      >
+                        Exel Hammasi
                       </Button>
                     </div>
                   </Card>
