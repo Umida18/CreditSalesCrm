@@ -755,11 +755,21 @@ export default function UsersPage() {
                 { required: true, message: "Iltimos, ish joyini tanlang" },
               ]}
             >
-              <Select placeholder="Ish joyini tanlang">
+              <Select
+                showSearch
+                optionFilterProp="label"
+                filterSort={(optionA: any, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                placeholder="Ish joyini tanlang"
+              >
                 {workplaces.map((workplace) => (
                   <Select.Option
                     key={workplace.id}
                     value={workplace.workplace_name}
+                    label={workplace.workplace_name}
                   >
                     {workplace.workplace_name}
                   </Select.Option>
@@ -810,11 +820,7 @@ export default function UsersPage() {
               label="Berilgan sana"
               rules={[{ required: true }]}
             >
-              <DatePicker
-                className="!w-full"
-                showTime
-                // format="YYYY-MM-DD HH:mm:ss"
-              />
+              <DatePicker className="!w-full" showTime />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">

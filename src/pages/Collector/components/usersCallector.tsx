@@ -347,6 +347,13 @@ export default function UsersCollec() {
           <div className="mb-4 flex items-center flex-col gap-1">
             <div className="flex items-center gap-1">
               <Select
+                showSearch
+                optionFilterProp="label"
+                filterSort={(optionA: any, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
                 placeholder="Ishxona"
                 value={workplaceId}
                 onChange={(value) => {
@@ -356,7 +363,11 @@ export default function UsersCollec() {
                 style={{ width: 180 }}
               >
                 {workplaces.map((workplace) => (
-                  <Select.Option key={workplace.id} value={workplace.id}>
+                  <Select.Option
+                    key={workplace.id}
+                    value={workplace.id}
+                    label={workplace.workplace_name}
+                  >
                     {workplace.workplace_name}
                   </Select.Option>
                 ))}

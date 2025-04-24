@@ -87,43 +87,6 @@ export default function DashboardPage() {
     fetchData();
   }, [selectedZone]);
 
-  // const closePaymentModal = () => {
-  //   setIsPaymentModalOpen(false);
-  //   setSelectedUser(null);
-  // };
-
-  // const handlePayment = async (paymentData: any) => {
-  //   try {
-  //     const response = await fetch(
-  //       `${BASE_URL}/payment/add/${selectedUser?.id}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(paymentData),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       message.success("To'lov muvaffaqiyatli amalga oshirildi!");
-
-  //       closePaymentModal();
-  //       const updatedData = data.map((user: any) =>
-  //         user.id === selectedUser?.id
-  //           ? { ...user, payment_status: true }
-  //           : user
-  //       );
-  //       setData(updatedData);
-  //     } else {
-  //       throw new Error("Xatolik");
-  //     }
-  //   } catch (error: any) {
-  //     setError(error.message);
-  //     message.error("To'lovda xatolik yuz berdi!");
-  //   }
-  // };
-
   const filteredData = data.filter((item: any) => {
     const matchesSearch =
       searchTerm.length >= 2
@@ -142,8 +105,6 @@ export default function DashboardPage() {
       title: "Id",
       dataIndex: "zone_id",
       key: "zone_id",
-      // render: (_: any, __: any, index: any) =>
-      //   index + 1 + (currentPage - 1) * itemsPerPage,
     },
     {
       title: "Hudud nomi",
@@ -228,29 +189,12 @@ export default function DashboardPage() {
 
       {/* Mobile and Tablet view */}
       <div className="md:hidden">
-        {/* <TableHeader
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          selectedZone={selectedZone}
-          setSelectedZone={setSelectedZone}
-          zones={zones}
-          setData={setData}
-        /> */}
         <div>
           {filteredData.map((item: any) => (
             <DashboardCard key={item.zone_id} item={item} />
           ))}
         </div>
       </div>
-
-      {/* {isPaymentModalOpen && (
-        <PaymentModal
-          isOpen={isPaymentModalOpen}
-          onClose={closePaymentModal}
-          handlePayment={handlePayment}
-          userName={selectPayUser}
-        />
-      )} */}
     </MainLayout>
   );
 }

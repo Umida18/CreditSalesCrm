@@ -12,6 +12,7 @@ const Header = ({ selectedZone, setData }: any) => {
   const handleAddUser = () => {
     setIsModalVisible(true);
   };
+  console.log("workplaceOptions", workplaceOptions);
 
   const handleSubmit = async (values: any) => {
     try {
@@ -186,7 +187,16 @@ const Header = ({ selectedZone, setData }: any) => {
               name="workplace_id"
               rules={[{ required: true, message: "Ish joyini tanlang!" }]}
             >
-              <Select options={workplaceOptions} />
+              <Select
+                showSearch
+                optionFilterProp="label"
+                filterSort={(optionA: any, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                options={workplaceOptions}
+              />
             </Form.Item>
             <Form.Item
               label="Vaqt"
@@ -209,13 +219,7 @@ const Header = ({ selectedZone, setData }: any) => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              label="Pasport seriyasi"
-              name="passport_series"
-              // rules={[
-              //   { required: true, message: "Pasport seriyasi kiriting!" },
-              // ]}
-            >
+            <Form.Item label="Pasport seriyasi" name="passport_series">
               <Input />
             </Form.Item>
             <Form.Item label="Tavsif" name="description">

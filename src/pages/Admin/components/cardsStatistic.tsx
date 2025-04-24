@@ -39,15 +39,6 @@ const CardsStatistic = () => {
       .catch((error) => console.error("Xatolik:", error));
   }, []);
 
-  // {
-  //   "zone_name": "bekobod",
-  //   "login": "aziz",
-  //   "id": 1,
-  //   "day": "2025-03-03T00:00:00.000Z",
-  //   "total_collected": "12345678.00",
-  //   "total_payments": "1"
-  // }
-
   useEffect(() => {
     const fetch = async () => {
       const res = await api.get("/collector/all-money-daily");
@@ -55,8 +46,6 @@ const CardsStatistic = () => {
     };
     fetch();
   }, []);
-
-  console.log("modalData", modalData);
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mb-6">
