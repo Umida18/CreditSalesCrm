@@ -77,13 +77,13 @@ export default function ResponsiveCollectorTable({
       title: "Oylik daromad",
       dataIndex: "monthly_income",
       key: "monthly_income",
-      render: (value) => `${value.toFixed(2)}`,
+      render: (value) => `${value ? value?.toFixed(2) : "-"}`,
     },
     {
       title: "To'lo'v",
       dataIndex: "payment",
       key: "payment",
-      render: (value) => `${value.toFixed(2)}`,
+      render: (value) => `${value ? value.toFixed(2) : "-"}`,
     },
   ];
 
@@ -135,6 +135,7 @@ export default function ResponsiveCollectorTable({
       </div>
     </Card>
   );
+  console.log("data", data);
 
   return (
     <div>
